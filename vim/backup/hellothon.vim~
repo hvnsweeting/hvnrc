@@ -1,7 +1,0 @@
-:function HelloThon()
-	:echo "this is HelloThon in vimscript"
-	:for i in range(5)
-	:	echo i
-	:endfor
-	:echo "end of HelloThon"
-:endfunction

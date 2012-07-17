@@ -1,5 +1,0 @@
-<?php
-	tep_db_query($sql_update);
-	echo "<body>";
-  echo '<form action="" method="post">';
-?>

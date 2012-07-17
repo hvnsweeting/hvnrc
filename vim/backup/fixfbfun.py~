@@ -1,8 +1,0 @@
-#!/usr/env python
-#Hoi cho vui :-"
-yourIsp = raw_input("What is your ISP name? (FPT, Viettel): ")
-print "Fixing Fb...\n"
-print "Your ISP now is VNPT\n"
-print "Done!"
-
-

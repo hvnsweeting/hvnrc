@@ -1,2 +1,0 @@
-String[] projection = new String[] {Calls.ID, Calls.NUMBER, Calls.TYPE};
-Cursor c = managedQuery(allCalls, projection, null, null, null);

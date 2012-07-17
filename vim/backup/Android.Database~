@@ -1,8 +1,0 @@
-subclass of SQLiteOpenHelper , override onCreate()
-
-	Read/write: getWritableDatabase() --> SQLiteDatabase
-	getReadableDatabase()
-	
-#Execute query:
-	query() -> Return cursor
-	SQLiteQueryBuilder

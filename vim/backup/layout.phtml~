@@ -1,4 +1,0 @@
-<body>
-HVNHEHE
-<?php echo $this->layout()->content; ?>
-</body>

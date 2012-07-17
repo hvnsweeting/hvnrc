@@ -1,2 +1,0 @@
-(defun fun-name (arg1 args) (body))
-(list :key var :key2 var2)

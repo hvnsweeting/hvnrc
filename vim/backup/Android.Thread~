@@ -1,3 +1,0 @@
-Main thread also called the UI thread
-Android UI toolkit is not thread-safe
-=> do not block the UI thread. Do not access the Android UI toolkit from out side of the UI thread
