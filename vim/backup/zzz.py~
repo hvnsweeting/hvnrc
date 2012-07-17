@@ -1,0 +1,25 @@
+from flask import Flask, url_for
+
+app = Flask(__name__)
+
+@app.route('/')
+def zzz():
+	return 'zzz z z z z ' + url_for('profile', username='HVN') 
+
+@app.route('/hello')
+@app.route('/hello/<name>')
+def hello(name=):
+	return 'hello'
+
+@app.route('/login')
+def login():
+	pass
+
+@app.route('/profile/<username>')
+def profile(username):
+	return 'User %s' % username
+
+
+if __name__ == "__main__":
+	app.debug = True
+	app.run()

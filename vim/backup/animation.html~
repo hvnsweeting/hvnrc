@@ -1,0 +1,75 @@
+<html>
+	<head>
+		<style type="text/css">
+			#banhsau
+			{
+				width:60px;
+				height:60px;
+				background:#92B901;
+				color:#ffffff;
+				position:relative;
+				font-weight:bold;
+				font-size:20px;
+				padding:10px;
+				-moz-animation:xoayBanhSau 5s infinite alternate;
+				border-radius:100px;
+				top:80;
+			}
+
+			#banhtruoc
+			{
+				width:60px;
+				height:60px;
+				background:#92B901;
+				color:#ffffff;
+				position:relative;
+				font-weight:bold;
+				font-size:20px;
+				padding:10px;
+				-moz-animation:xoayBanhTruoc 5s infinite alternate;
+				border-radius:100px;
+			}
+
+			#than
+			{
+				width:60px;
+				height:60px;
+				position:relative;
+				-moz-animation:diChuyenThan 5s infinite alternate;
+			}
+
+			@-moz-keyframes xoayBanhSau
+			{
+				0% {background:#92B901; -moz-transform: rotate(0deg);left:57;}
+				100% {background:red; -moz-transform: rotate(360deg);left:557px;}
+			}
+
+			@-moz-keyframes xoayBanhTruoc
+			{
+				0% {background:#92B901; -moz-transform: rotate(0deg);left:275;}
+				100% {background:yellow; -moz-transform: rotate(360deg);left:775;}
+			}
+
+			@-moz-keyframes diChuyenThan
+			{
+				0% {left:0px;}
+				100% {left:500px;}
+			}
+
+		</style>
+	</head>
+
+	<body>
+		<p><b><center> FAMILUG CAR</center></b></p>
+		<div id="than">
+			<img src="greencar.png">
+		</div>
+		<div id="banhsau">
+			<span>FAMI<br>.LUG.</span>
+		</div>
+
+		<div id="banhtruoc">
+			<span><br>-FTW-</span>
+		</div>
+	</body>
+</html>

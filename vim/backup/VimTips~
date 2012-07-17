@@ -1,0 +1,40 @@
+V > : indent a line
+gU : go upper
+> : indent
+>aB : indent a block
+zz zt zb
+H M B
+f char : find char Ex: fa -> go to next a
+]] [[: navigate by function
+# or *	 : to search for all current word under the cursor
+ci[	 : change everything inside [] 
+ca[	 :change everything inside [] and '['']' too
+ctrl C: quit insert mode (Esc)
+ctrl o: temporary quit insert mode to do one command then return
+gg=G : indent the file . (maybe need  :set filetype=<whaterver> :filetype indent on
+[I : like grep, 
+
+Ctrl A/Ctrl X : increase/decrease number by 1
+%s//replace/gc : replace last search + use with *
+ 
+:%!command : run command and return the result to current file
+
+in vimrc
+set directory=/bla/bla/temp make vim use that directory for temp file
+set backupdir=/bla/bla/backup maek vim use that directory for backup file ~
+
+% to go to nearest )]}
+%% go to ([{
+
+Ctrl ] Ctrl T
+:Sex : split and explorer
+
+:g/search/p grep, print, or d for delete
+~ : switches the case of selected char
+
+vim -o file file : ... in split panel
+vim -p file1 file2 : open multiple files in tabs
+
+
+#PYTHON:
+K (^S-K) : open the reference for the current word

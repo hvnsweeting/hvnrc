@@ -1,0 +1,194 @@
+package com.familug.hvn;
+
+import java.awt.Color;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JColorChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.Timer;
+
+public class DrawHelper {
+	public ControlPanel controlPanel = null;
+	
+	//VeOtoVaDiChuyenPanel drawPanel = null;
+	
+	//ScalePanel mScalePanel = null;
+
+	private BaseJFrame mFrame;
+
+	private RotatePanel mRotatePanel;
+	static int dist;
+
+	public void drawAFrameWithPanel() {
+
+		setFrameTitle("Bài 5");
+		//drawPanel = new VeOtoVaDiChuyenPanel();
+		
+		//mScalePanel = new ScalePanel();
+		mRotatePanel = new RotatePanel();
+		controlPanel = new ControlPanel();
+		
+		//addCompToScaleControlPanel();
+		addCompToRotateCP();
+		
+		//createAndAddCompToControlPanel();
+		
+		mFrame.add(mRotatePanel);
+		mFrame.add(controlPanel);
+		addPanelAndPack();
+	}
+
+	private void addCompToRotateCP() {
+		JButton mDrawButton = new JButton("Rotate it");
+		final JTextField mTextField = new JTextField("0");
+		JButton mClearButton = new JButton("Clear panel");
+		JLabel mJLabel = new JLabel("Alpha");
+		
+		mDrawButton.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String gotText = mTextField.getText();
+				String[] tokens;
+				if(!gotText.equalsIgnoreCase("") || gotText != null)
+				{
+					tokens = gotText.split("[ ]");
+					float alpha = Float.parseFloat(tokens[0]);
+					//float ky = Float.parseFloat(tokens[1]);
+					mRotatePanel.rotate(mRotatePanel.getGraphics(), alpha);
+				}
+			}
+		});
+		
+		mClearButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				mRotatePanel.repaint();
+			}
+		});
+		
+		controlPanel.add(mJLabel);
+		controlPanel.add(mTextField);
+		controlPanel.add(mDrawButton);
+		controlPanel.add(mClearButton);
+	
+	}
+
+
+	private void createAndAddCompToControlPanel() {
+		
+		final JTextField mTextField = new JTextField("1");
+		final JButton mFillButton = new JButton("Move it");
+		JButton mDrawButton = new JButton("Draw it");
+		JButton mClearButton = new JButton("Clear panel");
+
+		controlPanel.add(mTextField);
+
+		controlPanel.add(mDrawButton);
+		mDrawButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				drawPanel.drawCar(drawPanel.getGraphics());
+				dist = 0;
+			}
+		});
+
+		controlPanel.add(mFillButton);
+		mFillButton.addActionListener(new ActionListener() {
+
+			Timer mTimer;
+			int distance;
+			MoveListenter mMoveListenter;
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (mFillButton.getText() == "Move it") {
+					int entered = Integer.parseInt(mTextField.getText());
+					if (DrawHelper.dist == 0) {
+						distance = 0;
+					}
+					mMoveListenter = new MoveListenter(drawPanel, entered,
+							distance);
+					mTimer = new Timer(300, mMoveListenter);
+					mTimer.start();
+					mFillButton.setText("Stop it");
+				} else {
+					distance = mMoveListenter.getDistance();
+					mTimer.stop();
+					mFillButton.setText("Move it");
+					DrawHelper.dist = -1;
+				}
+
+			}
+		});
+
+		controlPanel.add(mClearButton);
+
+		mClearButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				drawPanel.repaint();
+			}
+		});
+
+		
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void setFrameTitle(String baiSo) {
+		mFrame = new BaseJFrame(baiSo);
+	}
+
+	private void addPanelAndPack() {
+		GridBagLayout mGridBagLayout = new GridBagLayout();
+
+		mFrame.setLayout(mGridBagLayout);
+		mFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mFrame.pack();
+		mFrame.setVisible(true);
+		
+	}
+}
+
+class ControlPanel extends JPanel {
+	Color choosedColor = Color.white;
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public ControlPanel() {
+		GridLayout mGridLayout = new GridLayout(5, 1);
+		this.setLayout(mGridLayout);
+
+		final JButton mChooseColorButton = new JButton("Choose color");
+		mChooseColorButton.setBackground(choosedColor);
+
+		// this.add(mChooseColorButton);
+
+		mChooseColorButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				choosedColor = JColorChooser.showDialog(ControlPanel.this,
+						"Choose Background Color", choosedColor);
+				if (choosedColor != null)
+					mChooseColorButton.setBackground(choosedColor);
+			}
+		});// addActionListener
+
+	}// ctor
+}// ControlPanel
+

@@ -1,0 +1,17 @@
+$def with (page)
+
+<html>
+	<head>
+		<title>
+			mTask - mini personal task-manager
+		</title>
+		<link rel=stylesheet type=text/css href="./static/style.css">
+	</head>
+	<body>
+		<ul id="Menu">
+			<li><a href="/">Home</a></li>
+		</ul>
+
+		$:page
+	</body>
+</html>

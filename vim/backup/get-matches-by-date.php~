@@ -1,0 +1,45 @@
+<?php
+require_once 'config.php';
+startMySQLConnection();
+?>
+<?php
+
+function get_matches_by_date()
+{
+	$sql = "
+		SELECT 
+		matches.id AS id,
+		homeTeam.id AS homeTeamId,
+		homeTeam.name AS homeTeamName,
+		guestTeam.id AS guestTeamId,
+		guestTeam.name AS guestTeamName,
+		startDateTime AS matchDate,
+		channels.id AS channelId,
+		channels.name AS channelName,
+		stadiums.id AS stadiumId,
+		stadiums.name AS stadiumName,
+		leagues.id AS leagueId,
+		leagues.name AS leagueName,
+		rounds.id AS roundId,
+		rounds.name AS roundName
+		FROM `matches`
+		LEFT JOIN leagues ON leagues.id = leagueId
+		LEFT JOIN teams AS homeTeam On homeTeam.id = matches.homeTeamId
+		LEFT JOIN teams AS guestTeam ON guestTeam.id = matches.guessTeamId
+		LEFT JOIN rounds ON rounds.id = rounds.id
+		LEFT JOIN channels ON channels.id = channelId
+		LEFT JOIN stadiums ON stadiums.id = stadiumId
+		WHERE matches.roundId = rounds.id 
+		AND matches.channelId = channels.id 
+		AND matches.stadiumId = stadiums.id ";
+
+	$result = mysql_query($sql);
+	while ($row = mysql_fetch_array($result)) {
+		$output[] = $row;
+	}
+
+	print json_encode($output);
+}
+
+get_matches_by_date();
+?>

@@ -1,0 +1,2 @@
+#!/bin/sh
+adbu $1 com.aps.$2

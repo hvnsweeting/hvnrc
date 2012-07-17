@@ -1,0 +1,50 @@
+#supervised learning
+predict
+problem have many features, attributes
+
+classification : discrete value output
+regression : Hồi quy, predict continuous value
+
+#unsupervised learning: give a data and find structure in the data
+clustering algorithm
+
+
+m =  number of example (x,y)
+x input
+y ouput
+superscript i 
+
+
+training set
+    |
+learning algorithm
+	|
+hypothesis(function)
+
+#1 variable linear regression
+cost function j(theta0, theta1)
+find min j()
+
+contour plots (contour figures)
+
+alpha : learing rate
+derivatives: dao ham 
+
+convex : bowl shaped: no have local optimal
+
+simultaneously update
+
+converge : hoi tu
+diverge : phan ki
+
+"batch " gradient descent
+
+
+#Multiple features
+n : number of features
+m : size of traning example
+superscript: training row
+subscript : feature
+
+Feature scaling
+

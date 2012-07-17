@@ -1,0 +1,158 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  chuong.cpp
+ *
+ *    Description:  
+ *
+ *        Version:  1.0
+ *        Created:  05/07/2012 02:08:00 PM
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  FamiHug (), famihug@gmail.com
+ *        Company:  FAMILUG
+ *
+ * =====================================================================================
+ */
+
+#include<iostream>
+
+using namespace std;
+
+int const CHO = 1;
+int const MEO = 2;
+int const GA = 3;
+
+class Long {
+	public:
+
+		bool isFull;
+		int loaiConVat;
+
+		Long()
+		{
+			isFull = false;
+			loaiConVat = 0;
+		}
+
+		Long(int pConVat)
+		{
+			if(pConVat != 0)
+				isFull = true;
+			else 
+				isFull = false;
+			loaiConVat = pConVat;
+		}
+
+		void nhot(int maConVat)
+		{
+			if(isFull)
+				cout << "Long da chua 1 con vat" << endl;
+			else
+			{
+				isFull = true;
+				loaiConVat = maConVat;
+			} 
+		}
+
+		void tha()
+		{
+			if(isFull)
+			{
+				isFull = false;
+				loaiConVat = 0;
+			}
+			else
+				cout << "Long rong";
+		}
+
+		void display()
+		{
+			cout << "Trinh trang long: " << (isFull ? "Day" : "Rong" ) ;
+			if(isFull)
+				cout << ", loaiConVat = " << loaiConVat;
+			cout	<< endl;
+		}
+
+
+};
+
+void demSoLongRong(Long* chuong)
+{
+	int cntr=  0;
+	for(int i = 0; i < 15; i++)
+	{
+		Long aLong(0);
+		if(chuong[i].isFull == false)
+			cntr ++;
+	}
+
+	cout <<"So long rong: " << cntr << "\n";
+}
+
+void isEmpty(Long aLong)
+{
+	if(aLong.isFull)
+		cout <<"Long chua con : " << aLong.loaiConVat << "\n";
+}
+
+void inRaSoConMoiLoai(Long* chuong)
+{
+	int type;
+	int soCho = 0;
+	int soMeo = 0;
+	int soGa = 0;
+	for(int i = 0; i < 15; i++)
+	{
+		type = chuong[i].loaiConVat;
+		if(type == CHO)
+		{
+			soCho++;
+		}
+		else if(type == MEO)
+		{
+			soMeo++;
+		}
+		else if(type == GA)
+		{
+			soGa++;
+		}
+	}
+
+	cout << "So cho: " << soCho << " so meo : " << soMeo << " so ga : " << soGa << "\n";
+}//inRaSoConMoiLoai
+
+int main()
+{
+	Long mLong(2);
+	mLong.display();
+
+	mLong.tha();
+	mLong.display();
+
+	mLong.nhot(4);
+	mLong.display();
+
+	isEmpty(mLong);
+
+
+	Long* chuong = new Long[15];
+
+	//Khoi tao long rong
+	cout << "Tao 15 cai long rong.\n";
+	for(int i = 0; i < 15; i++)
+	{
+		Long aLong(0);
+		chuong[i] = aLong;
+		chuong[i].display();
+	}
+
+
+	demSoLongRong(chuong);
+	inRaSoConMoiLoai(chuong);
+
+
+	return 1;
+
+}

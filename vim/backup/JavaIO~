@@ -1,0 +1,30 @@
+#Prefix
+File
+Buffered
+
+#Postfix
+InputStream - byte
+OutputStream - byte
+
+Reader - char
+Writer - char
+
+#Abstract
+1.InputStream
+2.OutputStream
+
+#No buffered
+3.FileInputStream
+4.FileOutputStream
+5.FileReader extends 3
+6.FileWriter
+
+#Buffered
+#Line - oriented
+7. BufferedReader
+8. BufferedWriter
+9. BufferedInputStream
+10. BufferedOutputStream
+
+#Flush
+Flush a stream is valid on any OUTPUT stream, but has no effect unless the stream is buffered

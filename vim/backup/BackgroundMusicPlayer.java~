@@ -1,0 +1,11 @@
+public class BackgroundMusicPlayer extends Service
+{
+	private Looper mServiceLooper;
+	private ServiceHandler mServiceHandler;
+	
+	private final class ServiceHandler extends Handler {
+	
+	}
+	
+}
+

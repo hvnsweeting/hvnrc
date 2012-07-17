@@ -1,0 +1,27 @@
+#nothing 
+# Do not remove the following lines, or various programs
+# that require network functionality will fail.
+192.168.0.101	hvn.vn	hvn	# Added by NetworkManager
+127.0.0.1	localhost.localdomain	localhost
+::1	hvn.vn	hvn	localhost6.localdomain6	localhost6
+125.252.224.88 facebook.com
+125.252.224.88 www.facebook.com
+
+69.63.181.12 apps.facebook.com
+69.63.187.16 facebook.com
+69.63.181.22 login.facebook.com
+69.63.186.12 apps.facebook.com
+69.63.187.16 www.facebook.com
+69.63.181.22 www.login.facebook.com
+
+153.16.15.71 www.facebook.com
+153.16.15.71 www.logins.facebook.com
+153.16.15.71 facebook.com
+153.16.15.71 logins.facebook.com
+153.16.15.71 apps.facebook.com
+153.16.15.71 upload.facebook.com
+153.16.15.71 www.connect.facebook.com
+153.16.15.71 graph.facebook.com
+153.16.15.71 static.ak.connect.facebook.com
+153.16.15.71 developers.facebook.com
+153.16.15.71 error.facebook.com

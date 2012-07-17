@@ -1,0 +1,5 @@
+run:
+	javac *.java; java PrintTask
+clean:
+	rm *.class
+	

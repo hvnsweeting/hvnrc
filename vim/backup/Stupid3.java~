@@ -1,0 +1,231 @@
+/*******************************************************************************
+ * Copyright (c) 2001-2012 Mathew A. Nelson and Robocode contributors
+ * All rights reserved. This program and the accompanying materials * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://robocode.sourceforge.net/license/epl-v10.html
+ *
+ * Contributors:
+ *     Mathew A. Nelson
+ *     - Initial implementation
+ *     Flemming N. Larsen
+ *     - Maintainance
+ *******************************************************************************/
+package org.familug.robo;
+
+import robocode.BulletHitEvent;
+import robocode.HitByBulletEvent;
+import robocode.HitRobotEvent;
+import robocode.HitWallEvent;
+import robocode.RobotDeathEvent;
+import robocode.Rules;
+import robocode.TurnCompleteCondition;
+//import robocode.AdvancedRobot;
+import robocode.ScannedRobotEvent;
+import robocode.util.Utils;
+import robocode.FamiTeam;
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+
+public class Stupid3 extends FamiTeam {
+
+	boolean peek;
+	double moveAmount;
+	boolean movingForward;
+	double predictedX, predictedY;
+	double direction = 1;
+	boolean nearWall = false;
+	String name;
+	double enemyAttract;
+	boolean inWall; // Is true when robot is near the wall.
+
+	public void run() {
+		setAdjustGunForRobotTurn(true);
+		setAdjustRadarForGunTurn(true);
+		setAdjustRadarForRobotTurn(true);
+		setTurnRadarRightRadians(Double.POSITIVE_INFINITY);
+		onRobotDeath(null);
+		if (getX() <= 50 || getY() <= 50
+				|| getBattleFieldWidth() - getX() <= 50
+				|| getBattleFieldHeight() - getY() <= 50) {
+			inWall = true;
+		} else {
+			inWall = false;
+		}
+
+		setAhead(40000);
+		movingForward = true;
+		do {
+			if (getX() > 50 && getY() > 50
+					&& getBattleFieldWidth() - getX() > 50
+					&& getBattleFieldHeight() - getY() > 50 && inWall == true) {
+				inWall = false;
+			}
+			if (getX() <= 50 || getY() <= 50
+					|| getBattleFieldWidth() - getX() <= 50
+					|| getBattleFieldHeight() - getY() <= 50) {
+				if (inWall == false) {
+					reverseDirection();
+					inWall = true;
+				}
+			}
+			if (getRadarTurnRemaining() == 0) {
+				setTurnRadarRightRadians(Double.POSITIVE_INFINITY);
+			}
+			setBodyColor(new Color((float) Math.random(),
+					(float) Math.random(), (float) Math.random()));
+			setGunColor(new Color((float) Math.random(), (float) Math.random(),
+					(float) Math.random()));
+			setRadarColor(new Color((float) Math.random(),
+					(float) Math.random(), (float) Math.random()));
+			setBulletColor(new Color((float) Math.random(),
+					(float) Math.random(), (float) Math.random()));
+			setScanColor(new Color((float) Math.random(),
+					(float) Math.random(), (float) Math.random()));
+			execute();
+			scan();
+		} while (true);
+	}
+
+	public void onHitRobot(HitRobotEvent e) {
+		if (e.isMyFault()) {
+			reverseDirection();
+		}
+	}
+
+	@Override
+	public void onHitWall(HitWallEvent event) {
+		reverseDirection();
+	}
+
+	public void onScannedRobot(ScannedRobotEvent e) {
+		if (isTeammate(e.getName())) {
+			return;
+		}
+		double dist = e.getDistance();
+		if (dist >= enemyAttract * 1.2) {
+			return;
+		}
+		try {
+			broadcastMessage(e.getName());
+		} catch (IOException ex) {
+			out.println("Unable to send order: ");
+			ex.printStackTrace(out);
+		}
+		enemyAttract = dist;
+		double myX = getX();
+		double myY = getY();
+		double bulletPower;
+		double absoluteBearing = getHeadingRadians() + e.getBearingRadians();
+		double enemyX = myX + e.getDistance() * Math.sin(absoluteBearing);
+		double enemyY = myY + e.getDistance() * Math.cos(absoluteBearing);
+		double enemyHeading = e.getHeadingRadians();
+		double enemyVelocity = e.getVelocity();
+		double missFactor, bulletTravelTime;
+
+		double deltaTime = 0;
+		double battleFieldHeight = getBattleFieldHeight(), battleFieldWidth = getBattleFieldWidth();
+
+		if (movingForward) {
+			setTurnRight(Utils.normalRelativeAngleDegrees(e.getBearing() + 70));
+		} else {
+			setTurnRight(Utils.normalRelativeAngleDegrees(e.getBearing() + 110));
+		}
+		if (e.getDistance() >= 550) {
+			if (getOthers() > 2) {
+				bulletPower = Math.min(1.0,
+						Math.min(getEnergy() / 16, e.getEnergy() / 3));
+			} else {
+				bulletPower = Math.min(0.5,
+						Math.min(getEnergy() / 16, e.getEnergy() / 3));
+			}
+
+		} else if (e.getDistance() >= 300) {
+			if (getOthers() > 2) {
+				bulletPower = Math.min(1.72,
+						Math.min(getEnergy() / 16, e.getEnergy() / 3));
+			} else {
+				bulletPower = Math.min(1.4,
+						Math.min(getEnergy() / 16, e.getEnergy() / 3));
+			}
+		} else if (e.getDistance() >= 200) {
+			if (getOthers() > 2) {
+				bulletPower = Math.min(2.0,
+						Math.min(getEnergy() / 16, e.getEnergy() / 3));
+			} else {
+				bulletPower = Math.min(1.72,
+						Math.min(getEnergy() / 16, e.getEnergy() / 3));
+			}
+		} else if (e.getDistance() >= 150) {
+			bulletPower = Math.min(2.2,
+					Math.min(getEnergy() / 8, e.getEnergy() / 3));
+		} else if (e.getDistance() >= 100) {
+			bulletPower = Math.min(2.4,
+					Math.min(getEnergy() / 8, e.getEnergy() / 3));
+		} else if (e.getDistance() >= 85) {
+			bulletPower = Math.min(2.5,
+					Math.min(getEnergy() / 8, e.getEnergy() / 3));
+		} else if (e.getDistance() >= 70) {
+			bulletPower = Math.min(2.7,
+					Math.min(getEnergy() / 8, e.getEnergy() / 3));
+		} else {
+			bulletPower = Math.min(3.0,
+					Math.min(getEnergy() / 4, e.getEnergy() / 3));
+		}
+		predictedX = enemyX;
+		predictedY = enemyY;
+		do {
+			bulletTravelTime = Point2D.Double.distance(getX(), getY(),
+					predictedX, predictedY) / (20 - 3 * bulletPower);
+
+			predictedX = enemyX
+					+ (Math.sin(enemyHeading) * enemyVelocity * bulletTravelTime);
+			predictedY = enemyY
+					+ (Math.cos(enemyHeading) * enemyVelocity * bulletTravelTime);
+
+			if (predictedX < 18)
+				predictedX = 18;
+			if (predictedY < 18)
+				predictedY = 18;
+			if (predictedX > getBattleFieldWidth() - 18)
+				predictedX = getBattleFieldWidth() - 18;
+			if (predictedY > getBattleFieldHeight() - 18)
+				predictedY = getBattleFieldHeight() - 18;
+
+			missFactor = Math.abs(bulletTravelTime
+					- Point2D.Double.distance(getX(), getY(), predictedX,
+							predictedY) / (20 - 3 * bulletPower));
+			bulletTravelTime = Point2D.Double.distance(getX(), getY(),
+					predictedX, predictedY) / 14;
+		} while (missFactor > 0.001);
+		double theta = Utils.normalAbsoluteAngle(Math.atan2(
+				predictedX - getX(), predictedY - getY()));
+		double radarTurn = Utils.normalRelativeAngle(absoluteBearing
+				- getRadarHeadingRadians());
+		double extraTurn = Math.min(Math.atan(72.0 / e.getDistance()),
+				Rules.RADAR_TURN_RATE_RADIANS);
+		radarTurn += (radarTurn < 0 ? -extraTurn : extraTurn);
+		setTurnRadarRightRadians(radarTurn);
+		setTurnGunRightRadians(Utils.normalRelativeAngle(theta
+				- getGunHeadingRadians()));
+		setFire(bulletPower);
+	}
+
+	@Override
+	public void onRobotDeath(RobotDeathEvent event) {
+		enemyAttract = Double.POSITIVE_INFINITY;
+		setTurnRadarRightRadians(Double.POSITIVE_INFINITY);
+	}
+
+	public void reverseDirection() {
+		if (movingForward) {
+			setBack(40000);
+			movingForward = false;
+		} else {
+			setAhead(40000);
+			movingForward = true;
+		}
+	}
+
+}

@@ -1,0 +1,25 @@
+import threading
+import logging
+import time
+
+logging.basicConfig(level=logging.DEBUG, 
+        format='%(threadName)-10s %(message)s',
+        )
+
+def foo():
+    logging.debug('worker running')
+    return
+
+t1 = threading.Timer(3, foo)
+t1.setName('t1')
+
+t2 = threading.Timer(3, foo)
+t2.setName('t2')
+
+logging.debug('start timer')
+t1.start()
+t2.start()
+logging.debug('canceling %s' % t2.getName())
+t2.cancel()
+logging.debug(done)
+

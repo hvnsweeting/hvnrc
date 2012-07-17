@@ -1,0 +1,64 @@
+comment: "
+
+Interactive mode: (normal mode)
+:let #show all GLOBAL VAR
+:let x = exp # x = exp (global var)
+:let s:x = exp #x = exp (local var - s stands for script)
+
+:while s:count < 5
+:	let s:count += 1
+:	echo s:count
+:endwhile
+continue break can be used
+
+:sleep 50m (sleep 50ms)
+:sleep 5 (5s)
+same with for, for same as Python. for x in range(1, 5)
+
+variable prefix:
+s: local to script
+w: ...window
+b: ...buffer
+g: global
+v: predefined by Vim
+
+deleting var: :unlet! s:count
+
+string is auto converted into zero value when needed
+
+can do math, a?b:c or php concanate "a"."b", logic operation
+
+:let alist = ['aap' ,'mies', 'noot']
+:for n in alist
+:echo n
+:endfor
+
+:let dict = {'one': '1'}
+:echo dict['one']
+can use dict like an object
+
+:if {condition}
+{statement}
+:elseif {condition}
+:else
+{statement}
+:endi# jk
+string compare. append # for match case, ? to ignore case (Eg: ==# or ==?)
+
+
+#Execute : exec an expression
+:execute "normal" . normal_commands
+
+#Evaluate an expression
+eval('&'. optname)
+
+#Function
+:call function_name(args)
+Define a func: f name must begin with a capital letter
+:function {name}({var1}, {var2}, ...)
+	: {body}
+	: return var
+
+	:endfunction
+
+Debug and exception

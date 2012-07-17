@@ -1,0 +1,8 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =6
+let g:netrw_dirhist_1='/home/famihug/Apps/web2py/applications/test/views'
+let g:netrw_dirhist_2='/home/famihug/Apps/web2py/applications/mTask/views'
+let g:netrw_dirhist_3='/home/famihug/Apps/web2py/applications/mTask/views/default'
+let g:netrw_dirhist_4='/home/famihug/Apps/web2py/applications/mTask/views'
+let g:netrw_dirhist_5='/home/famihug/Apps/web2py/applications/mTask/views/default'
+let g:netrw_dirhist_6='/home/famihug/Apps/web2py/applications/mTask/static'

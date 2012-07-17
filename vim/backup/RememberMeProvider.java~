@@ -1,0 +1,20 @@
+
+/**
+ * Provides access to a database of notes. Each note has a priority, the note content
+ */
+public class NotePadProvider extends ContentProvider {
+
+class RememberMeProvider
+{
+	// Define db
+	//
+	//
+	// Implement 6 Provider method
+	//
+	// onCreate()
+	// query()
+	// getType()
+	// insert()
+	// delete()
+	// update()
+}

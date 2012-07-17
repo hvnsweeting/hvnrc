@@ -1,0 +1,17 @@
+Sat May 19 21:21:30 ICT 2012
+
+3 main comps:
+BOunding box
+Frame
+Graphical control
+
+------------
+Widget magins
+Widget padding
+
+Min width / height
+
+min W/H = cells * 70 - 30
+
+AppWidgetProviderInfo
+

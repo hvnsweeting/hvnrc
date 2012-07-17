@@ -1,0 +1,30 @@
+function nghiem = jacobiHPT(A, b, k)
+	%Ax = b
+	%x = Bx + g
+
+%
+A = [4 0.24 -0.08; 0.09 3 -0.15; 0.04 -0.08 4]
+b = [8 9 20]'
+
+B = zeros(size(A))
+%g = zeros(size(b, 1))
+%#for i = 1:size(b, 1)
+%#	B(i,:) = A(i,:) ./ A(i,i);
+%#end
+%B = eye(size(A)) - B
+
+X = zeros(size(b));
+
+duongcheo = diag(A)
+for i = 1:size(A,1)
+	A(i,i) = 0;
+end
+
+%format long e
+for i=1:k
+	printf('Lan lap thu %d\n', i);
+	X = (b - A * X) ./ duongcheo;
+end
+
+nghiem = X;
+end

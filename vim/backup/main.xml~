@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:orientation="vertical" >
+
+	<EditText
+		android:id="@+id/work_enter"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:hint="@string/work_hint"
+		android:lines="1"
+		android:textSize="24"
+		/>
+
+	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal" >
+
+		<TextView
+			android:layout_width="50px"
+			android:layout_height="wrap_content"
+			android:text="@string/hour_edit"
+			android:typeface="normal"
+			android:textSize="15px"
+			android:textStyle="bold"
+			android:padding="5px"
+			/>
+
+		<EditText
+			android:id="@+id/hour_edit"
+			android:layout_width="45px"
+			android:layout_height="wrap_content"
+			android:hint="12"
+			android:textColorHint="@color/hint_color"
+			android:textSize="20px"
+			android:gravity="center"
+			android:padding="5px"
+			android:numeric="integer"
+			android:maxLength="2"
+			/>
+
+		<TextView
+			android:layout_width="65px"
+			android:layout_height="wrap_content"
+			android:text="@string/minute_edit"
+			android:typeFace="normal"
+			android:textSize="15px"
+			android:textStyle="bold"
+			android:padding="5px"
+			/>
+
+		<EditText
+			android:id="@+id/minute_edit"
+			android:layout_width="45px"
+			android:layout_height="wrap_content"
+			android:hint="00"
+			android:textColorHint="@color/hint_color"
+			android:textSize="20px"
+			android:gravity="center"
+			android:padding="5px"
+			android:numeric="integer"
+			android:maxLength="2"
+			/>
+	</LinearLayout>
+
+	<Button
+		android:id="@+id/button"
+		/>
+</LinearLayout>

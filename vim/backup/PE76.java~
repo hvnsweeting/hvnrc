@@ -1,0 +1,4 @@
+public class PE76
+{
+	public static void main(String args[]) { long i,j; long way[]; way = new long [101]; way[0]=1; for(i=99;i>=1;i--) for(j=i;j<=100;j++) way[(int)j]+=way[(int)(j-i)]; System.out.println(way[100]); }
+}

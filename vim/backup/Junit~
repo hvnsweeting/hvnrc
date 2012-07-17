@@ -1,0 +1,32 @@
+based on JUnit
+component-specific test case classes
+Ex: activity is a component
+
+
+Activity only can be invoked by instrumentation
+Only way to send events to the UI from a program is through instrumentation
+
+Base Class: InstrumentationTestCase
+Sub: ActivityInstrumentationTestCase2, ActivityUnitTestCase
+
+Activity testing:
+- Lifecycle control
+- Dependency injection: mock system obj: Contexts Apps
+- UI interaction: use INS to send keystrokes, touch event
+-
+
+AITC2: for activity, allow send mock, test respond to multiple types of intents, not allow mock Contexts or App -> can not isolate
+AUTC: test a single class in isolation, can be injected a mock Context or App. This is the only use mock
+
+SingleLaunchActTestCase: test single act that doesn't change from test to test. Not allow mock
+
+ViewAssert: assert the view
+
+#WHAT TO TEST?
+- input validation
+- lifecycle event
+- intents
+- runtime config changes
+- screen size and resolution
+
+#WHAT TO TEST?

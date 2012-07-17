@@ -1,0 +1,19 @@
+locateWindow
+	true if ch fits a window from table
+
+isAsciiCrLfOrTab
+	true if (ch >= 0x20 && <= 0x7F) || == 0x09 || 0x0A || 0X0D
+
+outputSingleByteRun
+	pass through chars in ASCII, quote chars overlapping with TAG
+	check and validate Surrogate
+	letters fit current Dwin : get offset then | 0x80
+
+quoteSingleByte
+	When quoting a character from a dynamic window use 0x80 - 0xFF, when
+	quoting a character from a static window use 0x00-0x7f.
+
+outputUnicodeRun
+	read next char, if both are compressible, break, else, remain in Unicode mode, 
+	
+

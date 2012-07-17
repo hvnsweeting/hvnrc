@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<title></title>
+	</head>
+	<body>
+		<table style="width: 100%">
+			<tr>
+				<td style="border-bottom: solid activecaption 1px;"><?php include("mainmenu.php"); ?></td>
+			</tr>
+			<tr>
+				<td>
+					<?php
+					$page = $_GET["p"];
+					if ($page != null) {
+						if ($page == "countries") {
+							include("countries.php");
+						} else if ($page == "leagues") {
+							include("leagues.php");
+						} else if ($page == "stadiums") {
+							include("stadiums.php");
+						} else if ($page == "teams") {
+							include("teams.php");
+						} else if ($page == "rounds") {
+							include("rounds.php");
+						} else if ($page == "channels") {
+							include("channels.php");
+						} else if ($page == "matches") {
+							include("matches.php");
+						}else if ($page == "news") {
+							include("news.php");
+						}else if ($page == "photos") {
+							include("photos.php");
+						}else if ($page == "clips") {
+							include("clips.php");
+						}else if ($page == "teammembers") {
+							include("teammembers.php");
+						}else if ($page == "matchevents") {
+							include("choose_match.php");
+						}
+					} else {
+						echo "Wellcome to Football League Information System!";
+					}
+					?>
+				</td>
+			</tr>
+			<tr>
+				<td><?php include("bottom.php"); ?></td>
+			</tr>
+		</table>
+	</body>
+</html>

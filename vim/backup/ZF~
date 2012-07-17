@@ -1,0 +1,47 @@
+Application
+
+Bootstrap.php
+	Contain info about bootstrap, controller...
+application.ini
+--M
+--C: contain app worlflow, mapping request to model and view
+	-- Action
+	
+--V -- Helper
+	-- script -- controller names (PHP and HTML mix)
+--layout
+	-- script : 
+-- data
+
+-- form
+
+####
+	Init: default front controller
+Bootstrap: add more resource by add _initMethodName()
+Thiet ke tung file theo kieu top down
+
+Tat ca cac file deu tao bang zf create...
+action method cung dc tao bang zf
+
+USE AT WILL design
+
+1. Create Models: 
+	- Model with get()s set()s (domain model)
+	- DbTable model (table data gateway to connect db)
+	- DataMapper: map a domain object to db (find, fetchAll, save)
+2. Create controller (auto create controller and views)
+	- map 1-1: action - view script
+
+
+#Naming conventions: 
+	from PEAR, X_Y_Z
+
+#Flow:
+	1. Create project
+	2. Enable layout, edit layout
+	3. init docType() and add resource to appconfig
+	4. Reg db, create db
+	5. Create table data gateway
+	6. Create data mapper
+	7. Create domain model
+	8. Create controller

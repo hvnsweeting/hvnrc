@@ -1,0 +1,13 @@
+<body>
+	Tags: <input type="text" size="100" name="tagsname" /> <br />
+	Các tags đã dùng: <br />
+	<script language="javascript" type="text/javascript">
+		function addtext(NAME) {
+			var newtext = document.getElementsByName('tagsname_1').value;
+			alert(newtext);
+			document.myform.tagsname.value += newtext;
+		}
+	</script>
+
+	<input type='hidden' name='tagsname_1' value='smartusing' /> <input type='submit' onClick=addtext("tagsname_1"); />
+</body>

@@ -1,0 +1,22 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  hello.c
+ *
+ *    Description:  
+ *
+ *        Version:  1.0
+ *        Created:  11/12/2011 05:06:04 PM
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  FamiHug (), famihug@gmail.com
+ *        Company:  FAMILUG
+ *
+ * =====================================================================================
+ */
+
+void hello()
+{
+	printf("Hello HVN");
+}

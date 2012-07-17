@@ -1,0 +1,8 @@
+import Pyro4
+
+name = raw_input("What is your name? ").strip()
+
+#Use nameserver to lookup uri shortcut
+greeting_maker = Pyro4.Proxy("PYRONAME:example.greeting")
+print greeting_maker.get_fortune(name)
+

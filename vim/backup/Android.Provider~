@@ -1,0 +1,22 @@
+ContentResolver cr = getContentResolver();
+
+A query return a cursor obj.
+
+URI: start with  content://
+
+Query a content provider:
+- URI identifies the provider
+- Names of data fields
+- Data types for those fields
+
+ContentResolver.query()  AND Activity.managedQuery()
+
+
+query(CONTENT_URI, NAMES, ROWS, selection arg, sorting order )
+	NAMES: names of columns that should be return,
+	ROWS: which rows to return (FORMAT AS WHERE exclude the WHERE)
+	jljfasuSorting order: format as SQL ORDER BY exclude ORDER BY
+
+Use Cursor obj to read
+Use ContentResolver to add modify, delete
+

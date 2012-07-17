@@ -1,0 +1,43 @@
+Thu May 10 15:19:58 ICT 2012
+
+# 1: ISO 27001
+ISO 27001 -> la co so thiet lap eh thong an nih dam bao
+Kniem an ninh thong tin (C I A)
+Lich su : CODE OF PRACTIVE(10 khia canh - QUAN TRONG), BS 7799 ISO 17799 ISO 27001
+Liet ke 10 khia canh code of practice
+                    +---------------------------------------+
+# 2: MA HOA         |      FAMILUG.ORG                      |
+khai niem           |                                       |
+so do               +---------------------------------------+
+KN ma khoa bi mat, DES mo ta muc cao,
+KN ma khoa cong khai, RSA mo ta muc cao
+ham bam, chu ky so
+
+# 3: BAO MAT UNG DUNG WEB
+SQL Injection  |
+XSS            | co che van hanh, tan cong
+
+# 4: MA DOC
+Phan loai (virus, worm ...)
+PHat hien & chong, co che
+
+# 5: BAO MAT GIAO THUC MANG
+TCP/IP
+DNS
+
+# 6: DOS - DDOS
+KN
+Co che 
+PHong ve 
+
+# 7: Firewall
+KN
+Loc goi tin - phi trang thai
+                co trang thai
+MO hinh (vi tri, DMZ)
+
+VNP
+
+NEN co vi du don gian ve co che tan cong
+
+(Bo? phan sao luu)

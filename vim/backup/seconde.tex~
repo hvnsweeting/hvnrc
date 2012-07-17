@@ -1,0 +1,11 @@
+\documentclass[14pt, a4paper]{report}%comment
+usepackage[utf8]{vietnam}
+\begin{document}
+Chả chào mừng thằng nào hết 
+\begin{center}
+Đi vào giữa
+\end{center}
+\begin{flushright}
+Phải
+\end{flushright}
+\end{document}

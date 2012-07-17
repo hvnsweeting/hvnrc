@@ -1,0 +1,43 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  qsort2.c
+ *
+ *    Description:  test qsort again
+ *
+ *        Version:  1.0
+ *        Created:  06/15/2012 03:19:39 PM
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  FamiHug (), famihug@gmail.com
+ *        Company:  FAMILUG
+ *
+ * =====================================================================================
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int compare(void * a, void * b)
+{
+	return (*(int *) a - *(int * ) b);
+}
+
+int main()
+{
+	int values[] = { 88, 2 ,3, 4, 52, 32, 1,54, 4};
+	//number of elements in array
+	int nelems = sizeof(values) / sizeof(int);
+
+	//qsort array
+	qsort(values, nelems, sizeof(int), compare);
+
+	int n;
+	for(n = 0; n < nelems; n++ )
+	{
+		printf("%d " , values[n]);
+	}
+	return 0;
+
+}

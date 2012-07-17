@@ -1,0 +1,47 @@
+var EXPORTED_SYMBOLS = ["extLoader"]; 
+
+var extLoader = {	//This name is fix!
+	folderPath: "",	//Change this to appropriate path e.g: "C:\\Users\\MyComputerName\\Desktop\\" if noting set, Desktop path will be used
+
+	pointers:	null,	//QFN will load this for you.
+	info: {
+		GUID: "3899dd04-5786-41ee-b86c-d1a6bb845eb7",
+		name: "Save all",
+		version: "0.1",
+		developer: "Andy J",
+		description: "Save all notes in editor to separate files",
+		qfnVersion: ["2.4C", "*"],
+		ffVersion: ["3.*", "*"]
+	},
+	//Use me for pointing to the functions in this scope, QFN will fix the pointer for you
+	xul: " \
+		<hbox id='top-toolbar'> \
+			<toolbarbutton tooltiptext='Save all notes to local disk' insertbefore='editor-tabbox-toolbar-toolbarbutton6' oncommand='me.doSave()' \
+				image='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAAK/INwWK6QAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAFSSURBVHjapFPNaoNAEJ7UaIqlIgEveYkGvPSod5/Bq9DnKUWPfYGevBvwUtCD5wY8ek2kVuL6V2fDCmtKsGRgdoeZb76Z2Z9F3/dwiyxxcRwnEATBeHbe4EECeBwU9/vlGXRqAH4IwDc575/eC7Rtu/M8z6SQrusMXdfBfppX9bTdQhRFxthB0zTICFU7jwCxmDMSMEdJ5hGwgiNBXddUy3oeAcOj3DFGdOz3X3SMa4oYxHIjoIMQAh/vr1BV1dXqq9UKNE0bO+BGUFX13yNwHaBYlgWbzebPxCzLwPf9kYS7RnqIZUm7sG2bBl3X5Qgwluc5yLJ8eQaoh8MBjscjKIpCg2hPBTGiKPIdsHeACVhhvV7TINpTQQzGuXcwJJtxHAeSJNExWAdoT6UoisuXOPyF3bCZgwZhGFICnDNNUwrCq0UyRpgkCcuBxa3f+VeAAQBc2vzIX8mG5AAAAABJRU5ErkJggg=='/> \
+		</hbox> \
+	",	  
+
+	initialize: function () {
+		//Check if user set folderPath variable or not
+		if (!this.folderPath)
+			this.folderPath = this.pointers.api.path("Desk");
+	},
+	
+	/*Extension's functions (Optional)*/
+	doSave: function () {
+		//Find all notes
+		this.pointers.api.titleNotification.show("Saving...");
+		
+		var tab = this.pointers.api.list.tab();
+		for (var i = 0; i < tab.length; i++) {
+			var data = this.pointers.api.get.noteContent(i+1);
+			var title =  this.pointers.api.get.noteTitle(tab[i]); 
+			if (!this.pointers.api.saveToFile(this.folderPath + title + ".txt", data)) {
+				this.pointers.api.alert("extSaveAll", "I cannot write here. Correct the 'folderPath' variable and try again!");
+				this.pointers.api.titleNotification.show("Error during saving!");
+				return;
+			}
+		}
+		this.pointers.api.titleNotification.show("Saved");
+	}
+}

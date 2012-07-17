@@ -1,0 +1,17 @@
+from multiprocessing import Process, Queue
+
+def foo(q):
+	q.put(1)
+
+def bar(q):
+	q.put(2)
+
+if __name__ == '__main__':
+	que = Queue()
+	p = Process(target=foo, args=(que,))
+	q = Process(target=bar, args=(que,))
+	p.start(q)
+	q.start(q)
+	print que.get()
+	print que.get()
+

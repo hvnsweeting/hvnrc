@@ -1,0 +1,40 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import codecs
+import string
+
+PATH = '/home/famihug/python/'
+
+
+f1 = codecs.open(PATH + 'am', 'r', "utf-8")
+nguyen_am = f1.readline()
+
+kq = u''
+f = codecs.open(PATH + 'ChiecNhan.txt', 'r', 'utf-8')
+table = string.maketrans( '', '', )
+d = {}
+punc_and_lf = string.punctuation + '\n' + '\r'
+#string = f.readline()
+for s in f:
+	s = s.lower()
+	s = u"".join(c for c in s if c not in punc_and_lf)
+	ls = s.split(" ")
+	for word in ls:
+		for i in range(0,len(word)):
+			if nguyen_am.__contains__(word[i]):
+				#removed_punc = u"".join(c for c in word[i:] if c not in punc_and_lf)
+				removed_punc = word[i:]
+				if d.has_key(removed_punc):
+					d[removed_punc] += 1
+				else:
+					d[removed_punc] = 1
+
+				kq += removed_punc
+				kq += " " 
+				break;
+		
+f2 = codecs.open(PATH + 'resChiecNhan.txt', 'w', 'utf-8')
+#f2.write(kq)
+for k in d.keys():
+	f2.write(str(d[k]) + ":" + k  + "\n")
+

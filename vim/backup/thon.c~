@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#define TOTAL 5
+#define MAX 10
+
+typedef struct product
+{
+	char name[MAX];
+	char manufactory[MAX];
+	int  year;
+	int  pcs;
+}product;
+
+
+product motor[TOTAL];
+int count=0;
+int i;
+
+void init(int);
+void print_all(int);
+
+int main()
+{
+	for(i=0; i<TOTAL; i++)
+		init(i);
+	
+	printf("\n Print:");
+	print_all(TOTAL);
+
+	return 0;
+}
+
+
+void init(int n)
+{	
+	printf("\nTen xe        :");
+	fgets(motor[n].name, MAX, stdin);
+
+
+	printf("\nHang san xuat :");
+	fgets(motor[n].manufactory, MAX, stdin);
+	
+	printf("\nNam San xuat  :");
+	scanf("%d", &motor[n].year);
+	
+	printf("\nSo luong      :");
+	scanf("%d", &motor[n].pcs);
+
+	char c =getchar();
+	free(&c);
+
+}
+
+void print_all(int n)
+{
+	for(i=0; i<n; i++)
+	{
+		printf("\n\tTen xe        : %s", motor[i].name);
+
+		printf("\n\tHang san xuat : %s", motor[i].manufactory);
+	
+		printf("\n\tNam San xuat  : %d", motor[i].year);
+	
+		printf("\n\tSo luong      : %d", motor[i].pcs);
+	}
+}

@@ -1,0 +1,55 @@
+import urllib2
+import logging
+
+#class TimeoutException(Exception): pass
+#@contextmanager
+#def time_limit(seconds):
+#    def signal_handler(signum, frame):
+#        raise TimeoutException, "Timed out!"
+#    signal.signal(signal.SIGALRM, signal_handler)
+#    signal.alarm(seconds)
+#    try:
+#        yield
+#    finally:
+#        signal.alarm(0)
+TIME_INTERVAL = 5
+
+def test_loop(url):
+    try:
+        opener = urllib2.build_opener(SmartRedirectHandler())
+        try:
+            #with time_limit(3):
+            f = opener.open(url, None, TIME_INTERVAL)
+        except urllib2.URLError as e:
+            logging.debug("URLError %s" % e)
+            return False        
+    except (urllib2.URLError,urllib2.HTTPError):
+        logging.debug("URLError or HTTPError or Timeout")
+        return False
+    except Exception as e:
+        logging.debug("%s" % e)
+    else:
+        return True
+
+class SmartRedirectHandler(urllib2.HTTPRedirectHandler):
+    recursion = 0
+
+    def http_error_301(self, req, fp, code, msg, headers):
+        self.recursion += 1
+        if self.recursion > 2:
+            logging.debug("301")
+            raise Exception("I won't follow redirects")
+        result = urllib2.HTTPRedirectHandler.http_error_301(self, req, fp, code, msg, headers)
+        result.status = code
+        return result
+
+    def http_error_302(self, req, fp, code, msg, headers):
+        self.recursion += 1
+        if self.recursion > 2:
+            logging.debug("302")
+            raise Exception("I won't follow redirects")
+        result = urllib2.HTTPRedirectHandler.http_error_302(self, req, fp, code, msg, headers)
+        result.status = code
+        return result
+
+#print test_loop('http://is.gd/ySqJJd')

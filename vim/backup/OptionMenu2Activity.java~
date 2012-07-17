@@ -1,0 +1,95 @@
+package com.familug.hvn;
+
+import java.util.ArrayList;
+
+import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+
+public class OptionMenu2Activity extends Activity {
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+
+		array = new ArrayList<Work>();
+		arrayAdapter = new WorkListAdapter(this, R.id.list, array);
+
+		final EditText workEnter = (EditText) findViewById(R.id.work_enter);
+		final EditText hourEdit = (EditText) findViewById(R.id.hour_edit);
+		final EditText minuteEdit = (EditText) findViewById(R.id.minute_edit);
+		final Button button = (Button) findViewById(R.id.button);
+		final ListView list = (ListView) findViewById(R.id.list);
+
+		list.setAdapter(arrayAdapter);
+
+		OnClickListener add = new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (workEnter.getText().toString().equals("")
+						|| hourEdit.getText().toString().equals("")
+						|| minuteEdit.getText().toString().equals(""))// end
+																		// condition
+				{
+					AlertDialog.Builder builder = new AlertDialog.Builder(
+							OptionMenu2Activity.this);
+					builder.setTitle("Info missing");
+					builder.setMessage("Plz enter more info");
+					builder.setPositiveButton("Continue",
+							new DialogInterface.OnClickListener() {
+
+								@Override
+								public void onClick(DialogInterface arg0,
+										int arg1) {
+									// TODO Auto-generated method stub
+
+								}
+							});
+					builder.show();
+
+				}// endif
+
+				else {
+					String workContent = workEnter.getText().toString();
+					String timeContent = hourEdit.getText().toString() + ":"
+							+ minuteEdit.getText().toString();
+					Work work = new Work(workContent, timeContent);
+					array.add(0, work);
+					arrayAdapter.notifyDataSetChanged();
+					workEnter.setText("");
+					hourEdit.setText("");
+					minuteEdit.setText("");
+				} // endelse
+			}
+
+		};
+
+		button.setOnClickListener(add);
+		// button.setOnClickListener(add);
+	}// end onCreate
+
+	public boolean onCreateOptionsMenus(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		menu.add(0, DELETE_WORK, 0, "Delete").setIcon(
+				android.R.drawable.ic_delete);
+		menu.add(0, ABOUT, 0, "About").setIcon(
+				android.R.drawable.ic_menu_info_details);
+
+		return true;
+	}
+
+	private static final int DELETE_WORK = Menu.FIRST;
+	private static final int ABOUT = Menu.FIRST + 2;
+	public ArrayList<Work> array;
+	public WorkListAdapter arrayAdapter;
+
+}// class

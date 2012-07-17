@@ -1,0 +1,14 @@
+<html>
+	<head>
+		<script type="text/javascript" language="JavaScript" src="savestate.js">
+		</script>
+		<script type="text/javascript" language="JavaScript">
+			function test()
+{
+	alert("test");
+}
+		</script>
+	</head>
+	<body onload="test()">
+	</body>
+</html>

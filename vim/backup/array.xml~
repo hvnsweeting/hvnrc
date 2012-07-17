@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="planets_array">
+        <item>Default</item>
+        <item>English</item>
+        <item>Vietnamese</item>
+    </string-array>
+    
+    <string-array name="choose_app_camera_array">
+        <item></item>
+        <item>English</item>
+        <item>Vietnamese</item>
+        
+		<item>Choose application will show when hold button camera</item>
+		<item>Choose application will show when hold button search</item>
+		<item>Default</item>
+		<item>Choose application will show</item>
+		<item>Choose languages show</item>
+		<item>Choose color show</item>
+        
+    </string-array>
+
+    <declare-styleable name="com.admob.android.ads.AdView">
+        <attr format="color" name="backgroundColor" />
+        <attr format="color" name="primaryTextColor" />
+        <attr format="color" name="secondaryTextColor" />
+        <attr format="string" name="keywords" />
+        <attr format="integer" name="refreshInterval" />
+    </declare-styleable>
+    
+    
+
+</resources>

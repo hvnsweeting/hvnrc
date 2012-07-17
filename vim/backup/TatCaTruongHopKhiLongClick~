@@ -1,0 +1,14 @@
+
+click 1 phat tha luon
+	start - cancel
+long click ko move
+	start
+	het gio -> startAct
+
+long click move it
+	start
+	het gio -> startACt
+
+long click move nhieu
+	start
+	move, cancel start

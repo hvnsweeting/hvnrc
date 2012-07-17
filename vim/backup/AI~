@@ -1,0 +1,70 @@
+Unit 1:
+excite
+
+AI program is called Intelligent agent
+
+  	sensors
+agent 		environment
+	actuators
+	
+AI has successfully been used in finance, robotic, games, medicine, theweb
+
+#terminology (thuat ngu)
+fully vs partially observable: (memoizing to decide)
+perception - action cycle
+
+deterministic vs stochastic:
+1.agent's action determine outcome
+2. random can affect
+
+discrete vs continuous:
+1. finally many choices
+2. infinite
+
+benign vs adversarial:
+1.no objective to contradict your own ojectiv
+2.environment is out to get you
+
+Unit2 Problem solving
+(s: state
+a: action
+n: number)
+
+problem can broke down to many component:
+
+inital state
+action(s) -> {a,a2,a3...}
+result(s, a) -> s'
+goalTest(s) -> T/F
+pathCost(s-(a)->s-(a)->s) -> n
++ stepCost(s,a,s') -> n
+
+frontier
+unexplored
+explored
+
+Tree search
+Graph search (avoid repeat the path) : good for find least step
+
+
+BFS (Breadth first search) :
+
+Uniform cost search (Cheapest first): find optimal path
+
+
+DFS : space save  
+may not find the goal if tree is infinitive
+
+Greedy best-first search
+
+A star algorithm (A*)
+f = g + h
+if h(s) < true cost
+
+search work when
+domain:
+fully boservable
+known action
+discrete
+deterministic
+static

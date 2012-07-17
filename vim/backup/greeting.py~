@@ -1,0 +1,20 @@
+import Pyro4
+
+class GreetingMaker(object):
+	def get_fortune(self, name):
+		return "Hello, {0}, heheheheh".format(name)
+
+greeting_maker = GreetingMaker()
+
+#Make a daemon
+daemon = Pyro4.Daemon()
+
+#find name server
+ns = Pyro4.locateNS()
+uri = daemon.register(greeting_maker)
+
+
+ns.register("example.greeting", uri)
+
+#Start event loop of the server to wait for call
+daemon.requestLoop()

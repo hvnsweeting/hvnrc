@@ -1,0 +1,110 @@
+import java.io.*;
+
+public class HTMLAnimationCreator
+{
+	static BufferedReader br;
+	static BufferedWriter bw; 
+	public static void main (String [] args) throws IOException {
+		br = null;
+		bw = null;
+		try {
+			br = new BufferedReader(new FileReader("temp.html"));
+			bw = new BufferedWriter(new FileWriter("AnimateCar.html"));
+			int range = 500;
+			if(args.length != 0)
+				range = Integer.parseInt(args[0]);
+
+			writeContentToFile(range);
+		} catch(IOException e)
+		{
+			e.printStackTrace();
+		} finally
+		{
+			if(br != null)
+				br.close();
+			if(bw != null)
+				bw.close();
+		}//finally
+	}//main
+
+	static void writeContentToFile(int range) throws IOException
+	{
+
+		bw.write("<html> ");
+		bw.write("<meta charset=utf-8>");
+		bw.write("<head>");
+		bw.write("<style type=\"text/css\">");
+		bw.write("#banhsau");
+		bw.write("{");
+		bw.write("width:60px;");
+		bw.write("height:60px;");
+		bw.write("background:#92B901;");
+		bw.write("color:#ffffff;");
+		bw.write("position:relative;");
+		bw.write("font-weight:bold;");
+		bw.write("font-size:20px;");
+		bw.write("padding:10px;");
+		bw.write("-moz-animation:xoayBanhSau 5s infinite alternate;");
+		bw.write("border-radius:100px;");
+		bw.write("top:80;");
+		bw.write("}");
+		bw.write("");
+		bw.write("#banhtruoc");
+		bw.write("{");
+		bw.write("width:60px;");
+		bw.write("height:60px;");
+		bw.write("background:#92B901;");
+		bw.write("color:#ffffff;");
+		bw.write("position:relative;");
+		bw.write("font-weight:bold;");
+		bw.write("font-size:20px;");
+		bw.write("padding:10px;");
+		bw.write("-moz-animation:xoayBanhTruoc 5s infinite alternate;");
+		bw.write("border-radius:100px;");
+		bw.write("}");
+		bw.write("");
+		bw.write("#than");
+		bw.write("{");
+		bw.write("width:60px;");
+		bw.write("height:60px;");
+		bw.write("position:relative;");
+		bw.write("-moz-animation:diChuyenThan 5s infinite alternate;");
+		bw.write("}");
+		bw.write("");
+		bw.write("@-moz-keyframes xoayBanhSau");
+		bw.write("{");
+		bw.write("0% {background:#92B901; -moz-transform: rotate(0deg);left:57;}");
+		bw.write("100% {background:red; -moz-transform: rotate(360deg);left:" + (57 + range) + "px;}");
+		bw.write("}");
+		bw.write("");
+		bw.write("@-moz-keyframes xoayBanhTruoc");
+		bw.write("{");
+		bw.write("0% {background:#92B901; -moz-transform: rotate(0deg);left:275;}");
+		bw.write("100% {background:yellow; -moz-transform: rotate(360deg);left:" + (275 + range) + ";}");
+		bw.write("}");
+		bw.write("");
+		bw.write("@-moz-keyframes diChuyenThan");
+		bw.write("{");
+		bw.write("0% {left:0px;}");
+		bw.write("100% {left:" + range + "px;}");
+		bw.write("}");
+		bw.write("");
+		bw.write("</style>");
+		bw.write("</head>");
+		bw.write("");
+		bw.write("<body>");
+		bw.write("<p><b><center> FAMILUG CAR<br> Nguyễn Việt Hưng - Toán tin 2 k53</center></b></p>");
+		bw.write("<div id=\"than\">");
+		bw.write("<img src=\"greencar.png\">");
+		bw.write("</div>");
+		bw.write("<div id=\"banhsau\">");
+		bw.write("<span>FAMI<br>.LUG.</span>");
+		bw.write("</div>");
+		bw.write("");
+		bw.write("<div id=\"banhtruoc\">");
+		bw.write("<span><br>-FTW-</span>");
+		bw.write("</div>");
+		bw.write("</body>");
+		bw.write("</html>");
+	}//writeContentToFile
+}//HTMLAnimationCreator

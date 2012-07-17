@@ -1,0 +1,294 @@
+<h1>Danh mục trận đấu</h1>
+<head>
+<script language="javascript" src="calendar/calendar.js"></script>
+</head>
+
+<?php
+require_once 'config.php';
+require_once('calendar/classes/tc_calendar.php');
+require_once 'time_functions.php';
+require_once 'html_form_helper.php';
+startMySQLConnection();
+?>
+
+<form name="frmDetail" id="frmDetail" method="post" action="http://localhost/OfflineFBL/?p=matchevents">
+	<input type="hidden" name="hdnDetailId" />
+	</form>
+
+	<form name="frmC" id="frmC" method="post" action="">
+	<input type="hidden" name="hdnUpdateId" />
+	<input type="hidden" name="hdnDeleteId" />
+	<input type="hidden" name="hdnAddCommand" value="0" />
+<?php
+// Handle Update
+if (isset($_POST["hdnUpdateId"]) && $_POST["hdnUpdateId"] > 0) {
+	$id = $_POST["hdnUpdateId"];
+	$sql = "Update matches set `name` = '" . $_POST["txtName_" . $id] . "' Where id=" . $id;
+	mysql_query($sql);
+}
+// Handle Delete
+if (isset($_POST["hdnDeleteId"]) && $_POST["hdnDeleteId"] > 0) {
+	$id = $_POST["hdnDeleteId"];
+	$sql = "Delete From `matches` Where id=" . $id;
+	mysql_query($sql);
+}
+// Handle Add new:
+if (isset($_POST["hdnAddCommand"]) && $_POST["hdnAddCommand"] > 0) {
+	$hourminute = $_POST["txtTime"];
+	$hour = $_POST["sltHour"];
+	$minute = $_POST["sltMinute"];
+	$league = $_POST['sltLeague'];
+	$homeTeam = $_POST["sltHomeTeam"];
+	$guessTeam = $_POST["sltGuessTeam"];
+	$round = $_POST["sltRound"];
+	$startDate = isset($_REQUEST["date1"]) ? $_REQUEST["date1"] : "";
+	$tsStart = strtotime($startDate . " " . $hour . ":" . $minute . ":00");
+	$channel = $_POST["sltChannel"];
+	$stadium = $_POST["sltStadium"];
+
+	$sql = "Insert Into matches(leagueId, homeTeamId, guessTeamId, roundId, channelId, stadiumId, startDateTime) Values($league, $homeTeam, $guessTeam, $round, $channel, $stadium, $tsStart)";
+	mysql_query($sql);
+}
+//id 	homeTeamId 	guessTeamId 	roundId 	homeTeamGoals 	guessTeamGoals 	startDateTime 	channelId 	stadiumId 
+// List matches by name
+$filterByLeague = $_POST["sltFiltByLeague"];
+$startDate = $_POST["filtDate"];
+$filterByDate = strtotime($startDate);
+//$filterByTeam = $_POST["sltFiltTeam"];
+
+$sql = "
+	SELECT matches.id as id, leagues.name as league ,homeTeam.name as homeName, homeTeamGoals, guessTeamGoals, guessTeam.name as guessName, rounds.name as round, startDateTime, channels.name as channel, stadiums.name as stadium 
+	FROM `matches`
+	LEFT JOIN leagues ON leagues.id = leagueId
+	LEFT JOIN teams as homeTeam On homeTeam.id = matches.homeTeamId
+	LEFT JOIN teams as guessTeam ON guessTeam.id = matches.guessTeamId
+	LEFT JOIN rounds ON rounds.id = rounds.id
+	LEFT JOIN channels ON channels.id = channelId
+	LEFT JOIN stadiums ON stadiums.id = stadiumId
+	WHERE matches.roundId = rounds.id AND matches.channelId = channels.id AND matches.stadiumId = stadiums.id " .
+	($filterByLeague != null & $filterByLeague != "" & $filterByLeague != "all" ? " AND matches.leagueId = " . $filterByLeague : "") .
+	($filterByDate != null & $filterByDate != "" ? " AND matches.startDateTime >= " . $filterByDate : "") .
+
+	" Order By `startDateTime` Desc";
+echo $sql;
+$result = mysql_query($sql);
+?>
+<table>
+	<tr>
+	<td>
+	Giải đấu: <select name="sltFiltByLeague">
+	<option value="all">Tất cả</option>
+	<?php printAllSelectOptionsFromTable("leagues"); ?>
+	</select>
+	</td>
+	<td>
+	Từ ngày: 
+	</td>
+	<td>
+<?php
+$date1_default = timestampToStringYMD(time());
+$myCalendar = new tc_calendar("filtDate", true, false);
+$myCalendar->setIcon("calendar/images/iconCalendar.gif");
+$myCalendar->setDate(date('d', strtotime($date1_default))
+	, date('m', strtotime($date1_default))
+	, date('Y', strtotime($date1_default)));
+$myCalendar->setPath("calendar/");
+$myCalendar->setYearInterval(1970, 2020);
+$myCalendar->setAlignment('left', 'bottom');
+$myCalendar->writeScript();
+?>
+</td>
+	<td>
+	Đội <select name="sltFiltTeam">
+	<option value="all">Tất cả</option>
+	<?php									printAllSelectOptionsFromTable("teams");?>
+	</select>
+	</td>
+	<td>
+	<input type="submit" value="Liệt kê">
+	</td>
+	</tr>
+	</table>
+
+	<table style="border: solid activecaption thin;">
+	<tr style="background-color: activecaption;">
+	<td><b>Id</b></td>
+	<td><b>Đội chủ nhà</b></td>
+	<td><b>Tỉ số</b></td>
+	<td><b>Đội khách</b></td>
+	<td><b>Giải</b></td>
+	<td><b>Vòng đấu</b></td>
+	<td><b>Ngày</b></td>
+	<td><b>Giờ(hh:mm)</b></td>
+	<td><b>Kênh</b></td>
+	<td><b>Sân vận động</b></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr style="background-color: #dcdcdc;">
+	<td></td>
+	<td>
+	Thêm trận:
+	<select name="sltHomeTeam">
+	<?php printAllSelectOptionsFromTable("teams") ?>
+	</select>
+	</td>
+	<td></td>
+	<td>
+	<select name="sltGuessTeam">
+	<?php printAllSelectOptionsFromTable("teams") ?>
+	</select>
+	</td>
+	<td>
+	<select name="sltLeague">
+	<?php printAllSelectOptionsFromTable("leagues") ?>
+	</select>
+
+	</td>
+	<td>
+	<select name="sltRound">
+	<?php printAllSelectOptionsFromTable("rounds") ?>
+	</select>
+	</td>
+	<td>
+<?php
+$date1_default = timestampToStringYMD(time());
+$myCalendar = new tc_calendar("date1", true, false);
+$myCalendar->setIcon("calendar/images/iconCalendar.gif");
+$myCalendar->setDate(date('d', strtotime($date1_default))
+	, date('m', strtotime($date1_default))
+	, date('Y', strtotime($date1_default)));
+$myCalendar->setPath("calendar/");
+$myCalendar->setYearInterval(1970, 2020);
+$myCalendar->setAlignment('left', 'bottom');
+$myCalendar->writeScript();
+?>
+</td>
+	<td>
+	<select name="sltHour">
+<?php
+for ($i = 0; $i < 24; $i++) {
+	if ($i < 10) {
+		$str = "0" . $i;
+	}
+	else
+		$str = $i;
+	echo '<option value=' . $str . '>' . $str . '</option>';
+}
+?>
+
+</select>
+	:
+	<select name="sltMinute">
+<?php
+for ($i = 0; $i < 60; $i++) {
+	if ($i < 10) {
+		$str = "0" . $i;
+	}
+	else
+		$str = $i;
+	echo '<option value=' . $str . '>' . $str . '</option>';
+}
+?>
+</select>
+	</td>
+	<td>
+	<select name="sltChannel">
+	<?php printAllSelectOptionsFromTable("channels") ?>
+	</select>
+	<td>
+	<select name="sltStadium">
+	<?php printAllSelectOptionsFromTable("stadiums") ?>
+	</select>
+	</td>
+	<td>
+	<input type="button" name="btnAddNew" value="Thêm mới" 
+	onclick="
+	frmC.hdnAddCommand.value='1'; 
+frmC.submit();
+" 
+	/>
+	</td>
+	</tr>
+<?php
+$i = 0;
+while ($r = mysql_fetch_array($result)) {
+	$cId = $r["id"];
+?>
+	<tr style="background-color: <?php echo($i % 2 == 0 ? "white" : "#f5f5f5"); ?>">
+		<td><?php echo($r["id"]); ?></td>
+		<td>
+		<input type="text" 
+		name="txtName_<?php echo($cId); ?>" 
+		value="<?php echo($r["homeName"]); ?>"
+		style="border:none; width: 100%; background-color: inherit;"
+		/>
+		</td>
+		<td>
+<?php
+	if ($r["homeTeamGoals"] == 0 & $r["guessTeamGoals"] == 0)
+		echo "? : ?";
+	else
+		echo($r["homeTeamGoals"] . ":" . $r["guessTeamGoals"]);
+?>
+	</td>
+		<td>
+		<?php echo($r["guessName"]); ?>
+		</td>
+		<td>
+		<?php echo($r["league"]); ?>
+		</td>
+		<td>
+		<?php echo($r["round"]); ?>
+		</td>
+		<td>
+		<?php echo(timestampToStringDMY($r["startDateTime"])); ?>
+		</td>
+
+		<td>
+
+		<?php echo(timestampToStringHM($r["startDateTime"])); ?>
+		</td>
+
+		<td>
+		<?php echo($r["channel"]); ?>
+		</td>
+		<td>
+		<?php echo($r["stadium"]); ?>
+		</td>
+
+		<td nowrap="true">
+		<input type="button" 
+		name="btnDetail_<?php echo($cId); ?>"
+		onclick="frmDetail.hdnDetailId.value='<?php echo($cId); ?>';
+	frmDetail.submit();
+
+	"
+		value="Detail"
+		/>
+
+		<input type="button" 
+		name="btnUpdate_<?php echo($cId); ?>"
+		onclick="
+		frmC.hdnUpdateId.value='<?php echo($cId); ?>';
+	frmC.submit();
+	"
+		value="Edit"
+		/>
+		<input type="button" 
+		name="btnDelete_<?php echo $cId; ?>"
+		onclick="
+		if (confirm('Bạn chắc chắn muốn xóa?')) {
+			frmC.hdnDeleteId.value='<?php echo($cId); ?>';
+			frmC.submit();
+		}
+	"
+		value="Xóa"
+		/>
+		</td>
+		</tr>
+<?php
+	$i++;
+}
+?>
+</table>
+	</form>

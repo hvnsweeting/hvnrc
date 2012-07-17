@@ -1,0 +1,78 @@
+from PyQt4 import QtGui, QtCore
+from urllib2 import Request, urlopen, urlparse
+from BeautifulSoup import BeautifulSoup, SoupStrainer
+from redirect2 import test_loop2
+from basethread import BaseThread
+from redirect_handler import test_loop
+import logging
+
+class CheckVitalThread(BaseThread):
+
+    def set_data(self, url):
+        self.url = url
+
+    def run(self):
+        logging.info("checking vital component in %s", self.url)
+        all_res = ""
+        separator =  "*" * 50
+
+        res = "*****Check vital components result for %s :*****\n" % self.url
+
+        entered_url = self.url
+        request  = Request(entered_url)
+        response = urlopen(request)
+        soup = BeautifulSoup(response)
+        # trim url
+        parsed = urlparse.urlparse(entered_url)
+        trimed_url = parsed.scheme + "://" + parsed.netloc + "/"
+
+
+        """Check all css and js"""
+        alive_dead_list = self.find_tag_and_check_link(soup, trimed_url)
+
+        res = ""
+        res = res + 'Alive components: ' + str(len(alive_dead_list[0])) + "\n"
+        all_dead = ""
+        all_dead = "\n".join(alive_dead_list[1])
+        res = res + 'Dead components:' + str(len(alive_dead_list[1])) + "\n" + all_dead
+        all_res += res
+        all_res += "\n" + separator
+        self.emit(QtCore.SIGNAL("VitalData"), all_res)
+
+    def remove_prefix_slash(self,string):
+        """Must do this because we trail all link with /"""
+        try:
+            if string[0] == '/':
+                return string[1:]
+            else:
+                return string
+        except:
+            return string
+
+    def find_tag_and_check_link(self, soup, url):
+        dead_comp = []
+        alive_comp = []
+        tags = ["script", "img", "link"]
+        for comp in soup.findAll(tags):
+            if comp.has_key("href") or comp.has_key("src"):
+                if comp.has_key("href"):
+                    path = ''.join(comp["href"])
+                elif comp.has_key("src"):
+                    path = ''.join(comp["src"])
+
+                path = self.remove_prefix_slash(path)
+
+                if path[:7] == "http://" or path[:8] == "https://":
+                    #external link
+                    full_link = path
+                else:
+                    #internal link
+                    full_link = url + path
+
+
+                if not test_loop(full_link):
+                    dead_comp.append(full_link)
+                else:
+                    alive_comp.append(full_link)
+
+        return (alive_comp, dead_comp)

@@ -1,0 +1,14 @@
+function [va] = tuTuongQuanRieng(vr, k)
+%Cho vector dau vao la cac tu tuong quan mau, 
+%Tra ve vector a chua tu tuong quan rieng thu 1 - > thu k.
+
+va = zeros(k, k);
+va(1, 1) = vr(1, 1); %k = 0
+
+for i=1:k
+	va(i + 1, i + 1) = vr(1, i + 1) - sum(vr(1, 1:i) .* a(i, k:-1:1))
+	va(i + 1, 1:i) = va(i, 1:i) - va(i + 1, i + 1) .* va(i, k:-1:1)
+end
+
+
+end

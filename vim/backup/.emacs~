@@ -1,0 +1,8 @@
+  (setq inferior-lisp-program "/usr/bin/clisp") ; your Lisp system
+(add-to-list 'load-path "/home/famihug/.slime/")  ; your SLIME directory
+(require 'slime)
+(slime-setup)
+(global-font-lock-mode t)
+(show-paren-mode 1)
+(add-hook 'lisp-mode-hook '(lambda ()
+							 (local-set-key (kbd "RET") 'newline-and-indent'))) 

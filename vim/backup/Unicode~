@@ -1,0 +1,19 @@
+
+UTF-16: 16bits
+not suitable for ASCII based OS, text-processing soft. Use 16 bits for all char.
+
+UTF-8 encode all ASCII chars using the same bytes as in  ASCII.
+0000-007F: 1bytes
+0080-07FF: 2
+0800-FFFF: 3
+10000-10FFFF:4
+
+Compress Unicode: SCSU , BOCU-1
+
+Standard compression scheme for Unicode
+Big-endian UTF-16(UTF16-16BE)
+
+BOCU-1: binary ordered compression of Unicode
+
+Big-endian: Start with FE FF  0061  (end at most-significant end)
+little-endian: FF FE 6100 (least significant end)

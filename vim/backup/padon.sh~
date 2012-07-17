@@ -1,0 +1,3 @@
+#!/bin/bash
+PASS='loved@le'
+echo $PASS | sudo -S modprobe -r psmouse

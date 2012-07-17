@@ -1,0 +1,24 @@
+Tỷ lệ nén: (Ratio)
+Hệ số nén: (Factor)
+Mức hao hụt:
+
+Average-length
+sum from i=1 to n {p_i l_i}
+
+Self-infomation. Bảng chữ cái S
+I(s_i) = sum from i=1 to n {-log_2 {p_i}}
+
+Entropy
+H(C) = sum from i=1 to n {p_i I(i)} = sum from i=1 to n{p_i log_2 1 over p_i}
+
+Bảng mã ở điều kiện tốt nhất 
+RLE
+Huffman
+
+Unicode
+UTF8,16,32
+BE, LE
+
+SCSU
+
+

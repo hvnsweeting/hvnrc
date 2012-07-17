@@ -1,0 +1,77 @@
+gnome-session-save --kill #logout gnome
+config ~/.xinitrc    exec awesome
+
+startx -- :1
+lshw -C network
+ifconfig
+netstat -nr
+/sbin/route
+lshw -C usb
+date #displays the current time and date
+cal #displays a calendar of the current month
+free #displays the amount of free memory
+file #detemine file type
+less #"less is more"
+whatis #displays manual page description
+ps -eo user,pcpu,pid,cmd | sort -r -k2 | head -6
+cat #CONCATENATE read one or more files and copies them to standard output, 	used to display short text files, join files together
+wc #WORD COUNT used to display the number of lines, words, and bytes contain	ed in file.
+grep #used to find text patterns within files.(grep -i file ___or___ grep -v file)
+tail #used to display last part of files.
+tail -f /var/log/messages (stop by Ctrl C)
+tee #reads stardart input and copies it to both stardart output and to one or more files
+echo Sunday | sed 's/day/night'
+sed #is the ultimate stream editor
+* #pathname expansion
+~ #tilde expansion
+  #arithmetic expansion
+$((expression))
+Arithmetic expansion only supports integers(whole numbers, no decimals) but can perform a number of different operations: +-*/%**
+
+{} #brace expansion. 
+echo Number {1..5}
+echo Number {1,2,4}
+mkdir {2007..2010}-0{1.9} {2007..2009}-{10-12}
+
+ #Parameter Expansion
+
+ #Command Substitution: allows us to use the output of a command as an expansion
+echo $(ls)
+We can use back-quotes instead of the dollar sign and the parentheses:
+echo `ls`
+
+Remember, parameter expansion, arithmetic expansion, and command substitution still take place within double quote
+lsb_release -a # lsb stands for Linux Standart Base, shows all information about your Ubuntu Version
+/etc/lsb-release
+/etc/issue
+/proc/cpuinfo
+
+lshw # list hardware
+top # display Linux tasks
+
+#terminal shortcut
+Ctrl Left/Right
+Ctrl U
+Ctrl K
+Ctrl W
+Ctrl R
+
+#find
+find /home/ -name '*.avi' -a -size +700M -mtime -15 -exec mv '{}' /my/new/movies/ \;
+
+strace : trace all system calls and signals
+id: list uid/gid
+w:	list login user and their action
+ps axuw : view processes
+strings : print all printable characters
+hexdump : print relative ascii, hex, octal, decimal of input data
+
+tail -n 15
+head -n 15
+tr ' ' '\t'
+od -tc
+cat text 1 | tr ' ' '\t' | cat - text2
+cat -n
+
+pr nl fmt
+nl txtfile | pr -m - file2 | head

@@ -1,0 +1,22 @@
+<html>
+	<head>
+		<script type="text/javascript" language="JavaScript">
+			function countDown()
+{
+	//	var left = 0;
+}
+</script>
+
+	</head>
+	<body>
+
+		<script type="text/javascript" language="JavaScript">
+			var today = new Date();
+			var deadline = new Date("April 18, 2012 00:00:00");
+			var gap = deadline - today;
+			var numberOfDay = Math.round(gap / 86400000);
+			document.write("BTL DOHOAMAYTINH: Con lai " + numberOfDay + "ngay");
+		</script>
+	</body>
+</HTML>
+

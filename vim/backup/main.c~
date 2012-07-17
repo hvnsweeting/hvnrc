@@ -1,0 +1,25 @@
+/*
+ * =====================================================================================
+ *
+ *       Filename:  main.c
+ *
+ *    Description:  
+ *
+ *        Version:  1.0
+ *        Created:  11/12/2011 05:05:13 PM
+ *       Revision:  none
+ *       Compiler:  gcc
+ *
+ *         Author:  FamiHug (), famihug@gmail.com
+ *        Company:  FAMILUG
+ *
+ * =====================================================================================
+ */
+#include <stdio.h>
+
+int main(){
+	hello();
+	return 0;
+}
+}
+

@@ -1,0 +1,12 @@
+
+./mysql
+Neu ban chi de moi tai khoan root va ko pass, hay go sudo ./mysql
+
+HIEN DANH SACH DB
+show databases;
+
+CHON DB
+use db_name;
+
+HIEN DANH SACH TABLES
+show tables;

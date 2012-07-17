@@ -1,0 +1,21 @@
+$def with (tasks, form)
+
+
+<div class=page>
+	<h1>mTask</h1>
+	<div class=metanav></div>
+
+	<form action="" method="post" class="add-entry">
+		$:form.render()
+	</form>
+
+	<ul class=tasks>
+		$for task in tasks:
+		<li><h2>$task['task'] $multi_string(task['priority'])</h2>
+		<h4>Start: $task['start'] - End: $task['end']</h4>
+		<h4>Days left: $task['diff']</h4>
+
+		</li>
+	</ul>
+
+</div>

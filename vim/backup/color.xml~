@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="hacker_green">#00EA01</color>
+    <color name="dark_green">#006400</color>
+    <color name="red">#EF2929</color>
+    <color name="light_yellow">#FCE94F</color>
+    <color name="main_font_color">#E81B1B</color>
+    <color name="main_font_shadow_color">#000000</color>
+    <color name="blue">#3465A4</color>
+	<color name="dark_blue">#001b33</color>
+
+</resources>
