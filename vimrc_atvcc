@@ -104,6 +104,7 @@ set sw=4
 set cindent
 set backupdir=~/.vim/backup
 set directory=~/.vim/swp
+set colorcolumn=80
 
 "For latex"
 set grepprg=grep\ -nH\ $*
@@ -118,6 +119,7 @@ map <F7> :tabnew<CR>
 map <F3> :NERDTreeToggle<CR>
 map <F4> :TlistToggle<CR>
 map <F5> ggOToday: <Esc>:r !date<CR>kJ
+map <F8> :!pep8 %<CR>
 
 map T :TaskList<CR>
 
@@ -136,8 +138,10 @@ let php_sql_query=1
 let php_htmlInString=1
 
 "HVN added"
-set ai
-set sm
+set autoindent
+set showmatch
+set cursorline
+colorscheme elflord
 let java_highlight_all=1
 let java_highlight_functions="style"
 let java_allow_cpp_keywords=1
