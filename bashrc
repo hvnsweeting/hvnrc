@@ -5,9 +5,9 @@
 # If not running interactively, don't do anything
 [ -z "$PS1" ] && return
 
-# don't put duplicate lines in the history. See bash(1) for more options
-# ... or force ignoredups and ignorespace
-HISTCONTROL=ignoredups:ignorespace
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
 
 # append to the history file, don't overwrite it
 shopt -s histappend
@@ -19,6 +19,10 @@ HISTFILESIZE=2000
 # check the window size after each command and, if necessary,
 # update the values of LINES and COLUMNS.
 shopt -s checkwinsize
+
+# If set, the pattern "**" used in a pathname expansion context will
+# match all files and zero or more directories and subdirectories.
+#shopt -s globstar
 
 # make less more friendly for non-text input files, see lesspipe(1)
 [ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
@@ -51,8 +55,10 @@ fi
 
 if [ "$color_prompt" = yes ]; then
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+    #PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]\$\[\e[m\] \[\e[1;37m\]'']]]]]]]'
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    #PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+    PS1='\[\e[0;33m\]\u\[\e[m\]@\[\e[0;36m\]\h\[\e[m\]: \[\e[1;35m\]\w\[\e[m\] \[\e[1;32m\]\$\[\e[m\] '
 fi
 unset color_prompt force_color_prompt
 
@@ -77,11 +83,6 @@ if [ -x /usr/bin/dircolors ]; then
     alias egrep='egrep --color=auto'
 fi
 
-# some more ls aliases
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
@@ -101,37 +102,11 @@ fi
 if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
-echo $(~/bin/bat.sh)
 
-export JAVA_HOME=/home/famihug/Apps/jdk1.6.0_21/bin/java
-export PATH=$PATH:/home/famihug/Apps/jdk1.6.0_21/bin:~/Apps/android-sdk-linux/platform-tools:
-alias cdd='cd /media/Dale/Dropbox/'
-alias padoff='sudo modprobe -r psmouse'
-alias padon='sudo modprobe psmouse'
-alias cb='~/bin/bat.sh'
-echo
-head ~/toDoNetList
-alias repo='cd /media/Dale/Repository/; ls'
-alias startlampp='sudo /opt/lampp/lampp start'
-alias cdp='cd /opt/lampp/htdocs/'
-alias tat='sudo shutdown -h now'
-alias ff4='~/Apps/firefox/firefox &'
-# Below command use when use junit
-#export CLASSPATH=$CLASSPATH:/media/Dale/Dropbox/DIC/javahvn/:~/Apps/mysql-connector-java-3.0.17-ga/mysql-connector-java-3.0.17-ga-bin.jar:
-# export CLASSPATH=~/Apps/junit4.8.1/junit-4.8.1.jar:~/Apps/junit4.8.1/:~/Dropbox/DIC/javahvn/:
-alias junit='java org.junit.runner.JUnitCore'
-alias new='find ~/Dropbox/ -mtime -2'
-alias new2='find /media/Dale/SavedHTML/ -name *.htm* -mtime -2'
-alias lx='lynx /media/Dale/SavedHTML/'
-alias jlab='cd /media/Dale/Dropbox/DIC/javahvn/'
-alias ecl='~/Apps/eclipse/eclipse'
-alias ws1='~/bin/ws1.sh'
-alias ws='sudo service network-manager start; sudo modprobe psmouse'
-alias cm='tail /var/mail/famihug'
-alias cdg='cd ~/Github/FAMILUG; ls'
-alias clc='clear'
-alias cdD='cd /media/Dale; ls'
-alias zf='/opt/lampp/htdocs/zf/zf1.11.11/bin/zf.sh'
-alias adbc='adb connect'
-alias argouml='java -jar ~/Apps/argouml-0.34/argouml.jar &'
-alias kqxs='~/bin/leecher.py; cat kq.txt'
+cat ~/.TODO
+cat ~/.REMEMBER
+
+#set up workspace
+cdp #change cwd to python
+
+# UPdate path
