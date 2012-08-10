@@ -108,10 +108,9 @@ bindsym $mod+Shift+R restart
 bindsym $mod+Shift+E exit
 # lock screen
 bindsym $mod+o exec /usr/bin/i3lock
-
-# volume adjustment
-bindsym $mod+F11 exec amixer set Master 10%- > /dev/null 
-bindsym $mod+F12 exec amixer set Master 10%+ > /dev/null 
+#printscreen
+exec --no-startup-id feh --bg-scale /home/hvn/Pictures/bg.png
+bindsym Print exec scrot -e 'mv $f /home/hvn && gimp /tmp/$f'
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -158,3 +157,4 @@ bindsym $mod+r mode "resize"
 bar {
         status_command i3status
 }
+
