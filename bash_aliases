@@ -13,4 +13,6 @@ alias repo="cd ~/Downloads/Repo"
 alias pom='git push origin master'
 alias psg='ps aux | grep '
 alias POM='git pull origin master'
-
+alias sshs='ssh 123.30.53.138'
+alias gtus='git status'
+alias gcm='git commit -m '

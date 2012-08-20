@@ -110,3 +110,4 @@ cat ~/.REMEMBER
 cdp #change cwd to python
 
 # UPdate path
+GIT="123.30.53.138"
