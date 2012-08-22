@@ -14,6 +14,7 @@ alias pom='git push origin master'
 alias psg='ps aux | grep '
 alias POM='git pull origin master'
 alias sshs='ssh 123.30.53.138'
+# GIT
 alias gtus='git status'
 alias gcm='git commit -m '
-alias nautilus='pcmanfm'
+alias gut='git add -u && gcm "update" && pom'
