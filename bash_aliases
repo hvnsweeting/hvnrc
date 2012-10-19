@@ -13,8 +13,10 @@ alias repo="cd ~/Downloads/Repo"
 alias pom='git push origin master'
 alias psg='ps aux | grep '
 alias POM='git pull origin master'
-alias sshs='ssh 123.30.53.138'
+alias sshs='ssh -A dev'
 # GIT
 alias gtus='git status'
 alias gcm='git commit -m '
 alias gut='git add -u && gcm "update" && pom'
+alias gito='cd ~/bin/gitolite-admin'
+alias sshlab='ssh -A hungnv@192.168.35.10'

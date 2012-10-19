@@ -110,6 +110,7 @@ bindsym $mod+Shift+E exit
 bindsym $mod+o exec /usr/bin/i3lock
 #printscreen
 exec --no-startup-id feh --bg-scale /home/hvn/Pictures/bg.png
+exec /home/hvn/.dropbox-dist/dropboxd
 bindsym Print exec scrot -e 'mv $f /home/hvn && gimp /tmp/$f'
 
 # resize window (you can also use the mouse for that)
