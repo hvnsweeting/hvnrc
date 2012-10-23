@@ -13,11 +13,13 @@ function percent_bat()  # None : Int
 }
 
 
+BAT_MIN=10
 #run it forever
 while [ "1" == "1" ]; do
     if [ $(is_on_battery) ]; then
-        if [ $(percent_bat) -lt "30" ]; then
-            echo "HETPIN" # thich lam j thi lam o day, play 1 file nhac chang han
+        if [ $(percent_bat) -lt "$BAT_MIN" ]; then
+            # do thing you want to alert
+            echo "CHARGE YOUR LAPTOP NOW!" 
         fi
     fi
     sleep 30
