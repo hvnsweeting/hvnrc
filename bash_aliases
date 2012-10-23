@@ -2,6 +2,7 @@
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
+alias lst='ls -Fhtl'
 
 # alias
 alias cdd="cd ~/Dropbox"
@@ -14,6 +15,7 @@ alias pom='git push origin master'
 alias psg='ps aux | grep '
 alias POM='git pull origin master'
 alias sshs='ssh -A dev'
+
 # GIT
 alias gtus='git status'
 alias gcm='git commit -m '
