@@ -20,3 +20,8 @@ alias gtus='git status'
 alias gcm='git commit -m '
 alias gut='git add -u && gcm "update" && pom'
 alias gito='cd ~/bin/gitolite-admin'
+
+# dangerous alias like for shutting down computer
+if [ -f .ugly_aliases ]; then
+    . .ugly_aliases
+fi
