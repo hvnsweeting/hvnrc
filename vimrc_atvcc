@@ -118,7 +118,7 @@ set pastetoggle=<F2>
 map <F7> :tabnew<CR>
 map <F3> :NERDTreeToggle<CR>
 map <F4> :TlistToggle<CR>
-map <F5> ggOToday(dmY): <Esc>:r !date +\%d-\%m-\%Y<CR>kJ
+map <F5> ggOToday: <Esc>:r !date<CR>kJ
 map <F8> :!pep8 %<CR>
 
 map T :TaskList<CR>
@@ -126,6 +126,7 @@ map T :TaskList<CR>
 
 nmap <Leader>s :source $MYVIMRC<CR>
 nmap <Leader># ggO#!/usr/bin/env python<Esc>o
+nmap <Leader>b ggO#!/bin/bash<Esc>
 nmap <Leader>v :e $MYVIMRC<CR>
 nmap <Leader>z :e ~/.zshrc<CR>
 nmap <Leader>m Giif __name__ == "__main__":<CR>
