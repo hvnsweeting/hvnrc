@@ -8,6 +8,7 @@ alias lst='ls -Fhtl'
 alias cdd="cd ~/Dropbox"
 alias cdp="cd ~/python"
 alias cdg="cd ~/Github"
+alias cdh="cd ~/hgrepo"
 alias sai="sudo apt-get install"
 alias repo="cd ~/Downloads/Repo"
 alias pom='git push origin master'
@@ -22,6 +23,6 @@ alias gut='git add -u && gcm "update" && pom'
 alias gito='cd ~/bin/gitolite-admin'
 
 # dangerous alias like for shutting down computer
-if [ -f .ugly_aliases ]; then
-    . .ugly_aliases
+if [ -f ~/.ugly_aliases ]; then
+    . ~/.ugly_aliases
 fi
