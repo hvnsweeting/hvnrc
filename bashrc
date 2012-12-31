@@ -44,22 +44,25 @@ esac
 
 if [ -n "$force_color_prompt" ]; then
     if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
-       # We have color support; assume it's compliant with Ecma-48
-       # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
-       # a case would tend to support setf rather than setaf.)
-       color_prompt=yes
+    # We have color support; assume it's compliant with Ecma-48
+    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    # a case would tend to support setf rather than setaf.)
+    color_prompt=yes
     else
-       color_prompt=
+    color_prompt=
     fi
 fi
 
-GIT_CURRENT_BRACH=$(git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3)
+function git_branch(){
+    echo $(git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3)
+}
+
 if [ "$color_prompt" = yes ]; then
-    PS1="${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\ ($GIT_CURRENT_BRACH) $ "
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\ \$(git_branch) $ '
     #PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]\$\[\e[m\] \[\e[1;37m\]'']]]]]]]'
 else
     #PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-    PS1='\[\e[0;33m\]\u\[\e[m\]@\[\e[0;36m\]\h\[\e[m\]: \[\e[1;35m\]\w\[\e[m\] ($GIT_CURRENT_BRACH) \[\e[1;32m\]\$\[\e[m\] '
+    PS1='\[\e[0;33m\]\u\[\e[m\]@\[\e[0;36m\]\h\[\e[m\]: \[\e[1;35m\]\w\[\e[m\] ($(git_branch)) \[\e[1;32m\]\$\[\e[m\] '
 fi
 unset color_prompt force_color_prompt
 
