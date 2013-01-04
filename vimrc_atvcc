@@ -126,7 +126,6 @@ map T :TaskList<CR>
 
 nmap <Leader>s :source $MYVIMRC<CR>
 nmap <Leader># ggO#!/usr/bin/env python<Esc>o
-nmap <Leader>b ggO#!/bin/bash<Esc>
 nmap <Leader>v :e $MYVIMRC<CR>
 nmap <Leader>z :e ~/.zshrc<CR>
 nmap <Leader>m Giif __name__ == "__main__":<CR>
@@ -142,7 +141,7 @@ let php_htmlInString=1
 set autoindent
 set showmatch
 set cursorline
-colorscheme elflord
+colorscheme murphy
 let java_highlight_all=1
 let java_highlight_functions="style"
 let java_allow_cpp_keywords=1
@@ -168,4 +167,7 @@ map <C-j> <C-W>j
 map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
-
+""
+""if $COLORTERM == 'gnome-terminal'
+""  set t_Co=256
+""endif

@@ -110,8 +110,8 @@ bindsym $mod+Shift+E exit
 bindsym $mod+o exec /usr/bin/i3lock
 #printscreen
 exec --no-startup-id feh --bg-scale /home/hvn/Pictures/bg.png
-exec /home/hvn/.dropbox-dist/dropboxd
-bindsym Print exec scrot -e 'mv $f /home/hvn && gimp /tmp/$f'
+exec ~/.dropbox-dist/dropboxd &
+bindsym Print exec scrot -e 'mv $f ~/Pictures && gimp ~/Pictures/$f'
 
 # resize window (you can also use the mouse for that)
 mode "resize" {
@@ -159,3 +159,12 @@ bar {
         status_command i3status
 }
 
+
+exec gnome-terminal &
+exec skype &
+exec firefox &
+exec pidgin &
+
+assign [class="^Skype"] 3:chat
+assign [class="^Firefox"] 2:net
+assign [class="^Pidgin"] 9
