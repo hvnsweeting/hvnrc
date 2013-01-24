@@ -7,7 +7,8 @@
 " To use it, copy it to
 "     for Unix and OS/2:  ~/.vimrc
 "	      for Amiga:  s:.vimrc
-"  for MS-DOS and Win32:  $VIM\_vimrc "	    for OpenVMS:  sys$login:.vimrc
+"  for MS-DOS and Win32:  $VIM\_vimrc
+"	    for OpenVMS:  sys$login:.vimrc
 
 " When started as "evim", evim.vim will already have done these settings.
 if v:progname =~? "evim"
@@ -95,26 +96,15 @@ if !exists(":DiffOrig")
 		  \ | wincmd p | diffthis
 endif
 
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-let php_sql_query=1
-let php_htmlInString=1
-
-"Color"
-let java_highlight_all=1
-let java_highlight_functions="style"
-let java_allow_cpp_keywords=1
-
-
-colorscheme elflord
 set nu
-set ts=4
-set sw=4
 set expandtab
+set ts=4
 set hlsearch
+set sw=4
 set cindent
 set backupdir=~/.vim/backup
 set directory=~/.vim/swp
-set cursorline
+set colorcolumn=80
 
 "For latex"
 set grepprg=grep\ -nH\ $*
@@ -123,14 +113,61 @@ let g:tex_flavor='latex'
 
 "Map key"
 "Python compile"
-map <F9> :!python2.7 %<CR>
-map <F2> :tabnew<CR>
-map <F5> :!javac %<CR>  
-map <F4> ggOToday: <Esc>:r !date<CR>kJ
+map <F9> :!python %<CR>
+set pastetoggle=<F2>
+map <F7> :tabnew<CR>
+map <F3> :NERDTreeToggle<CR>
+map <F4> :TlistToggle<CR>
+map <F5> ggOToday(dmY): <Esc>:r !date +\%d-\%m-\%Y<CR>kJ
+map <F8> :!pep8 %<CR>
+
+map T :TaskList<CR>
+
+
 nmap <Leader>s :source $MYVIMRC<CR>
 nmap <Leader># ggO#!/usr/bin/env python<Esc>o
 nmap <Leader>v :e $MYVIMRC<CR>
 nmap <Leader>z :e ~/.zshrc<CR>
 nmap <Leader>m Giif __name__ == "__main__":<CR>
 
-set sm "showmatch"
+"Python autocomplete"
+autocmd FileType python set omnifunc=pythoncomplete#Complete
+
+autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+let php_sql_query=1
+let php_htmlInString=1
+
+"HVN added"
+set autoindent
+set showmatch
+set cursorline
+colorscheme elflord
+let java_highlight_all=1
+let java_highlight_functions="style"
+let java_allow_cpp_keywords=1
+
+"miniBuf"
+""let g:miniBufExplMapWindowNavVim = 1
+""let g:miniBufExplMapWindowNavArrows = 1
+""let g:miniBufExplMapCTabSwitchBufs = 1
+""et g:miniBufExplModSelTarget = 1 
+
+" Rope AutoComplete
+let ropevim_vim_completion = 1
+let ropevim_extended_complete = 1
+let g:ropevim_autoimport_modules = ["os.*","traceback","django.*","xml.etree"]
+imap <C-Space> <C-R>=RopeCodeAssistInsertMode()<CR>
+
+"Taglist abovenerdtree"
+let Tlist_Use_Split_Window = 1
+com TT NERDTree | TlistToggle
+
+"Switching between windows"
+map <C-j> <C-W>j
+map <C-k> <C-W>k
+map <C-h> <C-W>h
+map <C-l> <C-W>l
+""
+""if $COLORTERM == 'gnome-terminal'
+""  set t_Co=256
+""endif
