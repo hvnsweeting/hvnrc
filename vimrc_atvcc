@@ -102,8 +102,8 @@ set ts=4
 set hlsearch
 set sw=4
 set cindent
-set backupdir=~/.vim/backup
-set directory=~/.vim/swp
+set backupdir=/tmp
+set directory=/tmp
 set colorcolumn=80
 
 "For latex"
