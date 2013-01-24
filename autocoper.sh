@@ -13,5 +13,5 @@ fi
 
 set +x
 rsync -avz ~/.i3/config $MY_PATH"i3config"
-rsync -avz ~/.bash_aliases $MY_PATH"bash_aliases"
+rsync -avz ~/.hvnalias $MY_PATH"hvnalias"
 rsync -avz ~/.bashrc $MY_PATH"bashrc"

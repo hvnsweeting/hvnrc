@@ -15,6 +15,7 @@ alias pom='git push origin master'
 alias psg='ps aux | grep '
 alias POM='git pull origin master'
 alias sshs='ssh -A dev'
+alias irc='irssi -c irc.freenode.net'
 
 # GIT
 alias gtus='git status'
