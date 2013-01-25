@@ -164,7 +164,9 @@ exec gnome-terminal &
 exec skype &
 exec firefox &
 exec pidgin &
+exec sleep 5 && thunderbird &
 
 assign [class="^Skype"] 3:chat
 assign [class="^Firefox"] 2:net
 assign [class="^Pidgin"] 9
+assign [class="^Thunderbird"] 8
