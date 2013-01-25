@@ -19,6 +19,7 @@ for i in "${arr[@]}";do
     if [[ $(diff -q $i | wc -l) -eq "1" ]]; then
         cp -i $i
     fi
-    echo 
-    echo -e "\e[0;33m------------------------\e[m"
+    tput bold 
+    echo "--------------------------------------"
+    tput sgr0
 done
