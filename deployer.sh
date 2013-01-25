@@ -1,16 +1,15 @@
 #!/bin/bash
 
-#set -x
-# SD = source destination
-SDVIM="vimrc_atvcc $HOME/.vimrc"
-SDBASH="bashrc $HOME/.bashrc"
-SDALIAS="hvnalias $HOME/.hvnalias"
-SDI3="i3config $HOME/.i3/config"
+# bash array
+arr=("vimrc_atvcc $HOME/.vimrc"
+    "bashrc $HOME/.bashrc"
+    "hvnalias $HOME/.hvnalias"
+    "i3config $HOME/.i3/config")
 
-#TODO write SD* another way, maybe use array
 echo "Running deployer, this file should be run with \`source `basename $0`\`"
-for i in "$SDVIM" "$SDBASH" "$SDALIAS" "$SDI3";do
-    echo $i
+
+for i in "${arr[@]}";do
+    echo "diff" $i
     if [[ -e `which colordiff` ]]; then
         colordiff $i
     else
@@ -21,7 +20,5 @@ for i in "$SDVIM" "$SDBASH" "$SDALIAS" "$SDI3";do
         cp -i $i
     fi
     echo 
-    echo 
     echo -e "\e[0;33m------------------------\e[m"
 done
-#set +x
