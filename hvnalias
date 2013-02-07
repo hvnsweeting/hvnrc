@@ -16,6 +16,7 @@ alias psg='ps aux | grep '
 alias POM='git pull origin master'
 alias sshs='ssh -A dev'
 alias irc='irssi -c irc.freenode.net'
+alias syslog='tail -f /var/log/syslog | ccze'
 
 # GIT
 alias gtus='git status'
