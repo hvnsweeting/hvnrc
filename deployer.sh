@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # bash array
-arr=("vimrc_atvcc $HOME/.vimrc"
+arr=("vimrc $HOME/.vimrc"
     "bashrc $HOME/.bashrc"
     "hvnalias $HOME/.hvnalias"
     "i3config $HOME/.i3/config")
