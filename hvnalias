@@ -17,6 +17,7 @@ alias POM='git pull origin master'
 alias sshs='ssh -A dev'
 alias irc='irssi -c irc.freenode.net'
 alias syslog='tail -f /var/log/syslog | ccze'
+alias tsb='~/bin/tmuxbootstrap.sh'
 
 # GIT
 alias gtus='git status'
