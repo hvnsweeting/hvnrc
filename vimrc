@@ -36,20 +36,18 @@ set backupdir=/tmp
 set directory=/tmp
 set colorcolumn=80
 set autoindent
+set smartindent
 set showmatch
 set cursorline
 colorscheme desert
 
-map <F3> :NERDTreeToggle<CR>
 map <F4> :TlistToggle<CR>
 map <F5> ggOToday: <Esc>:r !date<CR>kJ
 map <F7> : !ruby %<CR>
 map <F8> :!pep8 %<CR>
-map <F9> :!python %<CR>
 map T :TaskList<CR>
 
-"Space is easier to press than \"
-let mapleader = " "
+nmap <Leader>E :NERDTreeToggle<CR>
 nmap <Leader>r :!python %<CR>
 nmap <Leader>rb :!bash %<CR>
 nmap <Leader>p :set paste!<CR>i
