@@ -47,6 +47,8 @@ map <F7> : !ruby %<CR>
 map <F8> :!pep8 %<CR>
 map T :TaskList<CR>
 
+nmap j gj
+nmap k gk
 nmap <Leader>E :NERDTreeToggle<CR>
 nmap <Leader>r :!python %<CR>
 nmap <Leader>rb :!bash %<CR>
