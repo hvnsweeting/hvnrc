@@ -76,6 +76,9 @@ bindsym $mod+a focus parent
 # focus the child container
 #bindcode $mod+d focus child
 
+# start all apps
+bindsym $mod+p exec pidgin; exec skype; exec firefox; exec thunderbird
+
 # switch to workspace
 bindsym $mod+1 workspace 1:code
 bindsym $mod+2 workspace 2:net
@@ -159,14 +162,7 @@ bar {
         status_command i3status
 }
 
-
-exec ibus-daemon &
 exec gnome-terminal &
-exec skype &
-exec firefox &
-exec pidgin &
-exec sleep 5 && thunderbird &
-
 assign [class="^Skype"] 3:chat
 assign [class="^Firefox"] 7
 assign [class="^Pidgin"] 9
