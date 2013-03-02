@@ -96,3 +96,5 @@ map <C-l> <C-W>l
 if $COLORTERM == 'gnome-terminal'
   set t_Co=256
 endif
+
+filetype plugin indent on
