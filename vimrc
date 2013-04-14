@@ -41,11 +41,11 @@ set showmatch
 set cursorline
 colorscheme desert
 
-map <F4> :TlistToggle<CR>
 map <F5> ggOToday: <Esc>:r !date<CR>kJ
 map <F7> : !ruby %<CR>
 map <F8> :!pep8 %<CR>
-map T :TaskList<CR>
+nnoremap <Leader>t :TlistToggle<CR>
+nnoremap <Leader>T :TlistShowPrototype<CR>
 
 nmap j gj
 nmap k gk
