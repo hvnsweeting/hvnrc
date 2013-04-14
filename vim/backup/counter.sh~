@@ -1,0 +1,8 @@
+#!/bin/bash
+set -x
+ALL_COMMIT=$(git log | grep commit | cut -d' ' -f 2)
+len=`echo $ALL_COMMIT | tr ' ' '\n' | wc -l`
+#for (( c = 0; c < $len; c++ ))  do
+#    echo $c
+#done
+set +x

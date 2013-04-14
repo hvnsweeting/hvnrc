@@ -1,0 +1,6 @@
+<?php
+$a1=array('an'=>"Dog",'bn'=>"Cat",'cn'=>"Horse",'dn'=>"Bird");
+$pindex = array_search("Cat", $a1);
+array_splice($a1,$pindex,1);
+print_r($a1);
+?> 

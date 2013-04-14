@@ -1,0 +1,38 @@
+import requests as rq
+from pprint import pprint
+import json
+
+#LINK = "https://api.github.com/users/hvnsweeting/events"
+#r = rq.get(LINK)
+#dumped = json.dumps(r.json())
+#with open('data.json', 'wt') as f:
+#    f.write(dumped)
+def print_last_actions(count, json):
+    data = json
+    print "%s last actions" % count
+    for i, repo in enumerate(data[:count]):
+        #pprint(repo)
+        print i + 1,
+        print repo['repo']['name']
+        try:
+            print "Commit:", 
+            print(repo['payload']['commits'][0]['message'])
+            print
+        except KeyError, e:
+            pass
+
+def main():
+    users = ["hvnsweeting", "lamdt", "luuhai", 'minhchuduc']
+    for u in users:
+        print '*' * 20 , u , '*' * 20
+        link = "https://api.github.com/users/%s/events" % u
+        print_last_actions(1, rq.get(link).json())
+
+#with open('data.json', 'rt') as f:
+#    lines = f.readlines()
+#    print len(lines), type(lines)
+#    data = json.loads(lines[0])
+#    #print len(data)
+#    print_last_actions(5)
+if __name__ == "__main__":
+    main()

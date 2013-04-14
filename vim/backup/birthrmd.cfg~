@@ -1,0 +1,10 @@
+[account]
+username = bot.c2k8pro@gmail.com
+password = d23cb05a3c21c2527f26b7bd112541a5dc21a258
+
+[smtp]
+server  = smtp.gmail.com
+port = 587
+
+[file]
+mails_data = mails.csv

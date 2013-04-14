@@ -1,0 +1,159 @@
+-- phpMyAdmin SQL Dump
+-- version 3.4.5
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Sep 18, 2012 at 10:07 AM
+-- Server version: 5.5.16
+-- PHP Version: 5.3.8
+
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+
+--
+-- Database: `vpn`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE IF NOT EXISTS `admin` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id`, `name`, `password`) VALUES
+(1, 'admin', '123456'),
+(2, 'admin2', '123456');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `ip`
+--
+
+CREATE TABLE IF NOT EXISTS `ip` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `vid` int(11) NOT NULL,
+  `address` varchar(20) NOT NULL,
+  `rule_id` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `log`
+--
+
+CREATE TABLE IF NOT EXISTS `log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `content` text NOT NULL,
+  `status` int(11) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `project`
+--
+
+CREATE TABLE IF NOT EXISTS `project` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `project`
+--
+
+INSERT INTO `project` (`id`, `name`) VALUES
+(1, 'kenh14.vn'),
+(2, 'genk.vn'),
+(3, 'vccloud.vn');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `rule`
+--
+
+CREATE TABLE IF NOT EXISTS `rule` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `rule`
+--
+
+INSERT INTO `rule` (`id`, `type`) VALUES
+(1, 'ssh'),
+(2, 'ftp'),
+(3, 'all'),
+(4, 'http');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vpn`
+--
+
+CREATE TABLE IF NOT EXISTS `vpn` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pid` int(11) NOT NULL,
+  `type_id` int(11) NOT NULL,
+  `content` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=19 ;
+
+--
+-- Dumping data for table `vpn`
+--
+
+INSERT INTO `vpn` (`id`, `pid`, `type_id`, `content`) VALUES
+(17, 0, 0, '{ "rules" : [{ "ip" : "123.123.123.125", "type" : "ssh"} ], "type" : "admin",  "email" : "vpn-lamdt@kenh14.vn",  "id" : "1"} '),
+(18, 0, 0, '{ "rules" : [{ "ip" : "123.123.123.125", "type" : "ftp"} ], "type" : "admin",  "email" : "vpn-lamdt@genk.vn",  "id" : "18"} ');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vpn_type`
+--
+
+CREATE TABLE IF NOT EXISTS `vpn_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(10) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `vpn_type`
+--
+
+INSERT INTO `vpn_type` (`id`, `name`) VALUES
+(1, 'admin'),
+(2, 'editor');
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

@@ -1,0 +1,32 @@
+import sqlite3 as sql
+
+DBFILE = "./vpn.db"
+
+
+def exec_query(query, mode="r"):
+    conn = sql.connect(DBFILE)
+    with conn:
+        cur = conn.cursor()
+        ret = cur.execute(query)
+    return ret.rowcount
+
+TABLENAME = "token"
+def create_db():
+    query = """
+    create table %s (
+    token datetime
+    )
+    """ % TABLENAME
+    exec_query(query)
+
+def insert_token(token):
+    query = "insert into %s values ('%s')" % (TABLENAME, token)
+    return exec_query(query)
+
+def delete_token(token):
+    query = "delete from %s WHERE token='%s'" % (TABLENAME, token)
+    return exec_query(query)
+    
+
+if __name__ == "__main__":
+    create_db()

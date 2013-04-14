@@ -1,0 +1,7 @@
+[DEFAULT]
+bind_port = 8080
+user = swift
+swift_dir = /etc/swift
+
+[pipeline:main]
+pipeline = catch_errors healthcheck cache authtoken keystone proxy-server

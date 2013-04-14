@@ -1,0 +1,15 @@
+DROP TABLE IF EXISTS quotes;
+CREATE TABLE quotes(
+    quote text not null primary key,
+    author text not null,
+    category text not null,
+    create_day date,
+    vote integer default 0,
+    verify bool default false
+);
+
+INSERT INTO "quotes" VALUES('Trời lạnh rồi, em ra đường nhớ mặc áo khoác còn đi với thằng khác nhớ bảo nó mặc áo mưa. nhé nhé . . . ',' mrland83','linkhay',NULL,0,NULL);
+INSERT INTO "quotes" VALUES('Mình là đàn ông con trai,mình sống bằng oxi chứ không sống bằng tình thương của một đứa con gái','vozer','voz',NULL,0,NULL);
+INSERT INTO "quotes" VALUES('Sáng ra nước đái màu hồng
+Hóa ra thu đã chuyển đông lúnào....','vozer','voz',NULL,0,NULL);
+INSERT INTO "quotes" VALUES('Trời Hà Nội đêm nay đẹp lắm, ngồi đánh rắm anh lại nhớ đến em...','vozer','voz',NULL,0,NULL);

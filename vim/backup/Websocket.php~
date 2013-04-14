@@ -1,0 +1,929 @@
+<?php
+
+/**
+ * Simple implementation of HTML5 WebSocket server-side.
+ *
+ * PHP versions 5
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * @package    WebSocket
+ * @author     George Nava <georgenava@gmail.com>
+ * @author     Vincenzo Ferrari <wilk3ert@gmail.com>
+ * @copyright  2010-2011
+ * @license    http://www.gnu.org/licenses/gpl.txt GNU GPLv3
+ * @version    1.1.0
+ * @link       http://code.google.com/p/phpwebsocket/
+ */
+
+/**
+ * số người chơi lớn nhất có thể
+ * @var unknown_type
+ */
+
+define("MAX_PLAYER_IN_BOARD", 4);
+
+class CI_WebSocket {
+
+    var $master;
+    var $sockets = array ();
+    var $users = array ();
+
+    var $boards = array();
+
+    var $players = array();
+    // true to debug
+    var $debug = false;
+    // frame mask
+    var $masks;
+    // initial frames
+    var $initFrame;
+
+    function __construct () {
+        $this->player_class =  & load_class('Player');
+        $this->board_class =  & load_class('Board');
+        $this->card_class =  & load_class('Card');
+        $this->deck_class =  & load_class('Deck');
+        $this->rule = &load_class('Referee');
+    }
+
+    function start($address, $port){
+        set_time_limit (0);
+        ob_implicit_flush (1);
+        // Socket creation
+        $this->master = socket_create (AF_INET, SOCK_STREAM, SOL_TCP) or die("socket_create() failed");
+        socket_set_option ($this->master, SOL_SOCKET, SO_REUSEADDR, 1) or die("socket_option() failed");
+        socket_bind ($this->master, $address, $port) or die("socket_bind() failed");
+        socket_listen ($this->master, 20) or die("socket_listen() failed");
+        $this->sockets[] = $this->master;
+        $this->say ("Server Started : " . date ('Y-m-d H:i:s'));
+        $this->say ("Listening on   : {$address} {$port}");
+        $this->say ("Master socket  : {$this->master}\n");
+
+        // Main loop
+        while (true) {
+
+            $changed = $this->sockets;
+            socket_select ($changed, $write = NULL, $except = NULL, NULL);
+            foreach ($changed as $socket) {
+                if ($socket == $this->master) {
+                    $client = socket_accept ($this->master);
+
+                    if ($client < 0) {
+                        $this->say ("socket_accept() failed");
+                        continue;
+                    }
+                    else {
+                        $this->connect ($client);
+                    }
+                }
+                else {
+                    //echo "socket 1= master\n";
+                    $bytes = @socket_recv ($socket, $buffer, 2048, 0);
+                    if ($bytes == 0) {
+                        // On socket.close ();
+                        $this->disconnect ($socket);
+                    }
+                    else {
+                        // Retrieve the user from his socket
+                        $player = $this->getuserbysocket ($socket);
+
+                        if (!$player->handshake) {
+
+                            $this->dohandshake ($player, $buffer);
+                        }
+                        else {
+
+                            $this->process ($player, $this->decode ($buffer));
+                        }
+                    }
+                }
+            }
+        }
+    } # end of start()
+
+
+    function send_in_board($list_player, $msg, $player = null) {
+        
+        if(is_null($player)){
+            foreach($list_player as $p) {
+                    $this->send($p->socket, $msg);
+            }
+        }else{
+            foreach($list_player as $p) {
+                if($p->pid != $player->pid)
+                    $this->send($p->socket, $msg);
+            }
+
+        }
+    } # end of send_in_board()
+
+    /**
+     *
+     Khi Player  gửi yêu cầu tạo bàn chơi mới,
+     server sẽ tạo ra đối tượng Board.
+     Add người tạo bàn vào mảng list_player của board . Add vào mảng Boards
+     và trả về thông tin Board vừa tạo
+     Dữ liệu nhận được
+     + Header: newBoard
+     + Data: maxBet, minBet, rule, pid
+     Dữ liệu trả về cho người vừa tạo bàn
+     + Header: newBoard
+     + Data: maxBet, minBet, rule, statusBoard
+     */
+    function new_board($player, $data){
+
+        $board = new $this->board_class();
+        $board->setPosition(MAX_PLAYER_IN_BOARD);
+        $board->bid = uniqid();
+        $board->name = count($this->boards) + 1;
+        $board->maxBet = $data['maxBet'];
+        $board->minBet = $data['minBet'];
+        //$board->rule = $data['rule'];
+        //$board->master_board = $player->pid;
+        $board->list_player[$player->pid] = $player;
+        $this->boards[$board->bid] = $board;
+        $player->status = "busy";
+        $player->pos = 1;
+        $player->master = true;
+        $board->status = "waiting";
+        $board->position_player[$player->pos] = true;
+
+        $ret["header"] = "newBoard";
+        $ret["data"] =  array(
+            "maxBet"=>$board->maxBet,
+            "minBet" => $board->minBet,
+            "bid" => $board->bid,
+            "name" => $board->name,
+        );
+
+        //$jsonmsg = json_encode($ret);
+        $this->send($player->socket, $ret);
+
+
+        $ret["header"] = "newBoardInServer";
+        $ret["data"] =  array(
+            "bid"  =>$board->bid,
+            "maxBet"=>$board->maxBet,
+            "minBet" => $board->minBet,
+            //"rule" => $board->rule,
+            "name" => $board->name,
+            "status" => $board->status);
+        /* gui cho tat ca thang ngoi o phong cho khi co nguoi moi vao */
+        foreach ($this->players as $p){
+            if ($p->socket == $player->socket)
+                continue;
+            elseif($p->status == "free" ){
+                $this->send($p->socket, $ret);
+            }
+        }
+    } # newBoard()
+
+
+    function join_board($player, $data) {
+
+
+        $board = $this->boards[$data['bid']];
+
+        if ($board->status == "waiting" &&
+
+            MAX_PLAYER_IN_BOARD > count($board->list_player)) {
+
+                $player->status = 'busy';
+                $board->list_player[$player->pid] = $player;
+
+                //$board->position_player["$player->pos"] = true;
+
+                foreach ($board->position_player as $key => $value){
+                    if( $value == false){
+                        $player->pos = $key;
+                        $board->position_player[$key] = true; 
+                        break;
+                    }
+
+                }
+
+                # for all other players in board
+                $ret_remain = array('header' => 'playerJoin');
+                $ret_remain['data'] = array(
+                    'pid' => $player->pid,
+                    'name' => $player->name,
+                    'status' => $player->status,
+                    'cash' => $player->cash,
+                    'position' => $player->pos,
+                    'master' => $player->master
+
+                );
+
+                $this->send_in_board($board->list_player, $ret_remain, $player);
+
+
+                $players = array();
+                foreach ($board->list_player as $p) {
+                    if($p->pid != $player->pid){
+                        $tmp = null;
+                        $tmp["pid"] = $p->pid;
+                        $tmp["cash"]=$p->cash;
+                        $tmp["position"]=$p->pos;
+                        $tmp["name"]=$p->name;
+                        $tmp["status"]= "$p->status";
+                        array_push($players, $tmp);
+                    }
+                }
+
+
+                # for player requested join
+                $ret_new = array('header' => 'joinBoard');
+                $ret_new["data"]["players"] = $players;
+                $ret_new["data"]["bid"] = $board->bid;
+                $ret_new['data']["myOrder"] = $player->pos;
+                $this->send($player->socket, $ret_new);
+            } else {
+                /**
+                 * TODO
+                 */ 
+            }
+    } # join_board
+
+
+    function get_info($player,$msg){
+
+        $pid = $msg["pid"];
+
+        $players = array();
+
+        $found = null;
+
+        foreach($this->players as $p){
+
+            if ($p->socket == $player->socket) {
+                $p->pid = $pid;
+                $found["pid"] = $p->pid;
+                $found["cash"]=$p->cash;
+                $found["name"]=$p->name;
+            }
+            elseif($p->status == "free"){
+                $tmp = null;
+                $tmp["pid"] = $p->pid;
+                $tmp["cash"]=$p->cash;
+                $tmp["name"]=$p->name;
+                $players[] = $tmp;
+            }
+        }
+
+        $data["header"] = "infoServer";
+        $data["data"]["players"] = $players;
+
+        $tmp = null;
+        $boards = array();
+        foreach($this->boards as $b){
+
+            if($b->status == "waiting"){
+
+                $tmp["bid"] = $b->bid;
+                $tmp["maxBet"]=$b->max_bet;
+                $tmp["minBet"]=$b->min_bet;
+                $tmp["status"]=$b->status;
+                $tmp["name"]=$b->name;
+                $boards[] = $tmp;
+            }
+        }
+
+        $data["data"]["boards"] = $boards;
+
+        /* gui cho thang request */
+        $this->send($player->socket, $data);
+
+        $data = null;
+        $data["header"] = "newPlayerInServer";
+        $data["data"] = $found;
+
+        /* gui cho tat ca thang ngoi o phong cho khi co nguoi moi vao */
+        foreach ($this->players as $p){
+            if ($p->socket == $player->socket) 
+                continue;
+            elseif($p->status == "free" ){
+                $this->send($p->socket, $data);
+            }
+        }
+    }
+
+    function init_player($player,$msg){
+
+        $pid = $msg["pid"];
+
+        $found = null;
+
+        foreach($this->players as $p){
+
+            if ($p->socket == $player->socket && is_null($p->pid)) {
+                $p->pid = $pid;
+                $found = $p;
+                break;
+            }
+        }
+
+        if( ! is_null($found) ){
+            $data["header"] = "myInfo";
+            $data["data"]["id"] = $found->pid;
+            $data["data"]["name"] = $found->name;
+            $data["data"]["cash"] = $found->cash;
+            $data["data"]["status"] = $found->status;
+
+            $this->send($player->socket, $data);
+        }
+    }
+
+    function notify_ready($player, $data) {
+        $board = $this->boards[$data['bid']];
+        $msg  = array('header' => 'message');
+        $msg['data'] = array(
+            'title' => 'ready',
+            'body' => array('pid' => $player->pid)
+        );
+
+        $jsonmsg = json_encode($msg);
+        send_in_board($board->list_player, $jsonmsg);
+    } # notify_ready()
+
+    /**
+     * Chia bài
+     * Player  gửi yêu cầu chia bài, check xem người gửi yêu cầu có phải
+     * chủ bàn không, check xem các các player khác trong list_player
+     * đã sẵn sàng chưa, sẵn sàng thì chia bài. Số cây bài được lấy dựa vào
+     * số người chơi. Ví dụ 3 người chơi lấy random 39 cây trong
+     * bộ bài  trong bộ bài thôi
+     * Dữ liệu nhận được
+     * + Header : deal
+     * + Data :
+     * pid: id
+     * Dữ liệu trả cho tất cả mọi người trong list_player của board, cards
+     * của mỗi người sẽ nhận được là khác nhau
+     * + Header : deal
+     * + Data :
+     * Cards: mảng card( suit và rank )
+     */
+
+    function dealer($player, $data){
+        $board = $this->boards[$data['bid']];
+
+        if($player->master){
+
+            $board->status = "busy";
+            $no_players = count($board->list_player);
+            $card_quantity = $no_players * 13;
+            
+            $all_ready = 1;
+            /**
+             * comment tam thoi
+             foreach($board->list_player as $p)
+             {
+                 if($p->status != 'ready')
+                 {
+                     $all_ready = 0;
+                     break;
+        }
+        } # foreach
+             */
+
+            if($all_ready == 1)
+            {
+                $board->deck = new $this->deck_class();
+                $counter = 0;
+                #52/4 * so nguoi choi
+
+                foreach($board->list_player as $p)
+                {
+                    $cards_of_one = array();
+                    # 0->12, 13->25, 26->38, 39->52
+                    $c_and13 = $counter + 13;
+                    for($counter; $counter < $c_and13; $counter++)
+                    {
+                        $cards_of_one[] = $board->deck->cards[$counter];
+                        if($board->deck->cards[$counter]->rank == 3 && $board->deck->cards[$counter]->suit == 1){
+                            $board->actor_player = $p->pid;
+                            $board->cur_player = $p->pid;
+                        }
+                    }
+                    $cards_of_one = $this->sort_cards($cards_of_one);
+
+                    $ret["header"] = 'deal';
+                    $ret["data"] =  array('cards'=>$cards_of_one);
+                    $this->send($p->socket, $ret);
+                }
+                
+                if(is_null($board->actor_player))
+                    $board->actor_player = 1;
+                
+                $this->actor_player($board->list_player, $board->actor_player);
+
+            }
+        } # if
+    } # deal_card()
+
+    function actor_player($list_player,$pid){
+        $ret["header"] = 'message';
+                    $ret["data"] =  array('title'=>'actorPlayer','body'=>$pid);
+        $this->send_in_board($list_player, $ret);
+    }
+    /**
+     * Sắp xếp bộ bài từ bé tới lớn trước khi gửi cho user
+     * */
+    function sort_cards($cards = array()){
+        
+        $lg = count($cards);
+        for($i = 0 ; $i < $lg -1 ; $i++)
+            for($j = $i + 1 ; $j < $lg ; $j++){
+            
+                if ( (($cards[$j]->rank + 10 ) % 13) < (($cards[$i]->rank + 10 ) % 13) ) {
+                    
+                    $tmp = $cards[$i];
+                    $cards[$i] = $cards[$j];
+                    $cards[$j] = $tmp;
+                    
+                }else if($cards[$j]->rank == $cards[$i]->rank)
+                    if ($cards[$j]->suit < $cards[$i]->suit  ){
+                        $tmp = $cards[$i];
+                        $cards[$i] = $cards[$j];
+                        $cards[$j] = $tmp;
+                    }
+            }
+        return $cards;
+    }
+    /**
+     * Nhận đủ bài
+     Nếu player nhận đủ bài sẽ gửi thông báo lên. Khi nhận đủ thông báo từ tất
+     cả người chơi server sẽ check xem  tất cả mọi người đã nhận đủ bài chưa 
+     sau đó check xem có ai thắng trắng không (thắng không cần đánh),
+     */
+
+    function received_enough_cards($player, $data) {
+        if(1)# received from all players
+        { 
+            if(1)# du bai
+            {
+                if(1)# thang trang
+                {
+                    echo 'thagn trang';
+                    #$ret = array(
+                    #    'header'=>'message',
+                    #    'data'=>array(
+                    #        'title'=>'winner',
+                    #        'body'=>array(
+                    #            'pid'=>pid,
+                    #            'wid'=>wid,
+                    #            'money'=>money)));
+                } else {
+                    # quyet dinh xem ai danh dau tien
+                    # gui id qua actorPlayer
+                    echo 'nguoi danh dau tien';
+                    #$ret = array(
+                    #    'header'=>'message',
+                    #    'data'=>array(
+                    #        'title'=>'actorPlayer',
+                    #        'body'=>array(
+                    #           'pid'=>pid)));
+
+                }
+            } else {
+                echo 'chia lai';
+            } # chia lai 
+        } # nhan du thong bao tu players
+    } # received_enough_cards()
+
+
+    function remove_show_down_from_hand($show_down, $hand_card){
+        # lặp quanh các lá bài trong show_down
+        foreach($show_down as $card) {
+            # lặp qua các quân bài trên tay 
+            foreach($hand_card as $i => $c) {
+                if($c->rank == $card->rank && $c->suit == $card->suit) {
+                    # nếu quân bài ở show_down là quân bài trên tay 
+                    # thì xóa nó khỏi tay
+                    unset($hand_card[$i]);
+                    # xóa xong rồi thì break cho đỡ phải lặp. chuyển sang
+                    # kiểm tra quân showdown khac có trên tay ko
+                    break;
+                }
+            }
+        }
+        # trả về các quân bài còn trên tay;
+        return $hand_card;
+    }
+
+
+    function show_down($player, $data){
+        
+        $board = $this->boards[$data['bid']];
+        
+        
+        if($board->actor_player == $data['pid']){
+            
+            $show_down = array();
+            foreach ($data['cards'] as $value){
+                $card = new $this->card_class;
+                $card->getCard($value['rank'], $value['suit']);
+                $show_down[] = $card;
+            }
+            
+            # xóa các quân show_down khỏi tay, gán arrray những quân còn lại cho hand_card
+            $player->hand_card = $this->remove_show_down_from_hand($show_down, $player->hand_card);
+
+            if($this->rule->is_valid_move($show_down,$board->last_show)){
+                
+                $board->last_show = $show_down;
+                $key = $this->get_next_player($board->position_player,$player->pos);
+                foreach($board->list_player as $v){
+                    if($v->pos == $key ){
+                        $board->cur_player = $v->pid ;
+                        $board->actor_player = $v->pid;
+                    }
+                }
+                
+                $msg["header"] = "message";
+                $msg["data"]["title"] = "actorPlayer";
+                $msg["data"]["body"] = "$board->actor_player";
+                $this->send_in_board($board->list_player, $msg);
+                
+                $msg_["header"] = "message";
+                $msg_["data"]["title"] = "showDown";
+                $msg_["data"]["body"] = $show_down;
+                $this->send_in_board($board->list_player, $msg_,$player);
+            }
+        }
+    }
+    
+    function get_next_player($position_player, $key){
+        
+        do{
+            $key = ($key + 1 <= MAX_PLAYER_IN_BOARD)? $key + 1 : 1;
+        }while(!$position_player[$key]);
+        return $key;
+    }
+    
+    
+    function skip_player($player, $data){
+        
+        $board = $this->boards[$data['bid']];
+        
+        $key = $this->get_next_player($board->position_player,$player->pos);
+        
+        if($key == $player->pos){
+            $board->last_show = array();
+        }else{
+            foreach($board->list_player as $v){
+                if($v->pos == $key ){
+                    $board->cur_player = $v->pid ;
+                    $board->actor_player = $v->pid;
+                }
+            }
+        }
+        
+        $msg["header"] = "message";
+        $msg["data"]["title"] = "skipPlayer";
+        $msg["data"]["body"] = "$board->actor_player";
+        $this->send_in_board($board->list_player, $msg);
+        
+    }
+    
+    function process ($player, $msg) {
+
+        $this->say ("\n\n< $msg\n\n");
+        $msg = json_decode($msg,true);
+
+
+        switch ($msg['header']) {
+        case "getMyInfo":
+            $this->init_player($player,$msg['data']);
+            break;
+        case "getInfoServer":
+            $this->get_info($player,$msg['data']);
+            break;
+        case "newBoard":
+            $this->new_board($player,$msg['data']);
+            break;
+        case "joinBoard":
+            $this->join_board($player, $msg['data']);
+            break;
+        case "message":
+            $this->notify_ready($player, $msg['data']);
+            break;
+        case "deal":
+            $this->dealer($player, $msg['data']);
+            break;
+        case "showDown":
+            $this->show_down($player, $msg['data']);
+            break;
+        case "skipPlayer":
+            $this->skip_player($player, $msg['data']);
+            break;
+        default:
+            ;
+            break;
+        }
+
+    }
+
+    /**
+     * @brief Connect a new client (socket)
+     * @param $socket {Socket} : socket to connect
+     * @return void
+     */
+    function connect ($socket) {
+
+        if(!in_array($socket, $this->sockets)){
+            $player = new $this->player_class();
+            $player->socket = $socket;
+
+            array_push ($this->players, $player);
+            array_push ($this->sockets, $socket);
+
+        }
+    }
+
+    /**
+     * @brief Send a message to a client
+     * @param $client {Socket} : socket to send the message
+     * @param $msg {String} : the message to send
+     * @return void
+     */
+    function send ($client, $msg) {
+
+        $msg1 = $msg = json_encode($msg);
+        $msg = $this->encode ($msg);
+        socket_write ($client, $msg, strlen ($msg));
+
+        $this->say ("> $msg1");
+
+    }
+
+    /**
+        trong cái hàm disconect ấy
+        tìm cái thằng vừa dis
+        và cái bàn nó đang ở trong đó nếu có
+        check xem nó có fai là chủ bàn ko
+        nếu nó là chủ và số người trong bàn còn >2
+        thì xóa thằng đó khỏi list players mà khỏi board->list_player
+
+     */
+    function remove_user_and_broadcast($dis_er){
+        
+        // send cho nhung nguoi ngoai sanh
+        $data =array('head' => 'removePlayer',
+                      'data' => array('pid' => $dis_er->pid));
+        
+        $this->send_free_users($data);
+        
+        foreach($this->boards as $key_b => $board) {
+            foreach($board->list_player as $key_p => $p){
+                if ($p->pid == $dis_er->pid) {
+                    
+                    // thong bao cho nguoi trong ban choi
+                    $this->send_in_board($board->list_player, $data, $dis_er);
+
+                    unset($board->list_player[$key_p]);
+
+                    if($dis_er->master) {
+                        $board_to_delete = $board;
+                        $cplayer = count($board->list_player);
+                        if($cplayer > 1) {
+                            
+                            foreach ($board->list_player as $k => $v){
+                                if(!$v->master){
+                                    $v->master = true;
+                                    break;
+                                }
+                            }
+                            
+                        } else {
+                            # delete board after break; because we are looping in boards
+                            $msg = array('head' => 'removeBoard',
+                                'data' => array('bid' => $board->bid));
+                            $this->send_free_users($msg);
+                            unset($this->boards[$key_b]);
+                            break(2);
+                        }
+                    } # is master
+                    break;
+                } # found player
+            }
+        } # foreach
+
+    }
+
+    function send_free_users($msg) {
+        foreach($this->players as $p) {
+            if($p->status == 'free'){
+                $this->send($p->socket, $msg);
+            }
+        }
+    }
+
+    /**
+     * @brief Disconnect a client (socket)
+     * @param $socket {Socket} : socket to disconnect
+     * @return void
+     */
+    function disconnect ($socket) {
+        $found = null;
+        $dis_er = null;
+
+        // Finds the right user index from the given socket
+        foreach($this->players as $key => $player){
+            if ($player->socket == $socket) {
+                $found = $key;
+                $dis_er = $player;
+                break;
+            }
+        }
+
+        /* for test 
+        $xxx = array('data' => array(
+            'minBet' => '50',
+            'maxBet' => '100',
+            'rule' => null,
+            'pid' => $dis_er->pid ));
+        $data = json_encode($xxx);
+        $this->new_board($dis_er, $data);
+
+        echo "PLAYERS: ".count($this->players);
+        print_r($this->players);
+        echo "BOARDS: ".count($this->boards);
+        print_r($this->boards);
+         */
+
+        if (!is_null ($found)) {
+            array_splice ($this->players, $found, 1);
+        }
+
+        //$this->remove_user_and_broadcast($dis_er);
+
+        $index = array_search ($socket, $this->sockets);
+        socket_close ($socket);
+        $this->say ("{$socket} DISCONNECTED!");
+
+        if ($index >= 0) {
+            array_splice ($this->sockets, $index, 1);
+        }
+    }
+
+    /**
+     * @brief Do the handshake between server and client
+     * @param $user {User} : user to handshake
+     * @param $buffer {String} : user's request
+     * @return Boolean
+     */
+    function dohandshake ($player, $buffer) {
+        $this->say ("Requesting handshake...");
+        //$this->say ($buffer);
+
+        list ($resource, $host, $connection, $version, $origin, $key, $upgrade) = $this->getheaders ($buffer);
+
+        //$this->say ("Handshaking...");
+        $reply  =
+            "HTTP/1.1 101 Switching Protocols\r\n" .
+            "Upgrade: {$upgrade}\r\n" .
+            "Connection: {$connection}\r\n" .
+            "Sec-WebSocket-Version: {$version}\r\n" .
+            //"Sec-WebSocket-Origin: {$origin}\r\n" .
+            "Sec-WebSocket-Location: ws://{$host}{$resource}\r\n" .
+            "Sec-WebSocket-Accept: " . $this->calcKey ($key) . "\r\n" .
+            "\r\n";
+
+        // Closes the handshake
+
+        socket_write ($player->socket, $reply, strlen ($reply));
+
+        $player->handshake = true;
+        //$this->say ($reply);
+        $this->say ("Done handshaking...");
+
+        return true;
+    }
+
+    /**
+     * @brief Calculate Sec-WebSocket-Accept
+     * @note For more info look at: http://tools.ietf.org/html/draft-ietf-hybi-thewebsocketprotocol-17
+     * @param $key {String} : key to calculate
+     * @return Calculated key
+     */
+    function calcKey ($key) {
+        // Constant string as specified in the ietf-hybi-17 draft
+        $key .= "258EAFA5-E914-47DA-95CA-C5AB0DC85B11";
+        $key = sha1 ($key);
+        $key = pack ('H*', $key);
+        $key = base64_encode ($key);
+
+        return $key;
+    }
+    /**
+     * @brief Local echo messages
+     * @param $msg {String} : message to echo
+     * @return void
+     */
+    function say ($msg = "") {
+        echo "$msg\n";
+    }
+
+
+    /**
+     * @brief Get the client request headers
+     * @param $buffer {String} : buffer from which to draw the headers.
+     * @return Array
+     */
+    function getheaders ($buffer) {
+        $resource = $host = $connection = $version = $origin = $key = $upgrade = null;
+
+        preg_match ('#GET (.*?) HTTP#', $buffer, $match) && $resource = $match[1];
+        preg_match ("#Host: (.*?)\r\n#", $buffer, $match) && $host = $match[1];
+        preg_match ("#Connection: (.*?)\r\n#", $buffer, $match) && $connection = $match[1];
+        preg_match ("#Sec-WebSocket-Version: (.*?)\r\n#", $buffer, $match) && $version = $match[1];
+        preg_match ("#Sec-WebSocket-Origin: (.*?)\r\n#", $buffer, $match) && $origin = $match[1];
+        preg_match ("#Sec-WebSocket-Key: (.*?)\r\n#", $buffer, $match) && $key = $match[1];
+        preg_match ("#Upgrade: (.*?)\r\n#", $buffer, $match) && $upgrade = $match[1];
+
+        return array ($resource, $host, $connection, $version, $origin, $key, $upgrade);
+    }
+
+    /**
+     * @brief Retrieve an user from his socket
+     * @param $socket {Socket} : socket of the user to search
+     * @return User or null
+     */
+    function getuserbysocket ($socket) {
+        $found = null;
+        foreach ($this->players as $player) {
+            if ($player->socket == $socket) {
+                $found = $player;
+                break;
+            }
+        }
+
+        return $found;
+    }
+
+    /**
+     * @brief Decode messages as specified in the ietf-hybi-17 draft
+     * @param $msg {String} : message to decode
+     * @return Message decoded
+     */
+    function decode ($msg) {
+        $len = $data = $decoded = $index = null;
+        $len = $msg[1] & 127;
+
+        if ($len === 126) {
+            $this->masks = substr ($msg, 4, 4);
+            $data = substr ($msg, 8);
+            $this->initFrame = substr ($msg, 0, 4);
+        }
+        else if ($len === 127) {
+            $this->masks = substr ($msg, 10, 4);
+            $data = substr ($msg, 14);
+            $this->initFrame = substr ($msg, 0, 10);
+        }
+        else {
+            $this->masks = substr ($msg, 2, 4);
+            $data = substr ($msg, 6);
+            $this->initFrame = substr ($msg, 0, 2);
+        }
+
+        for ($index = 0; $index < strlen ($data); $index++) {
+            $decoded .= $data[$index] ^ $this->masks[$index % 4];
+        }
+
+        return $decoded;
+    }
+
+    /**
+     * @brief Encode messages
+     * @param $msg {String} : message to encode
+     * @return Message encoded
+     */
+    function encode ($msg) {
+
+        $b1 = 0x80 | (0x1 & 0x0f);
+        $length = strlen($msg);
+
+        if($length <= 125){
+            $header = pack('CC', $b1, $length);
+        }elseif($length > 125 && $length < 65536){
+            $header = pack('CCn', $b1, 126, $length);
+        }elseif($length >= 65536){
+            $header = pack('CCN', $b1, 127, $length);
+        }
+        return $header.$msg;
+    }
+}
+
+?>

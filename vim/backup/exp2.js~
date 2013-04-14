@@ -1,0 +1,6 @@
+goog.provide('expert')
+goog.require('lime.Director')
+
+expert.start = function() {
+    var director = new lime.Director(document.body, 1034,242);
+}

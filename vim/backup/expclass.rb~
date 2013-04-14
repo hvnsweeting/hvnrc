@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+#
+class Stupid
+    def initialize()
+        puts "hvn"
+    end
+
+end
+
+s = stupid.new

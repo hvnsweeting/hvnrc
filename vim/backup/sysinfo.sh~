@@ -1,0 +1,29 @@
+#!/bin/bash
+OS=$(uname -sr)
+PLATFORM=$(uname -m)
+DATE=$(date +'%H:%M:%S (%d/%m/%Y)')
+UPTIME=$(uptime | awk '{print $3,$4,$5}')
+IP=$(ip addr list wlan0 | grep 'inet' | awk '{print $2}')
+HOST=$(uname -n)
+LOAD=$(uptime | awk '{print $10,$11,$12}')
+MEM=$(free -m | grep 'cache:' | awk '{print $3,"mb used,",$4,"mb free"}')
+TASKS=$(ps -A | wc -l)
+CPU=$(cat /proc/cpuinfo | grep 'model name' | head -1)
+CORE=$(cat /proc/cpuinfo | grep processor | tail -1 | awk '{print $3+1}')
+RAM=$(free -m | grep Mem: | awk '{print $2,"mb"}')
+
+cat <<- _EOM
+        SYSTEM INFOS
+OS: $OS
+PLATFORM: $PLATFORM
+CPU name: $CPU
+CORES: $CORE
+RAM TOTAL: $RAM
+DATE: $DATE
+UPTIME: $UPTIME
+IP: $IP
+HOSTNAME: $HOST
+LOADING: $LOAD
+MEM: $MEM
+TASKS: $TASKS
+_EOM

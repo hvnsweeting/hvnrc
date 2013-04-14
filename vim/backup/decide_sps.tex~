@@ -1,0 +1,10 @@
+\documentclass[a4paper,14pt]{extreport}
+\usepackage[utf8]{vietnam}
+\usepackage{amsfonts}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage[top=3.5cm, bottom=3cm, left=3.5cm, right=2cm] {geometry} % định dạng
+\begin{document}
+\chapter{Các khái niệm liên quan}
+
+\end{document}

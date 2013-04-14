@@ -1,0 +1,11 @@
+
+def foo():
+    k = {}
+    try:
+        return k{'hihi'}
+    except KeyError, e:
+        return "hihi"
+
+
+if __name__ == "__main__":
+   print foo()

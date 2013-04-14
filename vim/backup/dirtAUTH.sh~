@@ -1,0 +1,5 @@
+#!/bin/sh
+user1="user1name"
+pass1="user1pass"
+test "$user1" = "${username}" && test "$pass1" = "${password}" && exit 0
+exit 1

@@ -1,0 +1,17 @@
+from lettuce import *
+
+@step('I have the number (\d+)')
+def have_the_number(step, number):
+    world.number = int(number)
+
+@step('I compute its factorial')
+def compute_factorial(step):
+    world.result = factorial(world.number)
+
+@step('I see the number (\d+)')
+def see_the_number(step, expected):
+    expected = int(expected)
+    assert world.result == expected, "Got %d " % world.result
+
+def factorial(number):
+    return -1

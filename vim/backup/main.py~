@@ -1,0 +1,95 @@
+#-*- coding: utf-8
+import sqlite3
+import random
+import time
+import json
+from flask import Flask, request, session, g, redirect, url_for, \
+        abort, render_template, flash
+
+
+#config
+DATABASE =  'vnquotes.db'
+DEBUG = True
+SECRET_KEY = 'hjkl;'
+
+app = Flask("VNQuotes")
+app.config.from_object(__name__)
+
+#@app.route("/")
+#def main():
+#    return "VNQUOTES home"
+
+def connect_db():
+    return sqlite3.connect(app.config['DATABASE'])
+
+@app.before_request
+def before_request():
+    g.db = connect_db()
+
+@app.teardown_request
+def teardown_request(exception):
+    g.db.close()
+
+@app.route('/')
+def home():
+    quotes = get_random_quotes(3)
+    return render_template('home.html', quotes=quotes)
+
+@app.route('/random')
+def random_quotes():
+    randomquote = get_random_quotes(1)
+    return json.dumps(randomquote[0], ensure_ascii=False)
+
+
+@app.route('/test')
+def test():
+    return json.dumps("cộng hòa", ensure_ascii=False)
+
+def get_today():
+    return int(time.time()) / 86400
+
+
+@app.route('/qotd')
+def quote_of_the_day(day=None):
+    if not day:
+        #day = today to timestamp
+        pass
+    cur = g.db.execute('select quote, author from quotes')
+    
+    quotes = [dict(quote=row[0], author=row[1]) for row in cur.fetchall()]
+    length = len(quotes)
+    today = get_today()
+    qotd = quotes[today % length]
+    return json.dumps(qotd, ensure_ascii=False)
+    
+
+def get_random_quotes(number):
+    cur = g.db.execute('select quote, author, vote from quotes')
+    quotes = [dict(quote=row[0], author=row[1], vote=row[2]) for row in cur.fetchall()]
+    random.shuffle(quotes) # shuffle the given list, no return
+    ret = []
+    for _ in range(number):
+        ret.append(quotes.pop())
+
+    return ret
+
+#@app.route('/category')
+#def view_categories():
+    #cur = g.db.execute('select quote, author from quotes')
+    #
+    #quotes = [dict(quote=row[0], author=row[1]) for row in cur.fetchall()]
+
+
+@app.route('/add', methods=['POST'])
+def add_quote():
+    #if not session.get('logged_in'):
+    #    abort(401)
+    g.db.execute('insert into quotes (quote, author, category, vote) values (?, ?, ?, ?)',
+                 [request.form['quote'], request.form['author'], request.form['categories'], 0])
+    g.db.commit()
+    flash('New quote was successfully posted')
+    return redirect(url_for('home'))
+
+if __name__ == "__main__":
+    app.run()
+

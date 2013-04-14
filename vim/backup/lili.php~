@@ -1,0 +1,8 @@
+<?php
+
+class LiLi extends CI_Controller {
+    public function ngo($page = 'home') {
+        $data['title'] = 'lili';
+        $this->load->view('lili/'.$page, $data);
+    }
+}

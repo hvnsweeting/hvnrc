@@ -1,0 +1,19 @@
+goog.provide('exp3')
+goog.require('lime.Director')
+goog.require('lime.Scene')
+goog.require('lime.Layer')
+goog.require('lime.Label')
+
+exp3.start = function() {
+    var director = new lime.Director(document.body, 1024, 768);
+    var scene = new lime.Scene();
+    var layer = new lime.Layer().setPosition(512,384);
+    var label = new lime.Label().setText('Hellothon').setSize(169,50).setFontSize(30).setPosition(100,80);
+
+    layer.appendChild(label);
+    scene.appendChild(layer);
+
+
+    director.replaceScene(scene)
+
+}

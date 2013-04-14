@@ -1,0 +1,21 @@
+body {
+background-image:url('tim.jpg');
+background-repeat:repeat-x;
+background-position:right top;
+}
+
+p {
+    background-color:#50ff08;
+    text-align:justify;
+    text-decoration:line-through;
+
+}
+
+h1 {
+    background-color:#b0c444;
+    color:#824233;
+    text-align:center;
+    text-decoration:blink;
+}
+
+div {background-color:#124432;}

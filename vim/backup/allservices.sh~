@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for a in rabbitmq-server libvirt-bin nova-network nova-compute nova-api nova-objectstore nova-scheduler nova-volume nova-consoleauth nova-cert keystone glance-api glance-registry
+do 
+    service $a $1;
+done
+
+sleep 3 &
+nova-manage service list 

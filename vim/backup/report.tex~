@@ -1,0 +1,38 @@
+\documentclass[a4paper]{report}
+\usepackage[utf8]{vietnam}% để đánh chữ tiếng việt
+
+\begin{document}
+
+lalal suki
+
+\\%dấu này để xuống dòng
+
+Chào mừng các bạn đến với Latex
+
+enter 2 phát cũng xuống dòng nhưng bị thụt vào
+
+\noindent enter 2 phát ko thụt đầu dòng                 muốn cách  bao nhiêu thì nó  cũng chỉ là 1 dấu cách mà thôi
+
+\begin{center}
+
+    Đi vào giữa
+
+\end{center}
+
+\begin{flushleft}
+
+    Sang trái
+
+\end{flushleft}
+
+\begin{flushright}
+
+    sang phải
+
+\end{flushright}
+
+Nhớ bấm quick build để tạo ra file pdf
+
+\noindent mình hướng dẫn chắc chắn là ko chuẩn rồi.  Mong các  nghiên cứu rồi góp ý
+
+\end{document}  Sẽ được như thế này

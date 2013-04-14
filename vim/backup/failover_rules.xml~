@@ -1,0 +1,81 @@
+<config>
+    <!-- ID bat dau tu 50 -->
+    <base number="50"/>
+    <rule id="1" type="routing" from="192.168.10.209" via="wan3">
+        <failover>wan4, wan5</failover>
+    </rule>
+        
+    <rule id="2" type="nat" port="2299" to="10.10.30.26:22" via="wan1">
+        <failover>wan2, wan3</failover>
+    </rule>
+
+    <rule id="3" type="routing" to="123.30.53.139" via="wan1">
+    </rule>
+
+    <rule id="4" type="routing" from="192.168.10.125" via="wan3" comment="SohaGame">
+        <failover>wan4, wan5</failover>
+    </rule>
+
+    <rule id="5" type="routing" from="192.168.11.179" via="wan14" comment="SohaGame">
+        <failover>wan10</failover>
+    </rule>
+    
+    <rule id="6" type="routing" from="192.168.11.75"  via="wan14" comment="SohaGame">
+        <failover>wan10</failover>
+    </rule>
+
+    <rule id="7" type="routing" from="192.168.14.35"  via="wan14" comment="SohaGame">
+        <failover>wan10</failover>
+    </rule>
+
+    <rule id="8" type="routing" from="192.168.55.164" via="wan11" comment="ThanhPV wifi"/>
+    <rule id="9" type="routing" from="192.168.55.75"  via="wan11" comment="ThanhPV wifi"/>
+    
+    <rule id="10" type="routing" from="192.168.11.97" via="wan14" comment="SohaGame">
+	<failover>wan10</failover>
+    </rule>
+    <rule id="11" type="routing" from="192.168.11.192" via="wan14" comment="SohaGame">
+        <failover>wan10</failover>
+    </rule>
+    <rule id="12" type="routing" from="192.168.11.26" via="wan14" comment="SohaGame">
+        <failover>wan10</failover>
+    </rule>
+    <rule id="13" type="routing" from="192.168.11.177" via="wan14" comment="SohaGame">
+        <failover>wan10</failover>
+    </rule>
+
+    <rule id="101" type="nat" port="80" to="192.168.10.123" via="wan9" comment="smstools"/>
+    <rule id="102" type="nat" port="3390" to="192.168.10.86:3389" via="wan9" comment="RDP .10.86"/>
+    <rule id="103" type="nat" port="3391" to="192.168.10.206:3389" via="wan9" comment="RDP .10.206"/>
+    <rule id="104" type="nat" port="3393" to="192.168.50.62:3389" via="wan9" comment="RDP .50.62"/>
+    <rule id="105" type="nat" port="8900" to="192.168.23.111" via="wan9" comment="Ecom-ThangPD"/>
+    <rule id="106" type="nat" port="11124" to="192.168.24.103:3389" via="wan9" comment="RDP KeToan-svr"/>
+    <rule id="107" type="nat" port="8081" to="192.168.24.103" via="wan6" comment="Web Ketoan-svr"/>
+    <rule id="108" type="nat" port="80" to="192.168.10.200" via="wan7" comment="callcenter and report8x01.vccorp.vn"/>
+    <rule id="109" type="nat" port="3389" to="192.168.23.57" via="wan7" comment="RDP Ecom-ManhND"/>
+    <rule id="110" type="nat" port="6000:6010" to="192.168.23.57" via="wan7" comment="Ecom-ManhND"/>
+    <rule id="111" type="nat" port="50000:60000" to="192.168.23.253" via="wan5" comment="Ecom-ManhND"/>
+    <rule id="112" type="nat" port="49160:49300" to="192.168.23.110" via="wan5" comment="Ecom-ManhND"/>
+    <rule id="113" type="nat" port="8888" to="192.168.23.110:80" via="wan7" comment="Ecom-ManhND"/>
+    <rule id="114" type="nat" port="50000:60000" to="192.168.23.110" via="wan7" comment="Ecom-ManhND"/>
+    <rule id="115" type="nat" port="1433" to="192.168.23.112" via="wan4" comment="SQLServer Cnht-ThanhPV"/>
+    <rule id="116" type="nat" port="706" to="192.168.21.10" via="wan13" comment="Video Conferencing"/>
+
+    <rule id="117" type="nat" port="8081" to="192.168.51.251" via="wan5" comment="Tuan SohaTV"/>
+    <rule id="118" type="nat" port="9091" to="192.168.51.251" via="wan5" comment="Tuan SohaTV"/>
+    <rule id="119" type="nat" port="8082" to="192.168.51.252" via="wan5" comment="Tuan SohaTV"/>
+    <rule id="120" type="nat" port="9092" to="192.168.51.252" via="wan5" comment="Tuan SohaTV"/>
+    <rule id="121" type="nat" port="8083" to="192.168.51.253" via="wan5" comment="Tuan SohaTV"/>
+    <rule id="122" type="nat" port="9093" to="192.168.51.253" via="wan5" comment="Tuan SohaTV"/>
+
+    <rule id="123" type="nat" port="8701" to="192.168.10.151" via="wan9" comment="wap.8x01.vn:8701"/>
+    
+    <!--
+    <rule id="" type="nat" port="" to="" via="wan" comment=""/>
+    <rule id="" type="nat" port="" to="" via="wan" comment=""/>
+    <rule id="" type="nat" port="" to="" via="wan" comment=""/>
+    
+    
+    <rule id="" type="nat" port="" to="" via="wan" comment=""/>
+    -->
+</config>

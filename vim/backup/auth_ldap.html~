@@ -1,0 +1,69 @@
+#!/usr/bin/env python
+import os
+from pprint import pprint
+import ldap
+import logging
+import errno 
+import sys
+
+import signal
+from contextlib import contextmanager
+
+class TimeoutException(Exception): pass
+class LackEnvironmentError(Exception): pass
+
+
+LOG_PATH = "/var/log/openvpn/openvpn-auth.log"
+logging.basicConfig(level=logging.DEBUG, filename=(LOG_PATH), filemode="a+",
+        format="%(asctime)s %(name)s %(levelname)s %(message)s",)
+log = logging.getLogger(__file__)
+
+@contextmanager
+def time_limit(seconds):
+    def signal_handler(signum, frame):
+        raise TimeoutException, "Timed out!"
+    signal.signal(signal.SIGALRM, signal_handler)
+    signal.alarm(seconds)
+    try:
+        yield
+    finally:
+        signal.alarm(0)
+
+#pprint(os.environ)
+def authen_and_author(maillist):
+    domain = maillist.split("@")[1]
+    try:
+        dn = "mail=%s@vccloud.vn,ou=Users,domainName=%s,o=domains,dc=vccloud,dc=vn" % (os.environ['username'], domain)
+        user = os.environ['username']
+        pw = os.environ['password']
+    except: 
+        log.debug("Not found environ vars")
+    else:
+        try:
+            with time_limit(2):
+                try:
+                    ldap_conn = ldap.initialize('ldap://ldap.vccloud.vn')
+                    ldap_conn.simple_bind_s(dn, pw)
+                    log.debug("%s Authentication succeeded! to %s" % (user, maillist))
+
+                    result = ldap_conn.search_st(dn, ldap.SCOPE_BASE, '(&(objectClass=mailUser)(memberOfGroup=%s))' % maillist, ['memberOfGroup'], timeout=1)
+
+                    if not result:
+                        log.debug("%s Authorization failed! to %s" % (user, maillist))
+                        sys.exit(errno.EACCES)
+                    else:
+                        log.debug("%s Authorization succeeded! to %s" % (user, maillist))
+                        sys.exit(0)
+                except ldap.INVALID_CREDENTIALS:
+                    log.debug("%s Authentication failed!", maillist)
+                    sys.exit(errno.EACCES)
+                    pass
+        except TimeoutException, msg:
+            log.debug("%s Timeout when connect to LDAP server: %s" % (maillist, msg))
+            sys.exit(errno.ETIMEDOUT)
+
+
+if __name__ == "__main__":
+    maillist = sys.argv[1]
+    #maillist = "vpnuser1@vccloud.vn"
+    authen_and_author(maillist)

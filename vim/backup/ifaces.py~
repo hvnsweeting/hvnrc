@@ -1,0 +1,114 @@
+import sys
+try:
+    import cPickle as pickle
+except:
+    import pickle
+import mypath
+from util import fill_wanname
+
+
+def parse_iface_config_from_pickle(filename):
+    """
+    return a nested dict contain all info about a wanline,
+    from a file that dumped with pickle by process_interfaces script
+    """
+    try:
+        with open(filename, "r") as f:
+            loaded = pickle.load(f)
+    except IOError, e:
+        print e
+        sys.exit("No picked file found")
+    else:
+        wan_configs = {}
+        for key in loaded:
+            if key.startswith("wan"):
+                wan_configs[key] = loaded[key]
+        return wan_configs
+
+
+def list_info_of(wanname):
+    #('gw': '192.168.33.1', 'subnet': '24', 'iface': 'vlan33', 'name': 'wan1',
+    #'depend_on': 'vlan33', 'UP': False, 'dns': '203.162.0.181',
+    #'wanip': '192.168.33.10', 'type': 'ether'
+    #iface-ip-gw-subnet-dns
+    infos = [get_iface_of(wanname), get_ip_of(wanname), get_gw_of(wanname), __iface_config__[wanname]['subnet'], get_dns_of(wanname)]
+    return infos
+    
+
+def get_list_of_all_wans():
+    """Return wan list from process_interfaces"""
+    global __iface_config__
+    wanlines = []
+    for key in __iface_config__:
+        if key.startswith("wan"):
+            wanlines.append(key)
+    return wanlines
+
+
+def get_list_of_all_wans_ids():
+    wanlines = get_list_of_all_wans()
+    wanlines = [line[3:] for line in wanlines]
+    return wanlines
+
+
+# NOTE : we dont catch exception here, 
+# if does not found that keys, false the test
+@fill_wanname
+def get_iface_of(wanname):
+    global __iface_config__
+    try:
+        return __iface_config__[wanname]['iface']
+    except KeyError, e:
+        return "wan0"
+
+
+@fill_wanname
+def get_dns_of(wanname):
+    global __iface_config__
+    try:
+        dns = __iface_config__[wanname]['dns']
+    except KeyError, e:
+        dns = "0.0.0.0"
+    finally:
+        return dns
+ 
+    #return __iface_config__[wanname]['dns']
+
+
+@fill_wanname
+def get_ip_of(wanname):
+    global __iface_config__
+    try:
+        wanip = __iface_config__[wanname]['wanip']
+    except KeyError, e:
+        wanip = "0.0.0.0"
+    finally:
+        return wanip
+
+@fill_wanname
+def get_gw_of(wanname):
+    global __iface_config__
+    try:
+        gw = __iface_config__[wanname]['gw']
+    except KeyError, e:
+        gw = "0.0.0.0"
+    finally:
+        return gw
+
+
+def init_lines_state(state=False):
+    # wanlist from dumped iface config
+    wanlines = get_list_of_all_wans()
+    return {key : state for key in wanlines}
+
+
+# All global var
+# Maybe read a config file, then pass these name to all parse fn
+#if SIMULATE:
+    #__iface_config__ = parse_interface_config("interfaces_lab.conf")
+#    __iface_config__ = parse_iface_config_from_pickle(PICKLED_FILE)
+#else:
+__iface_config__ = parse_iface_config_from_pickle(mypath.PICKLED_FILE)
+
+if __name__ == "__main__":
+    print list_info_of('wan1')

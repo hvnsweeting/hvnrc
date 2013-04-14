@@ -1,0 +1,10 @@
+proc fact n {
+    if {$n < 2} {
+       return expr 1
+    } else {
+       return expr {$n * [fact [incr n -1]]}
+    }
+}
+
+puts "[fact 4]"
+

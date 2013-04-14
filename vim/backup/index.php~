@@ -1,0 +1,5 @@
+#!/usr/bin/php
+<?
+echo "Content-type: text/html\n\n";
+echo "hello php";
+?>

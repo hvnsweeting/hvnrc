@@ -1,0 +1,39 @@
+<?php
+
+class User_model extends CI_Model {
+    public function __construct()
+    {
+        $this->load->database();
+    }
+
+    public function get_user_by_id($id = False)
+    {
+        if($id === False) {
+            $query = $this->db->get('users');
+            return $query->result_array();
+        }
+        $query = $this->db->get_where('users', array('id' => $id));
+        return $query->row_array();
+    }
+
+    public function get_cash_by_id($id) {
+        $info = $this->get_user_by_id($id);
+        return $info['cash'];
+    }
+
+    public function decrease_cash($id, $quantity) {
+        $current = get_cash_by_id($id);
+        $remain = $current - $quantity;
+        
+        $this->db->where('id', $id);
+        $this->db->update('users', array('cash' => $remain ));
+    }
+
+    public function increase_cash($id, $quantity) {
+        $current = get_cash_by_id($id);
+        $new = $current + $quantity;
+        $this->db->where('id', $id);
+        $this->db->update('users', array('cash' => $new ));
+    }
+}
+?>

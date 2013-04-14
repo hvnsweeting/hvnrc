@@ -1,0 +1,12 @@
+<?php
+$x[] = 1;
+$x[] = 1;
+var_dump($x);
+
+foreach($x as var)
+{
+    echo $var;
+}
+
+
+?>

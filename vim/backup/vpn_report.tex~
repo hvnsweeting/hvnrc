@@ -1,0 +1,88 @@
+\documentclass[a4paper,14pt]{extreport}
+\usepackage[utf8]{vietnam}
+\usepackage{amsfonts}
+%\usepackage{amsmath}
+%\usepackage{amssymb}
+\usepackage{graphicx}% muốn chèn hình sử dụng gói này
+\usepackage[top=3.5cm, bottom=3cm, left=3.5cm, right=2cm] {geometry} % định dạng
+\begin{document}
+
+\tableofcontents% tạo mục lục
+\thispagestyle{empty}% không đánh số trang này
+\setcounter{page}{0}
+\chapter{Các khái niệm liên quan}
+\section{Web service}
+\section{REST và RESTful}
+Representational State Transfer (REST) is a style of software architecture for distributed systems such as the World Wide Web
+\section{Python và web.py}
+\chapter{Tổng quan về chương trình}
+
+VPNWebpy là 1 RESTful webservice được thiết kế để hỗ trợ tạo các cấu hình cho openVPN một cách dễ dàng, dựa trên hệ thống template có sẵn. Triển khai theo lối webservice khiến cho việc tạo các client trên các nền tảng khác nhau trở nên thuận tiện và dễ dàng.
+
+\chapter{Chi tiết thực hiện}
+\section{RESTful webservice}
+\subsection{Chức năng}
+\hspace{6 mm} Webservice được lập trình sử dụng ngôn ngữ Python với sự hỗ trợ của framework web.py và engine template Jinja2. 
+Webservice hỗ trợ tạo các VPN thực hiện xác thực qua user-password LDAP.
+Khi client gửi đi một POST request chứa data ở dạng JSON, webservice sẽ sử dụng các thông tin đó để tạo, cập nhật hay xóa cấu hình openVPN.
+
+\subsection{API}
+\hspace{6 mm} \textbf{/create}
+
+id: một số tự nhiên trong khoảng 1-100, ứng với cổng sẽ được sử dụng cho kết nối vpn tương ứng.
+
+email: email có dạng vpn-admin@tenmien.com hoặc vpn-editor@tenmien.com
+
+type: loại của vpn (admin hoặc editor hoặc cả 2), dùng để tạo các route trong file config sử dụng trên server
+
+rules: cặp ip-kiểu , để tạo các rule cho tường lửa iptables.
+
+Ví dụ:
+ \begin{sloppypar}
+\{"rules": [\{"ip": "123.123.123.123", "type": "all"\}, \{"ip": "192.168.4.130", "type": "all"\}, \{"ip": "192.168.3.182", "type": "all"\}, \{"ip": "123.30.53.12", "type": "all"\}, \{"ip": "222.255.27.156", "type": "all"\}, \{"ip": "1.2.3.4", "type": "ftp"\}, \{"ip": "100.1.0.8", "type": "ftp"\}, \{"ip": "123.1.0.8", "type": "custom", "ports": "23,34,56"\}], "type": ["editor", "admin"], "email": "vpn-admin@vccloud.vn", "id": "4"\}
+ \end{sloppypar}
+Khi nhận được yêu cầu, webservice sẽ tạo ra các cấu hình cần thiết cho cả phía server và client, đóng gói file cấu hình của client vào 1 file zip rồi chuyển tới 1 directory khác để các client có thể nhận được qua một cơ chế nhất định. Đồng thời chạy luôn VPN đó từ phía server. Nếu quá trình tạo cấu hình openVPN thành công, service sẽ trả về kết quả như sau:
+
+\{"msg": "", "return\_code": "success"\}
+
+nếu không thành công, return\_code sẽ trả về giá trị "fail" với msg là thông tin về lỗi xảy ra trong quá trình tạo cấu hình.
+
+\textbf{/update}
+
+Việc update chỉ áp dụng để thay đổi type của VPN và các rules nên có thể sử dụng /create thay thế
+
+\textbf{/delete}
+
+email: client gửi đi email ứng với vpn muốn xóa, server sẽ xóa và trả về các thông tin như phần /create
+
+\textbf{/manage}
+
+Client gửi request GET để lấy thông tin về các cấu hình vpn đã tạo.
+
+\section{Python-CLI client}
+\hspace{6 mm} Đọc các thông tin VPN muốn tạo từ file config và gửi yêu cầu đến webservice.
+Các option:
+
+-c tạo vpn
+
+-d xóa vpn
+
+-m tra cứu thông tin các cấu hình vpn đã tạo
+
+\section{PHP web client}
+\hspace{6 mm} Cho phép người dùng nhập thông tin vpn vào form rồi submit. 
+Sử dụng twitter-boostrap để tạo giao diện web.
+
+\begin{figure} [ht]
+\centering
+\includegraphics[width=120mm]{vpnweb.png}
+\caption{Giao diện nhập thông tin tạo VPN}
+\end{figure}
+
+\chapter{Hướng phát triển trong tương lai}
+\begin{itemize} 
+\item Nâng cao tính năng bảo mật, sử dụng HTTPS
+\item Hỗ trợ nhiều template khác nhau
+\item Phát triển ứng dụng trên các nền tảng khác như desktop, di động...
+\end{itemize}
+\end{document}

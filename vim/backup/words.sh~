@@ -1,0 +1,6 @@
+words="ho bao cao chon"
+
+for word in `echo $words`; do
+    echo $word;
+done;
+

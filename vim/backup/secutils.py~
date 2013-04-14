@@ -1,0 +1,61 @@
+import subprocess as spr
+import commands
+import random
+import json
+import os
+from pprint import pprint
+from tempfile import mkstemp
+
+def process_cmd(command):
+    return spr.check_output(command, shell=True)
+
+
+def decrypt_data(jsondata, token=None):
+    sentdict = json.loads(jsondata)
+
+    enkey = sentdict['key']
+    cypher = sentdict['data']
+
+    cmd = "echo '%s' | openssl base64 -d | openssl rsautl -decrypt -inkey vpn.pem" % enkey
+    received_key = process_cmd(cmd)
+
+    command = "echo '%s' | openssl aes-256-cbc -d -a -pass pass:%s" % (cypher, received_key)
+    plaintext = process_cmd(command)
+
+    return plaintext
+
+
+def encrypt_data(plain):
+    _, TEMPFILE = mkstemp()
+
+    #data should write to a file because it can contain " and '
+    with open(TEMPFILE, "w+") as f:
+        f.write(plain)
+
+    # generate random key
+    key = commands.getoutput("date +%N")
+    # encrypt plaintext with key use AES
+    cypher = commands.getoutput("openssl aes-256-cbc -a -in %s -pass pass:%s" % (TEMPFILE, key))
+    # remove file
+    os.remove(TEMPFILE)
+    # encrypt key by RSA
+    enkey = commands.getoutput("echo '%s' | openssl rsautl -encrypt -pubin -inkey vpn.pub | openssl base64 -e" % key)
+    jsondata = json.dumps({'data' : cypher, 'key' : enkey}, indent=4)
+    return jsondata
+
+
+def main():
+    plain = """Well I just want a reason to hope
+    A reason to know that I should till be here
+    Maybe just a glimpse of the light, a patch of blue sky
+    Somthing to believe in
+    I just want a reason to hope x2
+    Want a reason that I should not let go
+    I want a reaon to hope"""
+
+    jsondata = encrypt_data(plain)
+    plaintext = decrypt_data(jsondata)
+    print plaintext
+
+if __name__ == "__main__":
+    main()

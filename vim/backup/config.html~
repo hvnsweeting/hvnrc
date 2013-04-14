@@ -1,0 +1,43 @@
+$def with (id, devname, type, email)
+
+port 13$id
+proto udp
+dev-type tap
+dev $devname
+ca ca.crt
+cert OpenVPN.crt
+key  OpenVPN.key  # This file should be kept secret
+dh dh1024.pem
+server 172.22.$id.0 255.255.255.0
+auth-user-pass-verify "scripts/dirtAUTH.sh" via-env
+script-security 3
+client-cert-not-required
+# client-config-dir	ccd/$devname/
+username-as-common-name
+duplicate-cn
+learn-address	scripts/$devname-LOG
+route-up	scripts/$devname-FW-up
+down		scripts/$devname-FW-down
+ifconfig-pool-persist ccd/$devname-ipp.txt
+keepalive 7 25
+tls-auth tls-auth_key/$(devname).key 0 # This file is secret
+comp-lzo
+persist-key
+persist-tun
+status /var/log/openvpn/$devname/openvpn-status.log
+log-append   /var/log/openvpn/$devname/openvpn.log
+verb 4
+mute 20
+
+$if "editor" in type:
+    push "route 123.30.53.12  255.255.255.255"
+    push "route 222.255.27.156  255.255.255.255"
+
+$if "admin" in type:
+    push "route 192.168.3.0  255.255.255.0"
+    push "route 192.168.4.0  255.255.255.0"
+    push "route 192.168.5.0  255.255.255.0"
+    push "route 192.168.6.0  255.255.255.0"
+    push "route 192.168.7.0  255.255.255.0"
+    push "route 192.168.8.0  255.255.255.0"
+    push "route 192.168.9.0  255.255.255.0"

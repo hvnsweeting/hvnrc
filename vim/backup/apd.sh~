@@ -1,0 +1,22 @@
+#!/bin/bash
+#Today(dmY): 01-01-2013
+
+APDDIR=/home/hvn/.apd
+mkdir $APDDIR
+
+#change HISTORY of bash
+
+ln /home/hvn/.bash_history $APDDIR/bash_history
+cd $APDDIR
+git init
+git add .
+git commit -m 'init'
+
+#add to crontab
+#@reboot cd $APDDIR; git add .; git commit -m 'update';
+#0 0 * * * cd $APDDIR; git add .; git commit -m 'update';
+
+
+#change bash_rc
+#shopt -s histappend
+#PROMPT_COMMAND="history -a;$PROMPT_COMMAND"

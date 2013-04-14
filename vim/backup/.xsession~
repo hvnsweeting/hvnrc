@@ -1,0 +1,5 @@
+#!/bin/sh
+# sudo ln -s FULL_ADDRESS_TO_THIS_FILE /usr/bin/ws
+# then you can Meta+d ws to start your setup workspace
+echo "hixhix" /home/hvn/chayroi
+ws &

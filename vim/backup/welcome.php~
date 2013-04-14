@@ -1,0 +1,29 @@
+<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+class Welcome extends CI_Controller {
+
+    function __construct()
+    {
+        parent::__construct();
+
+    }
+
+    function index()
+    {
+        
+        $this->load->view('welcome_message');
+
+    }
+    function create(){
+        $this->load->library('websocket');
+        $this->websocket->start("localhost", 12345);
+    }
+
+    function connect() {
+        $this->load->library('websocket');
+        $this->websocket->disconnect();
+    }
+
+}
+/* End of file welcome.php */
+/* Location: ./application/controllers/welcome.php */

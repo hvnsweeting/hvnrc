@@ -1,0 +1,12 @@
+<?php
+class HVN extends CI_Controller {
+    public function love ($page = 'home')
+    {
+        $data['title'] = 'Im HVN';
+        $this->load->view('templates/header', $data);
+        $this->load->view('hvn/'.$page, $data);
+        $this->load->view('templates/footer', $data);
+    }
+    
+}
+?>

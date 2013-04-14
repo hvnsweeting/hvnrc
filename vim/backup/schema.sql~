@@ -1,0 +1,10 @@
+drop table if exists quotes;
+
+create table quotes(
+    id integer primary key autoincrement,
+    quote text not null,
+    author text not null,
+    category text not null,
+    vote integer,
+    create_day date
+);

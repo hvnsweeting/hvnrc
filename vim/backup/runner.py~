@@ -1,0 +1,22 @@
+import web
+import reminder
+
+urls = (
+        "/", "index",
+        "/bot/", "bot",
+        )
+
+class index:
+    def GET(self):
+        reminder.main()
+        return "C2k8pro bot homepage, go to /bot/ to run birthday-reminder"
+
+class bot:
+    def GET(self):
+        reminder.main()
+        return "done"
+
+app = web.application(urls, locals())
+
+if __name__ == "__main__":
+    app.run()

@@ -1,0 +1,269 @@
+import sys
+import logging
+from xml.etree import ElementTree
+from pprint import pprint
+from ConfigParser import SafeConfigParser
+import util
+
+conparser = SafeConfigParser()
+conparser.read(util.gen_config_path("gateway.conf"))
+SIMULATE = conparser.getboolean('globals', 'simulate')
+
+log = logging.getLogger(__file__)
+
+
+def parse_failover_rules(xml_file):
+    """
+    Return a list of rules, each rule contain its data in a dict
+    """
+    with open(util.gen_config_path(xml_file), 'rt') as crit:
+        tree = ElementTree.parse(crit)
+    all_rules = {}
+
+    base_number = tree.find("base").attrib.get("number")
+    
+    root = tree.getroot()
+    for node in root.getiterator():
+        # dictionary contain all attri
+        if node.tag == "rule":
+            d = {}
+            for name, value in sorted(node.attrib.items()):
+                if name == "id":
+                    d[name] = str(int(base_number) + int(value))
+                else:
+                    d[name] = value
+
+            # default proto is tcp
+            if 'proto' not in d:
+                d['proto'] = 'tcp'
+
+            all_rules[d['id']] = d
+            d['failover'] = ""
+
+        elif node.tag == "failover":
+            # update the dict
+            d['failover'] = node.text
+            all_rules[d['id']] = d
+
+    return all_rules
+
+
+def parse_test_rules(xml_file):
+    """
+    return a nested dict contain test infos and suite_tables 
+    {'infos': {   suite_id
+                    {   wan_id
+                        {
+                            testname {testattrib : value}
+                        }
+                    }
+            },
+    'tables':
+        {   
+            suite_id: [table_id]
+        }
+    }
+    """
+    with open(util.gen_config_path(xml_file), 'rt') as xml:
+        tree = ElementTree.parse(xml)
+
+    suite_table = {}
+    suite_info = {}
+
+    test_suite_id = 1 # test_suite_id for count the test_suite
+    root = tree.getroot()
+    for tablenode in root.getiterator("table"):
+        table_id = tablenode.attrib.get('id')  # 90,91,92
+        keylvl1 = str(test_suite_id)
+        suite_table[keylvl1] = table_id.split(',')
+        wans_dict = {}
+
+        for wannode in tablenode.getiterator('wan'):
+            wanid = wannode.attrib.get('id')  # keylvl2 , maybe *
+            wanname = 'wan' + wanid if wanid != '*' else wanid
+
+            minimum_percent = wannode.attrib.get('minimum_percent')  #keylvl2
+
+            wandata = {}
+            # trim % sign, ready to use in calculating
+            wandata['min'] = int(minimum_percent[:-1])
+
+            test_dict = {}
+            for test in wannode.findall('test'):
+                test_data = {}
+                for test_attrib, test_value in test.attrib.items():
+                    test_data[test_attrib] = test_value
+                test_dict[test.attrib.get('name')] = test_data
+
+            wandata['tests'] = test_dict
+            wans_dict[wanname] = wandata
+        suite_info[keylvl1] = wans_dict
+        test_suite_id += 1
+
+    return {'infos':suite_info, 'tables':suite_table}
+
+
+def parse_interface_config(filename):
+    """
+    DEPRECATED - for testing purpose only
+    Return a dict contain all config section. Key is section name 
+    and value is a dict which contain all items in that section
+    """
+    interfaces = {}
+    config = SafeConfigParser()
+    config.read(util.gen_config_path(filename))
+    for section in config.sections():
+        d = {}
+        for option, value in config.items(section):
+            d[option] = value
+        interfaces[section] = d
+
+    return interfaces
+
+
+def parse_routing_tables(conf_filename):
+    """
+    Return a nested dict as same struct of ini-style config file
+    {
+        '90' :   
+        {
+            'wan1' = 5
+            ...
+        }
+        ...
+    }
+    """
+    routing_tables = {}
+    config = SafeConfigParser()
+    config.read(util.gen_config_path(conf_filename))
+    section_names = config.sections()
+    # use tableid number as key
+    return dict((secname.split('_')[1], dict(config.items(secname)))
+                        for secname in section_names)
+
+
+def parse_policy_routing(xml_file):
+    """
+    Return a list of rules, each rule contain its data in a dict
+    { lvl1_key : { lvl2_key : {lvl3key : lvl3value}}}
+
+    lvl1_key : rule_id
+    lvl2_keys : min, tests, rule-data
+    """
+    with open(util.gen_config_path(xml_file), 'rt') as crit:
+        tree = ElementTree.parse(crit)
+
+    all_rules = {}  # which will be returned
+    
+    # all rule id will be add to base number to get a real id
+    base_number = tree.find("base").attrib.get("number")
+
+    for node in tree.getiterator('rule'):
+        wrap_dict = {}  # Lvl 1 value
+
+        rule_data = {}  # Lvl 2 value
+        for name, value in sorted(node.attrib.items()):
+            if name == "id":
+                rule_data[name] = str(int(base_number) + int(value))
+            else:
+                rule_data[name] = value
+
+        wrap_dict['rule-data'] = rule_data
+
+        rule_id = rule_data['id']  # Lvl 1 key
+        all_rules[rule_id] = wrap_dict
+
+    return all_rules
+
+
+def get_priority_queue_from_rule_id(id):
+    """Return a list of wanname of `id_` rule in priority order"""
+    id = str(id)
+    global __failover_rules__
+    fo_rules = __failover_rules__
+    removed_spaces = ''.join(fo_rules[id]['failover'].split())
+    all_wan_in_rule = removed_spaces.split(",")
+    all_wan_in_rule.insert(0, fo_rules[id]['via'].strip())
+    ret = filter(None, all_wan_in_rule)
+    return ret
+
+
+def find_rules_relate_to_line(wanname):
+    """Return rules ids which contain wanname"""
+    global __failover_rules__
+    fo_rules = __failover_rules__
+    ruleids = [id for id in fo_rules if 
+                wanname in get_priority_queue_from_rule_id(id)]
+    return ruleids
+
+
+def get_all_tableids():
+    """Return all table ids in routing table"""
+    global __routing_tables__
+    return [sec for sec in __routing_tables__]
+
+
+def tableids_contain(wanname):
+    """Find in routing_table, return list of table id contain wanname"""
+    global __routing_tables__
+    rt_tables = __routing_tables__
+
+    tables_has_wanname = [name for name in rt_tables if 
+                                wanname in rt_tables[name]]
+    return tables_has_wanname
+
+
+def get_section_by_tableid(id):
+    """
+    return {wanname : weight}
+    """
+    try:
+        table_id = int(id)
+    except ValueError as e:
+        table_id = id.split("_")[1]
+    else:
+        table_id = str(table_id)
+
+    global __routing_tables__
+    try:
+        return __routing_tables__[table_id]
+    except KeyError, e:
+        return {}
+        #raise Exception("Can not found table %s in routing_tables, recheck test_rules" 
+        #        % section_name)
+
+
+def init_last_up_state(failover_rules):
+    # a dict to check what is the last up line of each table in failover rule
+    return dict((key, None) for key in failover_rules)
+
+
+def filt_tableids_relate_to_wan(wanname, tableids):
+    filted_tableids = []
+    for tableid in tableids:
+        try:
+            __routing_tables__[tableid][wanname]
+        except KeyError, e:
+            # that wanname not in tableid or that tableid not exist
+            pass 
+        else:
+            filted_tableids.append(tableid)
+
+    return filted_tableids
+            
+
+__routing_tables__ = parse_routing_tables('routing_tables.conf')
+__failover_rules__ = parse_failover_rules('failover_rules.xml')
+__test_rules__ = parse_test_rules('test_rules.xml')
+__policy_routing_rules__ =  parse_policy_routing('policy_routing.xml')
+
+
+if __name__ == "__main__":
+    print 'pprint(__routing_tables__)'
+    pprint(__routing_tables__)
+    print 'pprint(__test_rules__)'
+    pprint(__test_rules__)
+    print 'pprint(__failover_rules__)'
+    pprint(__failover_rules__)
+    print 'pprint(__policy_routing_rules__)'
+    pprint(__policy_routing_rules__)

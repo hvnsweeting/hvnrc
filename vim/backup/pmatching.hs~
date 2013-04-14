@@ -1,0 +1,8 @@
+
+
+pmtest [] = error "I dont like it"
+pmtest [x] = x
+pmtest (x:xs) 
+    | x > maxTail = x
+    | otherwise = maxTail
+    where maxTail = pmtest xs
