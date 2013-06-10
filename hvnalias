@@ -30,3 +30,6 @@ alias gito='cd ~/bin/gitolite-admin'
 if [ -f ~/.ugly_aliases ]; then
     . ~/.ugly_aliases
 fi
+
+# Arch
+alias lsrv='systemctl list-unit-files'

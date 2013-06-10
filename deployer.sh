@@ -16,7 +16,7 @@ for i in "${arr[@]}";do
         diff $i
     fi
 
-    if [[ $(diff -q $i | wc -l) -eq "1" ]]; then
+    if [[ ! -f "$i" ]] || [[ $(diff -q $i | wc -l) -eq "1" ]] ; then
         cp -i $i
     fi
     tput bold 
