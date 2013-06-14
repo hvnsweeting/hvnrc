@@ -4,6 +4,7 @@
 arr=("vimrc $HOME/.vimrc"
     "bashrc $HOME/.bashrc"
     "hvnalias $HOME/.hvnalias"
+    "tmux.conf $HOME/.tmux.conf"
     "i3config $HOME/.i3/config")
 
 echo "Running deployer, this file should be run with \`source `basename $0`\`"
