@@ -1,7 +1,7 @@
 ! urxvt
 
 URxvt*geometry:                53x20
-URxvt*font:  xft:Terminus:pixelsize=12
+urxvt*font:             xft:Bitstream Vera Sans Mono:pixelsize=13
 URxvt*depth:                32
 URxvt*background:            [85]#000000
 URxvt*foreground:            [100]#ffffff
