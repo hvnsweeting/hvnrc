@@ -39,7 +39,15 @@ alias vst='virsh start'
 
 # Auto deploy salt for test
 deps () {
-    set -x
-    $1/bootstrap_archive.py /srv/pillar ~/hvndata > ~/`date +%Y%m%d_%H%M%S`_salt.tar.gz
-    set +x
+    cd $1/..
+    parent=`pwd`
+    cd -
+    tarball=/tmp/salt_`date +%Y%m%d_%H%M%S`_$2.tar.gz
+    $1/bootstrap_archive.py $parent/saltpillar $parent/hvndata > $tarball
+    if [ ! -z $3 ]; then
+        if ! `scp $tarball root@$3:/tmp`; then
+            sed -i "/$3/d" ~/.ssh/known_hosts
+            scp $tarball root@$3:/tmp
+        fi
+    fi
 }
