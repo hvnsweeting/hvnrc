@@ -100,3 +100,11 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 export PATH=$PATH:~/bin/
+export EDITOR=vi
+
+# Auto deploy salt for test
+deps () {
+    set -x
+    $1/bootstrap_archive.py /srv/pillar ~/hvndata > ~/`date +%Y%m%d_%H%M%S`_salt.tar.gz
+    set +x
+}

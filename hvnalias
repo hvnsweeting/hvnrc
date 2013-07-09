@@ -33,3 +33,13 @@ fi
 
 # Arch
 alias lsrv='systemctl list-unit-files'
+
+# virsh
+alias vst='virsh start'
+
+# Auto deploy salt for test
+deps () {
+    set -x
+    $1/bootstrap_archive.py /srv/pillar ~/hvndata > ~/`date +%Y%m%d_%H%M%S`_salt.tar.gz
+    set +x
+}
