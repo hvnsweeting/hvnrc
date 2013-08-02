@@ -54,7 +54,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 function git_branch(){
-    echo $(git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3)
+    echo $(git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3-)
 }
 
 if [ "$color_prompt" = yes ]; then
