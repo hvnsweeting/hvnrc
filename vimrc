@@ -1,6 +1,7 @@
 " Use Vim settings, rather than Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
 set nocompatible
+set encoding=utf-8
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -102,15 +103,9 @@ nmap <Leader>b ggO#!/bin/bash<Esc>o
 nmap <Leader>m Giif __name__ == "__main__":<CR>
 
 autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-let php_sql_query=1
-let php_htmlInString=1
 "For latex"
 set grepprg=grep\ -nH\ $*
 let g:tex_flavor='latex'
-let java_highlight_all=1
-let java_highlight_functions="style"
-let java_allow_cpp_keywords=1
 
 "miniBuf"
 ""let g:miniBufExplMapWindowNavVim = 1
@@ -134,5 +129,29 @@ map <C-k> <C-W>k
 map <C-h> <C-W>h
 map <C-l> <C-W>l
 
-
+au BufNewFile,BufRead *.html,*.htm,*.shtml,*.stm,*.jinja2 set ft=jinja
 filetype plugin indent on
+
+"Git branch
+function! GitBranch()
+    let branch = system("git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* //'")
+    if branch != ''
+        return '   Git Branch: ' . substitute(branch, '\n', '', 'g')
+    en
+    return ''
+endfunction
+
+function! CurDir()
+    return substitute(getcwd(), '/home/hvn', "~/", "g")
+endfunction
+
+function! HasPaste()
+    if &paste
+        return 'PASTE MODE  '
+    en
+    return ''
+endfunction
+
+set laststatus=2
+" Format the statusline
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L%{GitBranch()}
