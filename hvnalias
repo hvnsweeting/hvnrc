@@ -25,6 +25,12 @@ alias gtus='git status'
 alias gcm='git commit -m '
 alias gut='git add -u && gcm "update" && pom'
 alias gito='cd ~/bin/gitolite-admin'
+alias gfo='git fetch origin -p'
+
+# Saltstack
+alias sls='salt-call --local state.sls'
+alias grains='salt-call --local grains.items'
+alias bfs='~/Github/tinyscripts/salt/bfs.sh'
 
 # dangerous alias like for shutting down computer
 if [ -f ~/.ugly_aliases ]; then
@@ -37,6 +43,8 @@ alias lsrv='systemctl list-unit-files'
 # virsh
 alias vst='virsh start'
 
+alias nrpe='~/Github/tinyscripts/salt/nrpe2mon.py'
+
 # Auto deploy salt for test
 deps () {
     cd $1/..
@@ -46,7 +54,7 @@ deps () {
     $1/bootstrap_archive.py $parent/saltpillar $parent/hvndata > $tarball
     if [ ! -z $3 ]; then
         if ! `scp $tarball root@$3:/tmp`; then
-            sed -i "/$3/d" ~/.ssh/known_hosts
+            ssh-keygen -f ~/.ssh/known_hosts -R $3
             scp $tarball root@$3:/tmp
         fi
     fi
