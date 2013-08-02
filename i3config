@@ -77,7 +77,7 @@ bindsym $mod+a focus parent
 #bindcode $mod+d focus child
 
 # start all apps
-bindsym $mod+p exec skype; exec firefox; exec thunderbird
+bindsym $mod+p exec pidgin; exec firefox
 
 # switch to workspace
 bindsym $mod+1 workspace 1:code
