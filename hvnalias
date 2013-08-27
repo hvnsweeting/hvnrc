@@ -52,20 +52,23 @@ deps () {
     cd -
     tarball=/tmp/salt_`date +%Y%m%d_%H%M%S`_$2.tar.gz
     logfile=/var/log/salt/`date +%Y%m%d_%H%M%S_$4.log`
+    errorfile=$logfile$$
     $1/bootstrap_archive.py $parent/saltpillar $parent/hvndata > $tarball
     if [ ! -z $3 ]; then
         if ! `scp $tarball root@$3:/tmp`; then
             ssh-keygen -f ~/.ssh/known_hosts -R $3
-            scp $tarball root@$3:/tmp
+            scp -oStrictHostKeyChecking=no $tarball root@$3:/tmp
         fi
-        ssh root@$3 << EOF
+        ssh -oStrictHostKeyChecking=no root@$3 << EOF
         cd /; tar xzf $tarball;
         pgrep salt-minion || bootstrap integration
-        echo "log_level: warning" > /etc/salt/minion.d/warning.conf
+        echo "log_level: info" > /etc/salt/minion.d/warning.conf
         service salt-minion restart
+        apt-get install pastebinit git -y
         cd /root/salt;
-        apt-get install pastebinit git -y && git init .
-        salt-call --local state.sls $4 > $logfile 2>&1
+        git init . && git add . >> /var/log/salt/$$_2>&1 && git commit -m 'init' >> /var/log/salt/$$_2>&1
+        salt-call --local state.sls $4 2>$errorfile > $logfile
+        cat $errorfile >> $logfile
         pastebinit $logfile
 EOF
     fi
