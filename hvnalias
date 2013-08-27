@@ -55,7 +55,12 @@ deps () {
     if [ ! -z $3 ]; then
         if ! `scp $tarball root@$3:/tmp`; then
             ssh-keygen -f ~/.ssh/known_hosts -R $3
-            scp $tarball root@$3:/tmp
+            yes | scp $tarball root@$3:/tmp
+			ssh root@$3 << EOF
+			cd /; tar xzf /tmp/$tarball; bootstrap integration
+			cd /root/salt; apt-get install git -y && git init .
+			salt-call --local state.sls $4
+EOF
         fi
     fi
 }
