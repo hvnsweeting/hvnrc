@@ -67,7 +67,8 @@ deps () {
         apt-get install pastebinit git -y
         cd /root/salt;
         git init . && git add . >> /var/log/salt/$$_2>&1 && git commit -m 'init' >> /var/log/salt/$$_2>&1
-        salt-call --local state.sls $4 2>$errorfile > $logfile
+		echo "$4" >> $logfile
+        salt-call --local state.sls $4 2>$errorfile >> $logfile
         cat $errorfile >> $logfile
         pastebinit $logfile
 EOF
