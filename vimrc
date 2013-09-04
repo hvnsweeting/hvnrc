@@ -51,6 +51,7 @@ filetype plugin indent on
 autocmd FileType text setlocal textwidth=78
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd BufNewFile,BufRead *.html,*.htm,*.jinja2 set ft=jinja
+autocmd BufWritePre * :%s/\s\+$//e
 
 " For simple status bar
 function! GitBranch()
