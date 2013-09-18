@@ -47,6 +47,7 @@ alias nrpe='~/Github/tinyscripts/salt/nrpe2mon.py'
 
 # Auto deploy salt for test
 deps () {
+    salt_common=`pwd`
     cd $1/..
     parent=`pwd`
     cd -
@@ -65,14 +66,17 @@ deps () {
         echo "log_level: info" > /etc/salt/minion.d/log.conf
         echo "file_log_level: debug" >> /etc/salt/minion.d/log.conf
         service salt-minion restart
-        apt-get install pastebinit git -y
+        apt-get install git -y
         cd /root/salt;
         git init . && git add . >> /var/log/salt/$$_2>&1 && git commit -m 'init' >> /var/log/salt/$$_2>&1
 		echo "$4" >> $logfile
         salt-call --local state.sls $4 2>$errorfile >> $logfile
         cat $errorfile >> $logfile
-        pastebinit $logfile
-        echo "DONE AT `date`"
+        echo "\nDONE AT `date`" >> $logfile
 EOF
+    cd ~/salt_deploy || mkdir ~/salt_deploy && cd ~/salt_deploy
+    scp root@$3:$logfile .
+    vim `basename $logfile`
+    cd $salt_common
     fi
 }
