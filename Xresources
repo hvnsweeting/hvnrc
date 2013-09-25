@@ -1,5 +1,4 @@
 ! urxvt
-
 URxvt*geometry:                53x20
 urxvt*font:             xft:Bitstream Vera Sans Mono:pixelsize=13
 URxvt*depth:                32
@@ -12,8 +11,6 @@ URxvt*termName:    rxvt-unicode
 URxvt.perl-ext-common: default,matcher
 URxvt.urlLauncher: firefox
 URxvt.matcher.button: 1
-
-
 
 !Pnevma1
 *color0: #2F2E2D
