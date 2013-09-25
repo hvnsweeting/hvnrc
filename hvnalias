@@ -20,6 +20,8 @@ alias syslog='tail -f /var/log/syslog | ccze'
 alias lstd='cat ~/.TODO.rst'
 alias vitd='vim ~/.TODO.rst'
 
+alias ipy='. ~/python2/bin/activate; ipython2'
+
 # GIT
 alias gtus='git status'
 alias gcm='git commit -m '
