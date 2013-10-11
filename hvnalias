@@ -33,6 +33,7 @@ alias gfo='git fetch origin -p'
 alias sls='salt-call --local state.sls'
 alias grains='salt-call --local grains.items'
 alias bfs='~/Github/tinyscripts/salt/bfs.sh'
+alias scl='salt-call --local'
 upre() {
     ssh-add; sudo virsh start $1
 }
