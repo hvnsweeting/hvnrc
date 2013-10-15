@@ -12,5 +12,6 @@ rsync -avz ~/.bashrc $MY_PATH"bashrc"
 rsync -avz ~/.Xresources $MY_PATH"Xresources"
 rsync -avz ~/.tmux.conf $MY_PATH"tmux.conf"
 rsync -avz ~/.xinitrc $MY_PATH"xinitrc"
+rsync -avz ~/.inputrc $MY_PATH"inputrc"
 
 set +x
