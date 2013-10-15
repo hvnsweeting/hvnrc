@@ -3,7 +3,8 @@ set keymap vi
 
 set keymap vi-command
 C-l clear-screen
-
+C-p previous-history
+C-n next-history
 
 set keymap vi-insert
 "\ep" yank-last-arg
