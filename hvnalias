@@ -33,6 +33,9 @@ alias gfo='git fetch origin -p'
 alias sls='salt-call --local state.sls'
 alias grains='salt-call --local grains.items'
 alias bfs='~/Github/tinyscripts/salt/bfs.sh'
+upre() {
+    ssh-add; sudo virsh start $1
+}
 
 # dangerous alias like for shutting down computer
 if [ -f ~/.ugly_aliases ]; then
