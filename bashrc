@@ -99,9 +99,10 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-export PATH=$PATH:~/bin/
-export EDITOR=vi
-
 command_today=$(find $(echo $PATH | tr ':' ' ') | shuf | head -n1)
 echo Command for today: $command_today
 whatis $(basename $command_today)
+
+export PATH=$PATH:~/bin/
+export EDITOR=vi
+
