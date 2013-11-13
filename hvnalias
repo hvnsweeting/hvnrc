@@ -28,6 +28,22 @@ alias gtus='git status'
 alias gcm='git commit -m '
 alias gut='git add -u && gcm "update" && pom'
 alias gfo='git fetch origin -p'
+gfa () {
+    current=`pwd`
+    if [ -z $1 ]; then
+        dest=/home/hvn/Github/bfs/*/
+    else
+        dest=$1
+    fi
+    for n in `find $dest -name '.git' -type d `;
+    do
+        dir=$(echo $n | grep -Eo '.*/')
+        cd $dir
+        echo "fetching in $(pwd)"
+        git fetch origin -p
+    done
+    cd $current
+}
 
 # Saltstack
 alias sls='salt-call --local state.sls'
