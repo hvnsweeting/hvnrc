@@ -14,8 +14,7 @@ set ts=4
 
 set backspace=indent,eol,start
 set cursorline
-set cursorcolumn
-set colorcolumn=78
+set colorcolumn=80
 set nu
 set ruler
 set showcmd
