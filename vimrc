@@ -19,7 +19,7 @@ set nu
 set ruler
 set showcmd
 syntax on
-colorscheme desert
+colorscheme torte
 
 set hlsearch
 set incsearch
