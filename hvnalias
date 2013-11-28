@@ -20,39 +20,19 @@ alias syslog='tail -f /var/log/syslog | ccze'
 alias lstd='cat ~/.TODO.rst'
 alias vitd='vim ~/.TODO.rst'
 
-alias py2='source ~/python2/bin/activate'
 alias ipy='. ~/python2/bin/activate; ipython'
 
 # GIT
 alias gtus='git status'
 alias gcm='git commit -m '
 alias gut='git add -u && gcm "update" && pom'
+alias gito='cd ~/bin/gitolite-admin'
 alias gfo='git fetch origin -p'
-gfa () {
-    current=`pwd`
-    if [ -z $1 ]; then
-        dest=/home/hvn/Github/bfs/*/
-    else
-        dest=$1
-    fi
-    for n in `find $dest -name '.git' -type d `;
-    do
-        dir=$(echo $n | grep -Eo '.*/')
-        cd $dir
-        echo "fetching in $(pwd)"
-        git fetch origin -p
-    done
-    cd $current
-}
 
 # Saltstack
 alias sls='salt-call --local state.sls'
 alias grains='salt-call --local grains.items'
 alias bfs='~/Github/tinyscripts/salt/bfs.sh'
-alias scl='salt-call --local'
-upre() {
-    ssh-add; sudo virsh start $1
-}
 
 # dangerous alias like for shutting down computer
 if [ -f ~/.ugly_aliases ]; then
@@ -76,13 +56,7 @@ deps () {
     tarball=/tmp/salt_`date +%Y%m%d_%H%M%S`_$2.tar.gz
     logfile=/var/log/salt/`date +%Y%m%d_%H%M%S_$4.log`
     errorfile=$logfile$$
-    if [ ! -z $5 ]; then
-        non_common=$5
-    else
-        non_common=$salt_common
-    fi
-    $1/bootstrap_archive.py $parent/saltpillar $non_common > $tarball
-
+    $1/bootstrap_archive.py $parent/saltpillar $parent/hvndata > $tarball
     if [ ! -z $3 ]; then
         if ! `scp $tarball root@$3:/tmp`; then
             ssh-keygen -f ~/.ssh/known_hosts -R $3
