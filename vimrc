@@ -19,7 +19,7 @@ set nu
 set ruler
 set showcmd
 syntax on
-colorscheme desert
+colorscheme torte
 
 set hlsearch
 set incsearch
@@ -47,9 +47,9 @@ if has('mouse')
 endif
 
 filetype plugin indent on
-autocmd FileType text setlocal textwidth=78
+autocmd FileType text setlocal textwidth=80
 autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd BufNewFile,BufRead *.jinja,*.jinja2 set ft=sls
+autocmd BufNewFile,BufRead *.jinja,*.jinja2 so ~/.vim/yaml.vim
 autocmd BufWritePre * :%s/\s\+$//e
 
 " For simple status bar
