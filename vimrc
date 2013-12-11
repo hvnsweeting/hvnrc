@@ -42,10 +42,6 @@ nmap <Leader># ggO#!/usr/bin/env python<Esc>o
 nmap <Leader>b ggO#!/bin/bash<Esc>o
 nmap <Leader>m Giif __name__ == "__main__":<CR>
 
-if has('mouse')
-  set mouse=a
-endif
-
 filetype plugin indent on
 autocmd FileType text setlocal textwidth=78
 autocmd FileType python set omnifunc=pythoncomplete#Complete
