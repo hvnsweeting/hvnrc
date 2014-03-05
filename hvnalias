@@ -108,3 +108,7 @@ EOF
     cd $salt_common
     fi
 }
+
+ldir () {
+    git diff $1 --stat | grep -v insertions | cut -d'/' -f1 | uniq | xargs
+}
