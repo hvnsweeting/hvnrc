@@ -6,15 +6,9 @@ alias lst='ls -Fhtl'
 
 # alias
 alias cdd="cd ~/Dropbox"
-alias cdp="cd ~/python"
+alias cdp="cd ~/python2"
 alias cdg="cd ~/Github"
-alias cdh="cd ~/hgrepo"
-alias sai="sudo apt-get install"
-alias repo="cd ~/Downloads/Repo"
-alias pom='git push origin master'
 alias psg='ps aux | grep '
-alias POM='git pull origin master'
-alias sshs='ssh -A dev'
 alias irc='irssi -c irc.freenode.net'
 alias syslog='tail -f /var/log/syslog | ccze'
 alias lstd='cat ~/.TODO.rst'
