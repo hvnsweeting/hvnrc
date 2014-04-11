@@ -1,0 +1,11 @@
+#!/bin/bash
+
+set -x
+if [ ! -e ~/python2 ]; then
+  virtualenv2 ~/python2
+  source ~/python2/bin/activate
+  pip install -r ~/.py2req.txt
+else
+  echo ~/python2 exists
+fi
+set +x
