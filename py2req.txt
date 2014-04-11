@@ -1,0 +1,5 @@
+# List of pkgs need to install in my ~/python2 virtualenv
+requests
+pycallgraph
+ipython
+ipdb
