@@ -39,6 +39,22 @@ gfa () {
     cd $current
 }
 
+function gpush () {
+    files=$(git log -n3 --stat | grep -o '.*\.py')
+        for f in $files; do
+            if [ -e $f ]; then
+                flake8 $f
+            fi
+        done
+    if [ ! -z "$files" ]; then
+        echo 'Do you still want to push? [y/n]'
+        read answer
+        if [ "$answer" = 'y' ]; then
+            git push $*
+        fi
+    fi
+}
+
 # Saltstack
 alias sls='salt-call --local state.sls'
 alias grains='salt-call --local grains.items'
