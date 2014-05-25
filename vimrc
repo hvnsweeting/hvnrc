@@ -70,3 +70,8 @@ endfunction
 
 set laststatus=2
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L%{GitBranch()}
+if !exists("*Flake8()")
+  autocmd BufWritePost *.py call Flake8()
+else
+  echo 'Missing flake8 plugin'
+endif
