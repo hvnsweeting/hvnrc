@@ -38,7 +38,7 @@ nmap <Leader>rb :!bash %<CR>
 nmap <Leader>p :set paste!<CR>i
 nmap <Leader>s :source $MYVIMRC<CR>
 nmap <Leader>v :e $MYVIMRC<CR>
-nmap <Leader># ggO#!/usr/bin/env python<Esc>o
+nmap <Leader># ggO# -*- coding: utf-8 -*-<CR>#!/usr/bin/env python2<Esc>o
 nmap <Leader>b ggO#!/bin/bash<Esc>o
 nmap <Leader>m Giif __name__ == "__main__":<CR>
 
