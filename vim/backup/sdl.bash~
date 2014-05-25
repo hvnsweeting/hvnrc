@@ -1,3 +1,0 @@
-sudo apt-get install libsdl1.2-dev
-chmod a+x bezier_curves_v2
-

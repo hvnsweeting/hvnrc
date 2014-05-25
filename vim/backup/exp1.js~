@@ -1,6 +1,0 @@
-goog.provide('exp1')
-goog.require('lime.Director')
-
-exp1.run = function() {
-    var director = new lime.Director(document.body, 1024,768);
-}

@@ -1,7 +1,0 @@
-\documentclass[a4paper, 14pt]{report}
-\usepackage[utf8]{inputenc}
-\usepackage[vietnam]{babel}
-
-\begin{document}
-Latex Tiếng Việt trên Linux 
-\end{document}

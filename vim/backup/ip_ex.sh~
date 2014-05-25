@@ -1,7 +1,0 @@
-#!/bin/bash
-
-all_hosts_that_up=$(nmap -sP 123.30.53.0/24 | grep report | cut -d '(' -f2 | tr -d')')
-for host in $all_hosts_that_up;
-do
-    nmap -A $host
-done

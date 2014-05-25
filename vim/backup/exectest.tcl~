@@ -1,6 +1,0 @@
-#!/usr/bin/env tclsh
-#
-#
-
-set temp [exec sleep 5 &]
-puts "This will show immediate if above cmd has trailing &"

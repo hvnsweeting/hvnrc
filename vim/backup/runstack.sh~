@@ -1,3 +1,0 @@
-service keystone start
-service glance-api start
-

@@ -1,4 +1,0 @@
-[swift-hash]
-a0a2c19e37b3ea9 # echo -n openstack | sha1sum | head -c 15
-
-

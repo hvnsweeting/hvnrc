@@ -1,2 +1,0 @@
-sudo apt-get install nova-compute nova-volume nova-novncproxy novnc nova-api nova-ajax-console-proxy nova-cert nova-consoleauth nova-doc nova-scheduler nova-network
-
