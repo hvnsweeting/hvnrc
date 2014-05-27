@@ -98,9 +98,19 @@ deps () {
             ssh-keygen -f ~/.ssh/known_hosts -R $3
             scp -oStrictHostKeyChecking=no $tarball root@$3:/tmp
         fi
+
+        # Prefix existing hostname with integration
+        scp root@$3:/etc/hostname /tmp/hostname_$$
+
+        remotehostname=$(cat /tmp/hostname_$$)
+        if [ "${remotehostname:0:11}" = 'integration' ]; then
+            remotehostname=${remotehostname:11}
+        fi
+
+        # run the salt-call
         ssh -oStrictHostKeyChecking=no root@$3 << EOF
         cd /; tar xzf $tarball;
-        pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh integration-`hostname`
+        pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh integration-$remotehostname
         echo "log_level: info" > /etc/salt/minion.d/log.conf
         echo "file_log_level: debug" >> /etc/salt/minion.d/log.conf
         service salt-minion restart
