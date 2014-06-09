@@ -6,7 +6,10 @@ Create symlink for all config file.
 import os
 import logging
 import shutil
+import sys
 
+if sys.version_info.major != 2 or sys.version_info.minor != 7:
+    sys.exit('Require python 2.7 to run')
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
