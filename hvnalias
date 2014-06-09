@@ -91,7 +91,7 @@ deps () {
     else
         non_common=$salt_common
     fi
-    $1/bootstrap_archive.py $parent/saltpillar $non_common > $tarball
+    $1/bootstrap_archive.py $parent/pillars $non_common > $tarball
 
     if [ ! -z $3 ]; then
         if ! `scp $tarball root@$3:/tmp`; then
