@@ -2,7 +2,7 @@
 
 set -x
 if [ ! -e ~/python2 ]; then
-  virtualenv2 ~/python2
+  virtualenv-2.7 ~/python2
   source ~/python2/bin/activate
   pip install -r ~/.py2req.txt
 else
