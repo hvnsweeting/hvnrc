@@ -99,9 +99,18 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-export PATH=$PATH:~/bin/
 export EDITOR=vi
 
-command_today=$(find $(echo $PATH | tr ':' ' ') | shuf | head -n1)
+if ( ! which shuf ); then
+    function rand_cmd () {
+        python -c "import random, sys; print(random.choice(sys.stdin.readlines()))"
+    }
+else
+    function rand_cmd () {
+        shuf | head -n1
+    }
+fi
+command_today=$(find $(echo $PATH | tr ':' ' ') | rand_cmd)
 echo Command for today: $command_today
 whatis $(basename $command_today)
+export PATH=$PATH:/opt/local/bin:~/hbin
