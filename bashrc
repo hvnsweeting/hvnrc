@@ -99,6 +99,12 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
+if ( which brew 2>&1 >/dev/null); then
+    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+      . $(brew --prefix)/etc/bash_completion
+    fi
+fi
+
 export EDITOR=vi
 
 if ( ! which shuf ); then
