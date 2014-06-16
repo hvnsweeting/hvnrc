@@ -135,5 +135,12 @@ EOF
 }
 
 ldir () {
+# get list of changed formulas in comparing to $1 branch
     git diff $1 --stat | grep -v insertions | cut -d'/' -f1 | uniq | xargs
+}
+
+mirror () {
+    echo -n 'server: '; read server
+    echo -n 'dir: '; read destdir
+    scp -v -P22022 $1 salt_archive@${server}:incoming/${destdir}
 }
