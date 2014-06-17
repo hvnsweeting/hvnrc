@@ -2,9 +2,13 @@
 
 set -x
 if [ ! -e ~/python2 ]; then
-  virtualenv-2.7 ~/python2
-  source ~/python2/bin/activate
-  pip install -r ~/.py2req.txt
+    if (which virtualenv-2.7 2>&1>/dev/null); then
+         virtualenv-2.7 ~/python2
+         source ~/python2/bin/activate
+         pip install -r ~/.py2req.txt
+    else
+        echo 'Missing virtualenv-2.7'; exit 1
+    fi
 else
   echo ~/python2 exists
 fi
