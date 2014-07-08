@@ -18,6 +18,7 @@ set colorcolumn=80
 set nu
 set ruler
 set showcmd
+set spell
 syntax on
 colorscheme torte
 
