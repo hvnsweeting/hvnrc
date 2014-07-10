@@ -144,3 +144,9 @@ mirror () {
     echo -n 'dir: '; read destdir
     scp -v -P22022 $1 salt_archive@${server}:incoming/${destdir}
 }
+
+saltrender () {
+    py2
+    salt-call --local -c /Users/hvn/Github/FOSS/salt/conf  cp.get_template salt://$1 /tmp/salt_render && less /tmp/salt_render
+    rm -f /tmp/salt_render
+}
