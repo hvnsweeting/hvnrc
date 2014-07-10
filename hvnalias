@@ -80,9 +80,31 @@ alias nrpe='~/Github/tinyscripts/salt/nrpe2mon.py'
 # Auto deploy salt for test
 deps () {
     salt_common=`pwd`
+
+    if [ ! -e 'nrpe/init.sls' ]; then
+        echo "$salt_common"
+        echo "It does not look like root salt-common dir. Exit? [y/n]"
+        read _cm
+        if [ ${_cm} = 'y' ]; then
+            return
+        fi
+    fi
+
     cd $1/..
     parent=`pwd`
-    cd -
+
+    cd $parent/pillars
+    if [ "$(git rev-parse --abbrev-ref HEAD)" == "develop" ]; then
+        echo -n "Pillar is in branch develop, continue? [y/n]:"
+        read _answ
+        if [ ${_answ} != "y" ]; then
+            cd $salt_common
+            return
+        fi
+    fi
+
+    cd $salt_common
+    # TODO verify is a salt-common repo
     tarball=/tmp/salt_`date +%Y%m%d_%H%M%S`_$2.tar.gz
     logfile=/var/log/salt/`date +%Y%m%d_%H%M%S_$4.log`
     errorfile=$logfile$$
@@ -115,8 +137,8 @@ deps () {
 
         # run the salt-call
         ssh -oStrictHostKeyChecking=no root@$3 << EOF
-        cd /; tar xzf $tarball;
-        pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh integration-$remotehostname
+        cd /; rm -rf /root/salt; tar xzf $tarball;
+        pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh "integration-$remotehostname"
         echo "log_level: info" > /etc/salt/minion.d/log.conf
         echo "file_log_level: debug" >> /etc/salt/minion.d/log.conf
         service salt-minion restart
