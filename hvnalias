@@ -151,7 +151,7 @@ deps () {
 EOF
     cd ~/salt_deploy || mkdir ~/salt_deploy && cd ~/salt_deploy
     scp root@$3:$logfile .
-    vim `basename $logfile`
+    vim +/'Result:    False' `basename $logfile`
     cd $salt_common
     fi
 }
