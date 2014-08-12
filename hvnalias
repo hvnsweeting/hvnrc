@@ -156,6 +156,8 @@ EOF
     fi
 }
 
+alias lint=~/Github/tinyscripts/lint.sh
+
 ldir () {
 # get list of changed formulas in comparing to $1 branch
     git diff $1 --stat | grep -v insertions | cut -d'/' -f1 | uniq | xargs
