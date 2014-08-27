@@ -79,6 +79,9 @@ alias nrpe='~/Github/tinyscripts/salt/nrpe2mon.py'
 
 # Auto deploy salt for test
 deps () {
+    saltcommon=$1
+    address=$2
+    SLSes=$3
     salt_common=`pwd`
 
     if [ ! -e 'nrpe/init.sls' ]; then
@@ -90,7 +93,7 @@ deps () {
         fi
     fi
 
-    cd $1/..
+    cd $saltcommon/..
     parent=`pwd`
 
     cd $parent/pillars
@@ -105,20 +108,20 @@ deps () {
 
     cd $salt_common
     # TODO verify is a salt-common repo
-    tarball=/tmp/salt_`date +%Y%m%d_%H%M%S`_$2.tar.gz
-    logfile=/var/log/salt/`date +%Y%m%d_%H%M%S_$4.log`
+    tarball=/tmp/salt_`date +%Y%m%d_%H%M%S`.tar.gz
+    logfile=/var/log/salt/`date +%Y%m%d_%H%M%S_$SLSes.log`
     errorfile=$logfile$$
     if [ ! -z $5 ]; then
         non_common=$5
     else
         non_common=$salt_common
     fi
-    $1/bootstrap_archive.py $parent/pillars $non_common > $tarball
+    $saltcommon/bootstrap_archive.py $parent/pillars $non_common > $tarball
 
-    if [ ! -z $3 ]; then
-        if ! `scp $tarball root@$3:/tmp`; then
-            ssh-keygen -f ~/.ssh/known_hosts -R $3
-            scp -oStrictHostKeyChecking=no $tarball root@$3:/tmp
+    if [ ! -z $address ]; then
+        if ! `scp $tarball root@$address:/tmp`; then
+            ssh-keygen -f ~/.ssh/known_hosts -R $address
+            scp -oStrictHostKeyChecking=no $tarball root@$address:/tmp
         fi
 
         # Prefix existing hostname with integration
@@ -128,7 +131,7 @@ deps () {
             rm -f /tmp/hostname_$$
         fi
 
-        scp root@$3:/etc/hostname /tmp/hostname_$$
+        scp root@$address:/etc/hostname /tmp/hostname_$$
 
         remotehostname=$(cat /tmp/hostname_$$)
         if [ "${remotehostname:0:11}" = 'integration' ]; then
@@ -136,21 +139,21 @@ deps () {
         fi
 
         # run the salt-call
-        ssh -oStrictHostKeyChecking=no root@$3 << EOF
+        ssh -oStrictHostKeyChecking=no root@$address << EOF
         cd /; rm -rf /root/salt; tar xzf $tarball;
         pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh "integration-$remotehostname"
         echo "log_level: info" > /etc/salt/minion.d/log.conf
         echo "file_log_level: debug" >> /etc/salt/minion.d/log.conf
         service salt-minion restart
         cd /root/salt;
-		echo "$4" >> $logfile
+		echo "$SLSes" >> $logfile
         salt-call --local saltutil.sync_all
-        salt-call --local state.sls $4 2>$errorfile >> $logfile
+        salt-call --local state.sls $SLSes 2>$errorfile >> $logfile
         cat $errorfile >> $logfile
         echo "\nDONE AT `date`" >> $logfile
 EOF
     test -e ~/salt_deploy || mkdir ~/salt_deploy
-    scp root@$3:$logfile ~/salt_deploy
+    scp root@$address:$logfile ~/salt_deploy
     vim +/'Result:    False' ~/salt_deploy/`basename $logfile`
     fi
 }
