@@ -4,10 +4,7 @@ alias la='ls -A'
 alias l='ls -CF'
 alias lst='ls -Fhtl'
 
-# alias
-alias cdd="cd ~/Dropbox"
-alias cdp="cd ~/python2"
-alias cdg="cd ~/Github"
+# frequent
 alias psg='ps aux | grep '
 alias irc='irssi -c irc.freenode.net'
 alias syslog='tail -f /var/log/syslog | ccze'
@@ -16,6 +13,11 @@ alias vitd='vim ~/.TODO.rst'
 
 alias py2='source ~/python2/bin/activate'
 alias ipy='. ~/python2/bin/activate; cd ~/python2/code; ipython'
+
+# cds
+alias cdd="cd ~/Dropbox"
+alias cdp="cd ~/python2"
+alias cdg="cd ~/Github"
 
 # GIT
 alias gtus='git status'
