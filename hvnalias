@@ -123,9 +123,9 @@ deps () {
     $saltcommon/bootstrap_archive.py $parent/pillars $non_common > $tarball
 
     if [ ! -z $address ]; then
-        if ! `scp $tarball root@$address:/tmp`; then
+        if ! `scp -v $tarball root@$address:/tmp`; then
             ssh-keygen -f ~/.ssh/known_hosts -R $address
-            scp -oStrictHostKeyChecking=no $tarball root@$address:/tmp
+            scp -v -oStrictHostKeyChecking=no $tarball root@$address:/tmp
         fi
 
         # Prefix existing hostname with integration
@@ -135,7 +135,7 @@ deps () {
             rm -f /tmp/hostname_$$
         fi
 
-        scp root@$address:/etc/hostname /tmp/hostname_$$
+        scp -v root@$address:/etc/hostname /tmp/hostname_$$
 
         remotehostname=$(cat /tmp/hostname_$$)
         if [ "${remotehostname:0:11}" = 'integration' ]; then
@@ -159,7 +159,7 @@ deps () {
         echo "\nDONE AT `date`" >> $logfile
 EOF
     test -e ~/salt_deploy || mkdir ~/salt_deploy
-    scp root@$address:$logfile ~/salt_deploy
+    scp -v root@$address:$logfile ~/salt_deploy
     vim +/'Result: *False' ~/salt_deploy/`basename $logfile`
     fi
 }
