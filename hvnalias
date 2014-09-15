@@ -18,6 +18,8 @@ alias ipy='. ~/python2/bin/activate; cd ~/python2/code; ipython'
 alias cdd="cd ~/Dropbox"
 alias cdp="cd ~/python2"
 alias cdg="cd ~/Github"
+alias cdcm='cd ~/Github/bfs/common'
+alias cdrc='cd ~/Github/hvnrc'
 
 # GIT
 alias gtus='git status'
@@ -156,7 +158,7 @@ deps () {
 EOF
     test -e ~/salt_deploy || mkdir ~/salt_deploy
     scp root@$address:$logfile ~/salt_deploy
-    vim +/'Result:    False' ~/salt_deploy/`basename $logfile`
+    vim +/'Result: *False' ~/salt_deploy/`basename $logfile`
     fi
 }
 
