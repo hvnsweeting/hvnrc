@@ -116,7 +116,7 @@ else
         shuf | head -n1
     }
 fi
-command_today=$(find $(echo $PATH | tr ':' ' ') | rand_cmd)
+command_today=$(find $(echo $PATH | tr ':' ' ') 2> /dev/null | rand_cmd)
 echo Command for today: $command_today
 whatis $(basename $command_today) | head -n10
 export PATH=$PATH:/opt/local/bin:~/hbin
