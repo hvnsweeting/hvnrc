@@ -118,5 +118,5 @@ else
 fi
 command_today=$(find $(echo $PATH | tr ':' ' ') | rand_cmd)
 echo Command for today: $command_today
-whatis $(basename $command_today)
+whatis $(basename $command_today) | head -n10
 export PATH=$PATH:/opt/local/bin:~/hbin
