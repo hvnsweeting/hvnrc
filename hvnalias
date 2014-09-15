@@ -153,7 +153,9 @@ deps () {
 		echo "$SLSes" >> $logfile
         salt-call --local saltutil.sync_all
         salt-call --local state.sls $SLSes 2>$errorfile >> $logfile
+        echo "============== ERROR LOG ==============" >> $logfile
         cat $errorfile >> $logfile
+        rm $errorfile
         echo "\nDONE AT `date`" >> $logfile
 EOF
     test -e ~/salt_deploy || mkdir ~/salt_deploy
