@@ -173,18 +173,20 @@ ldir () {
 
 mirror () {
     url=$1
-    fn=$2
-    if [ -e $1 ]; then
-        fn=$1
-    else
+    expected_fn=$2
+    if [ ! -e $url ]; then
+        # it's a url
+        fn=$expected_fn
         set -x
         python2 -c "import urllib; print urllib.urlretrieve('"$url"', '"$fn"')"
         set +x
+    else
+        fn=$url
     fi
 
     echo -n 'server: '; read server
     echo -n 'dir: '; read destdir
-    scp -v -P22022 $fn salt_archive@${server}:incoming/${destdir}
+    scp -v -P22022 $fn salt_archive@${server}:incoming/${destdir}/$expected_fn
     rm -i $fn
 }
 
