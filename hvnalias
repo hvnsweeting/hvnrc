@@ -172,9 +172,20 @@ ldir () {
 }
 
 mirror () {
+    url=$1
+    fn=$2
+    if [ -e $1 ]; then
+        fn=$1
+    else
+        set -x
+        python2 -c "import urllib; print urllib.urlretrieve('"$url"', '"$fn"')"
+        set +x
+    fi
+
     echo -n 'server: '; read server
     echo -n 'dir: '; read destdir
-    scp -v -P22022 $1 salt_archive@${server}:incoming/${destdir}
+    scp -v -P22022 $fn salt_archive@${server}:incoming/${destdir}
+    rm -i $fn
 }
 
 saltrender () {
