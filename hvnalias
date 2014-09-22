@@ -23,7 +23,7 @@ alias cdrc='cd ~/Github/hvnrc'
 
 # netcheck
 # TODO test on Linux, add an IP of VN
-alias netchk='ping -c1 -W1 8.8.8.8 || ping -c1 -W1 208.67.222.222 || echo "NO CONNECTION"'
+alias netchk='ping -c2 -W1 203.162.71.66 || ping -c1 -W1 8.8.8.8 || ping -c1 -W1 208.67.222.222 || echo "NO CONNECTION"'
 
 # GIT
 alias gtus='git status'
