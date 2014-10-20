@@ -117,6 +117,11 @@ else
     }
 fi
 command_today=$(find $(echo $PATH | tr ':' ' ') 2> /dev/null | rand_cmd)
-echo Command for today: $command_today
 whatis $(basename $command_today) | head -n10
+echo Command for today: $command_today
+if `which dpkg`; then
+    pkgname=$(dpkg -S $command_today | cut -f1 -d:)
+    echo "in package $pkgname"
+    dpkg -L $pkgname | grep /bin
+fi
 export PATH=$PATH:/opt/local/bin:~/hbin
