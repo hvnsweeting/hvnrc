@@ -25,6 +25,9 @@ alias cdrc='cd ~/Github/hvnrc'
 # TODO test on Linux, add an IP of VN
 alias netchk='ping -c2 -W1 203.162.71.66 || ping -c1 -W1 8.8.8.8 || ping -c1 -W1 208.67.222.222 || echo "NO CONNECTION"'
 
+# PyTimesheet
+alias pts='/Users/hvn/Github/pytimesheet/pts.py'
+
 # GIT
 alias gtus='git status'
 alias gcm='git commit -m '
@@ -124,8 +127,12 @@ deps () {
     else
         non_common=$salt_common
     fi
+    set -x
     $saltcommon/bootstrap_archive.py $parent/pillars $non_common > $tarball
+    set +x
+    tar tzf $tarball 2>&1 > /dev/null || { echo "bad tarball" && return ; }
 
+    set -x
     if [ ! -z $address ]; then
         if ! `scp -v $tarball root@$address:/tmp`; then
             ssh-keygen -f ~/.ssh/known_hosts -R $address
@@ -166,6 +173,7 @@ EOF
     scp -v root@$address:$logfile ~/salt_deploy
     vim +/'Result: *False' ~/salt_deploy/`basename $logfile`
     fi
+    set +x
 }
 
 alias lint=~/Github/tinyscripts/lint.sh
