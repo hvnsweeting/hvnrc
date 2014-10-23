@@ -49,6 +49,9 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd BufNewFile,BufRead *.jinja,*.jinja2 set ft=sls
 autocmd BufWritePre * :%s/\s\+$//e
 
+" Ctags
+let Tlist_WinWidth = 55
+
 " For simple status bar
 function! GitBranch()
     let branch = system("git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* //'")
