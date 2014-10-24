@@ -207,3 +207,5 @@ saltrender () {
     salt-call --local -c /Users/hvn/Github/FOSS/salt/conf  cp.get_template salt://$1 /tmp/salt_render && less /tmp/salt_render
     rm -f /tmp/salt_render
 }
+
+alias dockersalt='docker run -v ~/Github/bfs/common/:/root/salt/states -v ~/Github/bfs/pillars/:/root/salt/pillar -it hvn:salt  tmux'
