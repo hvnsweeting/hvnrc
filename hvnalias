@@ -11,6 +11,10 @@ alias syslog='tail -f /var/log/syslog | ccze'
 alias lstd='cat ~/.TODO.rst'
 alias vitd='vim ~/.TODO.rst'
 
+function grepsalt() {
+    grep -v -E 'salt.loader \(loader\.gen_functions|OrderedDict|Executing state|salt\.loaded\.int\.render\.yaml|Completed state' $1 | less -N
+}
+
 alias py2='source ~/python2/bin/activate'
 alias ipy='. ~/python2/bin/activate; cd ~/python2/code; ipython'
 
@@ -20,6 +24,7 @@ alias cdp="cd ~/python2"
 alias cdg="cd ~/Github"
 alias cdcm='cd ~/Github/bfs/common'
 alias cdrc='cd ~/Github/hvnrc'
+alias cdf='cd ~/Github/FOSS'
 
 # netcheck
 # TODO test on Linux, add an IP of VN
