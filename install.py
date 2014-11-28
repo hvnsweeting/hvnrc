@@ -48,11 +48,20 @@ for src in src_dst:
                 else:
                     logger.info('%s pointed to %s', dest, source)
     else:
+        logger.debug('Checking %s' , dest)
         try:
             os.stat(dest)
             logger.info('%s is not a symlink, append its name with .backup', dest)
             shutil.move(dest, '.'.join((dest, 'backup')))
         except OSError:
-            pass
+            # should only fail if dest dir not exist due to dir path not exist
+            contain_dir = os.path.dirname(dest)
+            logger.debug("%s does not exist", dest)
+
+            if not os.path.isdir(contain_dir):
+                os.mkdir(contain_dir)
+                logger.debug("Created dir %s", contain_dir)
+            else:
+                logger.debug("%s dir exists", contain_dir)
         logger.info('Creating symlink %s ------> %s', dest, source)
         os.symlink(source, os.path.join(home, dest))
