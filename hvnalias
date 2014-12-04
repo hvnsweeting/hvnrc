@@ -38,6 +38,10 @@ alias gtus='git status'
 alias gcm='git commit -m '
 alias gut='git add -u && gcm "update" && pom'
 alias gfo='git fetch origin -p'
+alias gfap='git fetch --all -p'
+# git latest branches
+alias glb='git for-each-ref --sort=-committerdate refs/heads/ | head'
+
 gfa () {
     current=`pwd`
     if [ -z $1 ]; then
