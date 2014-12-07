@@ -84,6 +84,12 @@ upre() {
     ssh-add; sudo virsh start $1
 }
 
+# common developer tools
+# find the most common used Python vars
+function pyvars () {
+    find $1 -name '*.py' | xargs grep ' = ' | cut -f1 -d'=' | tr -d ' ' | cut -f2 -d':' | sort -nr | uniq -c| sort -nr| head -n30
+}
+
 # dangerous alias like for shutting down computer
 if [ -f ~/.ugly_aliases ]; then
     . ~/.ugly_aliases
