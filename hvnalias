@@ -170,6 +170,7 @@ deps () {
         echo "file_log_level: debug" >> /etc/salt/minion.d/log.conf
         service salt-minion restart
         cd /root/salt;
+        rm -rf /var/cache/salt/minion/doc
 		echo "$SLSes" >> $logfile
         salt-call --local saltutil.sync_all
         salt-call --local state.sls $SLSes 2>$errorfile >> $logfile
