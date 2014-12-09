@@ -169,7 +169,7 @@ deps () {
         fi
 
         # run the salt-call
-        ssh -oStrictHostKeyChecking=no root@$address << EOF
+        ssh -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF
         cd /; rm -rf /root/salt; tar xzf $tarball;
         pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh "integration-$remotehostname"
         echo "log_level: info" > /etc/salt/minion.d/log.conf

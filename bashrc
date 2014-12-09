@@ -124,4 +124,5 @@ if `which dpkg`; then
     echo "in package $pkgname"
     dpkg -L $pkgname | grep /bin
 fi
-export PATH=$PATH:/opt/local/bin:~/hbin
+export PATH=$PATH:/opt/local/bin:~/hbin:/Users/hvn/Github/FOSS/golang/bin
+
