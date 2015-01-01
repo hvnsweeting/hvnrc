@@ -26,6 +26,14 @@ alias cdcm='cd ~/Github/bfs/common'
 alias cdrc='cd ~/Github/hvnrc'
 alias cdf='cd ~/Github/FOSS'
 
+# golang workspace
+export GOPATH="~/Github/gomeo"
+if [ ! -d "$GOPATH/src" ]; then
+  mkdir -p "$GOPATH/src" "$GOPATH/pkg" "$GOPATH/bin"
+fi
+export PATH=$PATH:$GOPATH/bin
+alias gogo="cd $GOPATH"
+
 # netcheck
 # TODO test on Linux, add an IP of VN
 alias netchk='ping -c2 -W1 203.162.71.66 || ping -c1 -W1 8.8.8.8 || ping -c1 -W1 208.67.222.222 || echo "NO CONNECTION"'
