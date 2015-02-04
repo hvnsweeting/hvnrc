@@ -25,9 +25,10 @@ alias cdg="cd ~/Github"
 alias cdcm='cd ~/Github/bfs/common'
 alias cdrc='cd ~/Github/hvnrc'
 alias cdf='cd ~/Github/FOSS'
+alias cdfs='cd ~/Github/FOSS/salt'
 
 # golang workspace
-export GOPATH="~/Github/gomeo"
+export GOPATH=~/Github/gomeo
 if [ ! -d "$GOPATH/src" ]; then
   mkdir -p "$GOPATH/src" "$GOPATH/pkg" "$GOPATH/bin"
 fi
@@ -176,6 +177,10 @@ deps () {
             remotehostname=${remotehostname:11}
         fi
 
+        ssh -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF_
+        ntpdate ntp.ubuntu.com
+EOF_
+
         # run the salt-call
         ssh -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF
         cd /; rm -rf /root/salt; tar xzf $tarball;
@@ -209,7 +214,11 @@ ldir () {
 
 mirror () {
     url=$1
-    expected_fn=$2
+    if [ -z $2 ]; then
+        expected_fn=$(basename $1)
+    else
+        expected_fn=$2
+    fi
     if [ ! -e $url ]; then
         # it's a url
         fn=$expected_fn
