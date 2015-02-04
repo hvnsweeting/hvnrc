@@ -241,4 +241,24 @@ saltrender () {
     rm -f /tmp/salt_render
 }
 
+startday() {
+    echo "Adding ssh key"
+    pwd=$(pwd)
+    if (! ssh-add -l); then
+        ssh-add
+    fi
+
+    echo "creating SSH tunnel if needed"
+    ~/hbin/sshtunnel.sh
+    ps auxww | grep 'ssh.*[D] 123'
+
+    for repo in common pillars; do
+        echo "fetching important repo ${repo}"
+        cd ~/Github/bfs/${repo}
+        git fetch --all --prune
+    done
+    cd $pwd
+    echo "Good day, me!"
+}
+
 alias dockersalt='docker run -v ~/Github/bfs/common/:/root/salt/states -v ~/Github/bfs/pillars/:/root/salt/pillar -it hvn:salt  tmux'
