@@ -10,6 +10,7 @@ alias irc='irssi -c irc.freenode.net'
 alias syslog='tail -f /var/log/syslog | ccze'
 alias lstd='cat ~/.TODO.rst'
 alias vitd='vim ~/.TODO.rst'
+alias myip='dig +short myip.opendns.com @208.67.222.222'
 
 function grepsalt() {
     grep -v -E 'salt.loader \(loader\.gen_functions|OrderedDict|Executing state|salt\.loaded\.int\.render\.yaml|Completed state' $1 | less -N
@@ -237,7 +238,7 @@ mirror () {
 
 saltrender () {
     py2
-    salt-call --local -c /Users/hvn/Github/FOSS/salt/conf  cp.get_template salt://$1 /tmp/salt_render && less /tmp/salt_render
+    salt-call --local -c /Users/hvn/Github/FOSS/salt/conf/local  cp.get_template salt://$1 /tmp/salt_render && less /tmp/salt_render
     rm -f /tmp/salt_render
 }
 
