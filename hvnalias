@@ -45,6 +45,9 @@ alias pts='/Users/hvn/Github/pytimesheet/pts.py'
 
 # ssh
 alias sshr='ssh-keygen -R'
+function sshroot () {
+    ssh -v root@$1
+}
 
 # GIT
 alias gtus='git status'
