@@ -34,7 +34,6 @@ nmap <Leader>E :NERDTreeToggle<CR>
 nmap <Leader>p :set paste!<CR>i
 nmap <Leader>s :source $MYVIMRC<CR>
 nmap <Leader>v :e $MYVIMRC<CR>
-nmap <Leader>m Giif __name__ == "__main__":<CR>
 
 filetype plugin indent on
 autocmd FileType text setlocal textwidth=78
@@ -44,6 +43,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 " Python
 autocmd FileType py nmap <Leader>r :!python %<CR>
 autocmd FileType py nmap <Leader># ggO#!/usr/bin/env python2<CR># -*- coding: utf-8 -*-<Esc>o
+autocmd FileType py nmap <Leader>m Giif __name__ == "__main__":<CR>
 autocmd FileType py set omnifunc=pythoncomplete#Complete
 
 " Shell
