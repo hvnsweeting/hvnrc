@@ -26,6 +26,9 @@ set hlsearch
 set incsearch
 set showmatch
 
+" Vim pathogen
+execute pathogen#infect()
+
 " Binding
 nmap j gj
 nmap k gk
