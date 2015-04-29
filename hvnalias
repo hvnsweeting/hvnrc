@@ -43,12 +43,15 @@ alias netchk='ping -c2 -W1 203.162.71.66 || ping -c1 -W1 8.8.8.8 || ping -c1 -W1
 # PyTimesheet
 alias pts='/Users/hvn/Github/pytimesheet/pts.py'
 
+# ssh
+alias sshr='ssh-keygen -R'
+
 # GIT
 alias gtus='git status'
 alias gcm='git commit -m '
 alias gut='git add -u && gcm "update" && pom'
 alias gfo='git fetch origin -p'
-alias gfap='git fetch --all -p'
+alias gfap='git fetch --all -p --tags'
 # git latest branches
 alias glb='git for-each-ref --sort=-committerdate refs/heads/ | head'
 
