@@ -29,9 +29,6 @@ set showmatch
 " Binding
 nmap j gj
 nmap k gk
-map <F5> ggOToday: <Esc>:r !date<CR>kJ
-map <F7> : !ruby %<CR>
-map <F8> :!pep8 %<CR>
 
 nmap <Leader>E :NERDTreeToggle<CR>
 nmap <Leader>p :set paste!<CR>i
