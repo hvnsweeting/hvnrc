@@ -34,21 +34,30 @@ map <F7> : !ruby %<CR>
 map <F8> :!pep8 %<CR>
 
 nmap <Leader>E :NERDTreeToggle<CR>
-nmap <Leader>r :!python %<CR>
-nmap <Leader>rb :!bash %<CR>
-nmap <Leader>rg :!go build && ./%:r<CR>
 nmap <Leader>p :set paste!<CR>i
 nmap <Leader>s :source $MYVIMRC<CR>
 nmap <Leader>v :e $MYVIMRC<CR>
-nmap <Leader># ggO#!/usr/bin/env python2<CR># -*- coding: utf-8 -*-<Esc>o
-nmap <Leader>b ggO#!/bin/bash<Esc>o
 nmap <Leader>m Giif __name__ == "__main__":<CR>
 
 filetype plugin indent on
 autocmd FileType text setlocal textwidth=78
-autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd BufNewFile,BufRead *.jinja,*.jinja2 set ft=sls
 autocmd BufWritePre * :%s/\s\+$//e
+
+" Python
+autocmd FileType py nmap <Leader>r :!python %<CR>
+autocmd FileType py nmap <Leader># ggO#!/usr/bin/env python2<CR># -*- coding: utf-8 -*-<Esc>o
+autocmd FileType py set omnifunc=pythoncomplete#Complete
+
+" Shell
+autocmd FileType sh nmap <Leader>r :!bash %<CR>
+autocmd FileType sh nmap <Leader># ggO#!/bin/bash<Esc>o
+
+" Golang
+autocmd FileType go nmap <leader>r <Plug>(go-run)
+autocmd FileType go nmap <leader>b <Plug>(go-build)
+autocmd FileType go nmap <leader>t <Plug>(go-test)
+autocmd FileType go nmap <leader>c <Plug>(go-coverage)
 
 " Ctags
 let Tlist_WinWidth = 55
