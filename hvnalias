@@ -198,8 +198,8 @@ EOF_
         cd /root/salt;
         rm -rf /var/cache/salt/minion/doc
 		echo "$SLSes" >> $logfile
-        salt-call --local saltutil.sync_all
-        salt-call --local state.sls $SLSes 2>$errorfile >> $logfile
+        salt-call -c /root/salt/states/test saltutil.sync_all
+        salt-call -c /root/salt/states/test state.sls $SLSes 2>$errorfile >> $logfile
         echo "============== ERROR LOG ==============" >> $logfile
         cat $errorfile >> $logfile
         rm $errorfile
