@@ -169,20 +169,6 @@ deps () {
             scp -v -oStrictHostKeyChecking=no $tarball root@$address:/tmp
         fi
 
-        # Prefix existing hostname with integration
-
-        # remove hostname file may chmod 444, cannot override it, so remove it
-        if [ -f /tmp/hostname_$$ ]; then
-            rm -f /tmp/hostname_$$
-        fi
-
-        scp -v root@$address:/etc/hostname /tmp/hostname_$$
-
-        remotehostname=$(cat /tmp/hostname_$$)
-        if [ "${remotehostname:0:11}" = 'integration' ]; then
-            remotehostname=${remotehostname:11}
-        fi
-
         ssh -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF_
         ntpdate ntp.ubuntu.com
 EOF_
