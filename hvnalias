@@ -51,9 +51,11 @@ function sshroot () {
 # GIT
 alias gtus='git status'
 alias gcm='git commit -m '
-alias gut='git add -u && gcm "update" && pom'
+alias gco='git checkout'
+alias gdev='git checkout develop && git merge origin/develop'
 alias gfo='git fetch origin -p'
 alias gfap='git fetch --all -p --tags'
+alias gpo='git push origin $(git symbolic-ref --short HEAD)'
 # git latest branches
 alias glb='git for-each-ref --sort=-committerdate refs/heads/ | head'
 
@@ -187,7 +189,7 @@ EOF_
         salt-call -c /root/salt/states/test state.sls $SLSes 2>$errorfile >> $logfile
         echo "============== ERROR LOG ==============" >> $logfile
         cat $errorfile >> $logfile
-        rm $errorfile
+        rm -f $errorfile
         echo "\nDONE AT `date`" >> $logfile
 EOF
     test -e ~/salt_deploy || mkdir ~/salt_deploy
