@@ -54,7 +54,8 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 function git_branch(){
-    echo $(git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3-)
+    # it will complain if cwd not a git repo, 2> it
+    echo $(git symbolic-ref --short --quiet HEAD 2>/dev/null | cut -d"/" -f 3-)
 }
 
 if [ "$color_prompt" = yes ]; then
@@ -116,7 +117,7 @@ else
         shuf | head -n1
     }
 fi
-command_today=$(find $(echo $PATH | tr ':' ' ') 2> /dev/null | rand_cmd)
+command_today=$(find /bin /sbin 2> /dev/null | rand_cmd)
 whatis $(basename $command_today) | head -n10
 echo Command for today: $command_today
 if `which dpkg`; then
@@ -124,5 +125,6 @@ if `which dpkg`; then
     echo "in package $pkgname"
     dpkg -L $pkgname | grep /bin
 fi
-export PATH=$PATH:/opt/local/bin:~/hbin:/Users/hvn/Github/FOSS/golang/bin
+export PATH=$PATH:~/hbin:/Users/hvn/Github/FOSS/golang/bin
 
+source ~/.profile
