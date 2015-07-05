@@ -1,0 +1,10 @@
+# format
+set date_format="%y-%m-%d %T"
+set index_format="%2C | %Z [%d] %-30.30F (%-4.4c) %s"
+
+bind index "^" imap-fetch-mail
+
+set beep_new = yes
+
+set editor = "vim"
+set mail_check = 120
