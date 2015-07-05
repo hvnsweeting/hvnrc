@@ -22,6 +22,7 @@ src_dst = {'vimrc': '.vimrc',
     'py2req.txt': '.py2req.txt',
     'i3config': '.i3/config',
     'mutt/imaprc': '.mutt/imaprc',
+    'mutt/baserc': '.mutt/baserc',
     'mutt/pgprc': '.mutt/pgprc',
     }
 
