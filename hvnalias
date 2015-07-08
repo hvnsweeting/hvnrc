@@ -198,6 +198,7 @@ EOF
 }
 
 alias lint=~/Github/tinyscripts/lint.sh
+pilocal='cd ~/Github/bfs/pillars/; git checkout integration.sls; patch integration.sls patchlocal;cd -'
 
 ldir () {
 # get list of changed formulas in comparing to $1 branch
