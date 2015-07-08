@@ -19,11 +19,13 @@ function grepsalt() {
 alias py2='source ~/python2/bin/activate'
 alias ipy='. ~/python2/bin/activate; cd ~/python2/code; ipython'
 
+SCROOT="~/Github/bfs/common"
+
 # cds
 alias cdd="cd ~/Dropbox"
 alias cdp="cd ~/python2"
 alias cdg="cd ~/Github"
-alias cdcm='cd ~/Github/bfs/common'
+alias cdcm="cd $SCROOT"
 alias cdrc='cd ~/Github/hvnrc'
 alias cdf='cd ~/Github/FOSS'
 alias cdfs='cd ~/Github/FOSS/salt'
@@ -51,11 +53,13 @@ function sshroot () {
 # GIT
 alias gtus='git status'
 alias gcm='git commit -m '
+alias gcam='git commit -am '
 alias gco='git checkout'
 alias gdev='git checkout develop && git merge origin/develop'
 alias gfo='git fetch origin -p'
 alias gfap='git fetch --all -p --tags'
 alias gpo='git push origin $(git symbolic-ref --short HEAD)'
+alias gdep='git fetch --all; git checkout testing && git reset --hard origin/testing && git merge origin/develop && git push origin testing'
 # git latest branches
 alias glb='git for-each-ref --sort=-committerdate refs/heads/ | head'
 
@@ -93,13 +97,7 @@ function gpush () {
 }
 
 # Saltstack
-alias sls='salt-call --local state.sls'
-alias grains='salt-call --local grains.items'
-alias bfs='~/Github/tinyscripts/salt/bfs.sh'
-alias scl='salt-call --local'
-upre() {
-    ssh-add; sudo virsh start $1
-}
+alias scdoc="cd $SCROOT; py2; ./doc/build.py"
 
 # common developer tools
 # find the most common used Python vars
@@ -178,7 +176,7 @@ EOF_
         # run the salt-call
         ssh -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF
         cd /; rm -rf /root/salt; tar xzf $tarball;
-        pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh "integration-$remotehostname"
+        pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh "salt-hvn-dev"
         echo "log_level: info" > /etc/salt/minion.d/log.conf
         echo "file_log_level: debug" >> /etc/salt/minion.d/log.conf
         service salt-minion restart
