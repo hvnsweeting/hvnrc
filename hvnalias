@@ -110,12 +110,6 @@ if [ -f ~/.ugly_aliases ]; then
     . ~/.ugly_aliases
 fi
 
-# Arch
-alias lsrv='systemctl list-unit-files'
-
-# virsh
-alias vst='virsh start'
-
 alias nrpe='~/Github/tinyscripts/salt/nrpe2mon.py'
 
 # Auto deploy salt for test
@@ -197,7 +191,6 @@ EOF
     set +x
 }
 
-alias lint=~/Github/tinyscripts/lint.sh
 pilocal='cd ~/Github/bfs/pillars/; git checkout integration.sls; patch integration.sls patchlocal;cd -'
 
 ldir () {
