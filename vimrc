@@ -20,7 +20,7 @@ set ruler
 set showcmd
 set spell
 syntax on
-colorscheme torte
+colorscheme darkblue
 
 set hlsearch
 set incsearch
@@ -44,10 +44,10 @@ autocmd BufNewFile,BufRead *.jinja,*.jinja2 set ft=sls
 autocmd BufWritePre * :%s/\s\+$//e
 
 " Python
-autocmd FileType py nmap <Leader>r :!python %<CR>
-autocmd FileType py nmap <Leader># ggO#!/usr/bin/env python2<CR># -*- coding: utf-8 -*-<Esc>o
-autocmd FileType py nmap <Leader>m Giif __name__ == "__main__":<CR>
-autocmd FileType py set omnifunc=pythoncomplete#Complete
+autocmd FileType python nmap <Leader>r :!python %<CR>
+autocmd FileType python nmap <Leader># ggO#!/usr/bin/env python2<CR># -*- coding: utf-8 -*-<Esc>o
+autocmd FileType python nmap <Leader>m Giif __name__ == "__main__":<CR>
+autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 " Shell
 autocmd FileType sh nmap <Leader>r :!bash %<CR>
