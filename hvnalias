@@ -97,7 +97,7 @@ function gpush () {
 }
 
 # Saltstack
-alias scdoc="cd $SCROOT; py2; ./doc/build.py"
+alias scdoc="cd $SCROOT; py2; time ./doc/build.py"
 
 # common developer tools
 # find the most common used Python vars
