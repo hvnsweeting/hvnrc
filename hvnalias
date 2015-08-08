@@ -4,6 +4,8 @@ alias la='ls -A'
 alias l='ls -CF'
 alias lst='ls -Fhtl'
 
+alias troi='while read i; do echo $i; sleep 0.5; done <'
+
 # frequent
 alias psg='ps aux | grep '
 alias irc='irssi -c irc.freenode.net'
@@ -62,6 +64,8 @@ alias gpo='git push origin $(git symbolic-ref --short HEAD)'
 alias gdep='git fetch --all; git checkout testing && git reset --hard origin/testing && git merge origin/develop && git push origin testing'
 # git latest branches
 alias glb='git for-each-ref --sort=-committerdate refs/heads/ | head'
+# list of files changed in latest commit
+alias glast='git diff-tree --name-only -r --no-commit-id HEAD'
 
 gfa () {
     current=`pwd`
