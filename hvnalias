@@ -14,6 +14,12 @@ alias lstd='cat ~/.TODO.rst'
 alias vitd='vim ~/.TODO.rst'
 alias myip='dig +short myip.opendns.com @208.67.222.222'
 
+function tgrep () {
+  FILETYPE=$1
+  GREP=$2
+  find . -name "*.$FILETYPE" | xargs grep -Rn ${GREP}
+}
+
 function grepsalt() {
     grep -v -E 'salt.loader \(loader\.gen_functions|OrderedDict|Executing state|salt\.loaded\.int\.render\.yaml|Completed state' $1 | less -N
 }
