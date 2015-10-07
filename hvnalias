@@ -15,9 +15,15 @@ alias vitd='vim ~/.TODO.rst'
 alias myip='dig +short myip.opendns.com @208.67.222.222'
 
 function tgrep () {
-  FILETYPE=$1
-  GREP=$2
-  find . -name "*.$FILETYPE" | xargs grep -Rn ${GREP}
+  GREP=$1
+  FILETYPE=$2
+  find . -name "*.$FILETYPE" | xargs grep -Rn "${GREP}"
+}
+
+function tgrepl () {
+  GREP=$1
+  FILETYPE=$2
+  find . -name "*.$FILETYPE" | xargs grep -l "${GREP}"
 }
 
 function grepsalt() {
@@ -34,7 +40,7 @@ alias cdd="cd ~/Dropbox"
 alias cdp="cd ~/python2"
 alias cdg="cd ~/Github"
 alias cdcm="cd $SCROOT"
-alias cdrc='cd ~/Github/hvnrc'
+alias cdrc='cd ~/Github/me/hvnrc'
 alias cdf='cd ~/Github/FOSS'
 alias cdfs='cd ~/Github/FOSS/salt'
 
