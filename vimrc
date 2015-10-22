@@ -100,7 +100,7 @@ function! HasFlake()
 endfunction
 
 set laststatus=2
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ FLAKE:%{HasFlake()}\ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L%{GitBranch()}
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L%{GitBranch()}\ FLAKE:%{HasFlake()}
 if !exists("*Flake8()") && executable('flake8')
   autocmd BufWritePost *.py call Flake8()
 endif
