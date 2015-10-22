@@ -67,7 +67,6 @@ let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_operators = 1
 let g:go_highlight_build_constraints = 1
-let g:go_fmt_command = "goimports"
 let g:go_auto_type_info = 1
 
 " Ctags
@@ -93,12 +92,17 @@ function! HasPaste()
     return ''
 endfunction
 
+function! HasFlake()
+  if !exists("*Flake8()") && executable('flake8')
+      return ''
+  endif
+  return 'NO'
+endfunction
+
 set laststatus=2
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L%{GitBranch()}
-if !exists("*Flake8()")
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ FLAKE:%{HasFlake()}\ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L%{GitBranch()}
+if !exists("*Flake8()") && executable('flake8')
   autocmd BufWritePost *.py call Flake8()
-else
-  echo 'Missing flake8 plugin'
 endif
 
 
