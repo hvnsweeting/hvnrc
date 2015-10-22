@@ -82,7 +82,7 @@ function! GitBranch()
 endfunction
 
 function! CurDir()
-    return substitute(getcwd(), '/home/hvn', "~/", "g")
+    return substitute(getcwd(), expand("$HOME"), "~", "g")
 endfunction
 
 function! HasPaste()
