@@ -2,14 +2,12 @@
 alias ll='ls -alF'
 alias la='ls -A'
 alias l='ls -CF'
-alias lst='ls -Fhtl'
 
 alias troi='while read i; do echo $i; sleep 0.5; done <'
 
 # frequent
 alias psg='ps aux | grep '
 alias irc='irssi -c irc.freenode.net'
-alias syslog='tail -f /var/log/syslog | ccze'
 alias lstd='cat ~/.TODO.rst'
 alias vitd='vim ~/.TODO.rst'
 alias myip='dig +short myip.opendns.com @208.67.222.222'
@@ -69,8 +67,8 @@ alias gtus='git status'
 alias gcm='git commit -m '
 alias gcam='git commit -am '
 alias gco='git checkout'
+alias gdi='git diff'
 alias gdev='git checkout develop && git merge origin/develop'
-alias gfo='git fetch origin -p'
 alias gfap='git fetch --all -p --tags'
 alias gpo='git push origin $(git symbolic-ref --short HEAD)'
 alias gdep='git fetch --all; git checkout testing && git reset --hard origin/testing && git merge origin/develop && git push origin testing'
@@ -94,22 +92,6 @@ gfa () {
         git fetch origin -p
     done
     cd $current
-}
-
-function gpush () {
-    files=$(git log -n3 --stat | grep -o '.*\.py')
-        for f in $files; do
-            if [ -e $f ]; then
-                flake8 $f
-            fi
-        done
-    if [ ! -z "$files" ]; then
-        echo 'Do you still want to push? [y/n]'
-        read answer
-        if [ "$answer" = 'y' ]; then
-            git push $*
-        fi
-    fi
 }
 
 # Saltstack
