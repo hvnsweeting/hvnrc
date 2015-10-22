@@ -125,6 +125,6 @@ if `which dpkg`; then
     echo "in package $pkgname"
     dpkg -L $pkgname | grep /bin
 fi
-export PATH=$PATH:~/hbin:/Users/hvn/Github/FOSS/golang/bin
+export GO15VENDOREXPERIMENT=1
 
 source ~/.profile
