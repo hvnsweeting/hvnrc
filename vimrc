@@ -37,6 +37,8 @@ nmap <Leader>E :NERDTreeToggle<CR>
 nmap <Leader>p :set paste!<CR>i
 nmap <Leader>s :source $MYVIMRC<CR>
 nmap <Leader>v :e $MYVIMRC<CR>
+nmap <C-N> :next<CR>
+nmap <C-B> :prev<CR>
 
 filetype plugin indent on
 autocmd FileType text setlocal textwidth=78
@@ -71,6 +73,9 @@ let g:go_auto_type_info = 1
 
 " Ctags
 let Tlist_WinWidth = 55
+map T :TaskList<CR>
+" D stands for def
+map D :TlistToggle<CR>
 
 " For simple status bar
 function! GitBranch()
