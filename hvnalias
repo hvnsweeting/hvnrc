@@ -25,7 +25,7 @@ function tgrepl () {
 }
 
 function grepsalt() {
-    grep -v -E 'salt.loader \(loader\.gen_functions|OrderedDict|Executing state|salt\.loaded\.int\.render\.yaml|Completed state' $1 | less -N
+    grep -v -E ' Missing key|salt.loader \(loader\.gen_functions|OrderedDict|Executing state|salt\.loaded\.int\.render\.yaml|Completed state' "$1" | less -N
 }
 
 alias py2='source ~/python2/bin/activate'
@@ -48,7 +48,6 @@ if [ ! -d "$GOPATH/src" ]; then
   mkdir -p "$GOPATH/src" "$GOPATH/pkg" "$GOPATH/bin"
 fi
 export PATH=$PATH:$GOPATH/bin
-alias gogo="cd $GOPATH"
 
 # connection checking
 alias cck='ping -c2 -W1 203.162.71.66 || ping -c1 -W1 8.8.8.8 || ping -c1 -W1 208.67.222.222 || echo "NO CONNECTION"'
