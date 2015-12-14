@@ -107,6 +107,89 @@ if [ -f ~/.ugly_aliases ]; then
     . ~/.ugly_aliases
 fi
 
+alias nrpe='~/Github/tinyscripts/salt/nrpe2mon.py'
+
+# Auto deploy salt for test
+deps () {
+    saltcommon=$1
+    address=$2
+    SLSes=$3
+    salt_common=`pwd`
+
+    if [ ! -e 'nrpe/init.sls' ]; then
+        echo "$salt_common"
+        echo "It does not look like root salt-common dir. Exit? [y/n]"
+        read _cm
+        if [ ${_cm} = 'y' ]; then
+            return
+        fi
+    fi
+
+    cd $saltcommon/..
+    parent=`pwd`
+
+    cd $parent/pillars
+    if [ "$(git rev-parse --abbrev-ref HEAD)" == "develop" ]; then
+        echo -n "Pillar is in branch develop, continue? [y/n]:"
+        read _answ
+        if [ ${_answ} != "y" ]; then
+            cd $salt_common
+            return
+        fi
+    fi
+
+    cd $salt_common
+    # TODO verify is a salt-common repo
+    tarball=/tmp/salt_`date +%Y%m%d_%H%M%S`.tar.gz
+    logfile=/var/log/salt/`date +%Y%m%d_%H%M%S_$SLSes.log`
+    errorfile=$logfile$$
+    if [ ! -z $5 ]; then
+        non_common=$5
+    else
+        non_common=$salt_common
+    fi
+    set -x
+    $saltcommon/bootstrap_archive.py $parent/pillars $non_common > $tarball
+    set +x
+    tar tzf $tarball 2>&1 > /dev/null || { echo "bad tarball" && return ; }
+
+    set -x
+    if [ ! -z $address ]; then
+        if ! `scp -v $tarball root@$address:/tmp`; then
+            ssh-keygen -f ~/.ssh/known_hosts -R $address
+            scp -v -oStrictHostKeyChecking=no $tarball root@$address:/tmp
+        fi
+
+        ssh -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF_
+        ntpdate ntp.ubuntu.com
+EOF_
+
+        # run the salt-call
+        ssh -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF
+        cd /; rm -rf /root/salt; tar xzf $tarball;
+        pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh "salt-hvn-dev"
+        echo "log_level: info" > /etc/salt/minion.d/log.conf
+        echo "file_log_level: debug" >> /etc/salt/minion.d/log.conf
+        service salt-minion restart
+        cd /root/salt;
+        rm -rf /var/cache/salt/minion/doc
+		echo "$SLSes" >> $logfile
+        salt-call -c /root/salt/states/test saltutil.sync_all
+        salt-call -c /root/salt/states/test state.sls $SLSes 2>$errorfile >> $logfile
+        echo "============== ERROR LOG ==============" >> $logfile
+        cat $errorfile >> $logfile
+        rm -f $errorfile
+        echo "\nDONE AT `date`" >> $logfile
+EOF
+    test -e ~/salt_deploy || mkdir ~/salt_deploy
+    scp -v root@$address:$logfile ~/salt_deploy
+    vim +/'Result: *False' ~/salt_deploy/`basename $logfile`
+    fi
+    set +x
+}
+
+pilocal='cd ~/Github/bfs/pillars/; git checkout integration.sls; patch integration.sls patchlocal;cd -'
+
 ldir () {
 # get list of changed formulas in comparing to $1 branch
     git diff $1 --stat | grep -v insertions | cut -d'/' -f1 | uniq | xargs
@@ -160,3 +243,5 @@ startday() {
     cd $pwd
     echo "Good day, me!"
 }
+
+alias dockersalt='docker run -v ~/Github/bfs/common/:/root/salt/states -v ~/Github/bfs/pillars/:/root/salt/pillar -it hvn:salt  tmux'
