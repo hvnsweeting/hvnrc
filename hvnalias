@@ -43,17 +43,19 @@ alias cdf='cd ~/Github/FOSS'
 alias cdfs='cd ~/Github/FOSS/salt'
 
 # golang workspace
+export PATH=/usr/local/go/bin/:$PATH
 export GOPATH=~/Github/gomeo
 if [ ! -d "$GOPATH/src" ]; then
   mkdir -p "$GOPATH/src" "$GOPATH/pkg" "$GOPATH/bin"
 fi
 export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:~/bin
 
 # connection checking
 alias cck='ping -c2 -W1 203.162.71.66 || ping -c1 -W1 8.8.8.8 || ping -c1 -W1 208.67.222.222 || echo "NO CONNECTION"'
 
 # PyTimesheet
-alias pts='/Users/hvn/Github/pytimesheet/pts.py'
+alias pts='/Users/hvn/Github/pytimesheet/storage.py'
 
 # ssh
 alias sshr='ssh-keygen -R'
@@ -156,12 +158,12 @@ deps () {
             scp -v -oStrictHostKeyChecking=no $tarball root@$address:/tmp
         fi
 
-        ssh -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF_
+        ssh -T -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF_
         ntpdate ntp.ubuntu.com
 EOF_
 
         # run the salt-call
-        ssh -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF
+        ssh -T -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF
         cd /; rm -rf /root/salt; tar xzf $tarball;
         pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh "salt-hvn-dev"
         echo "log_level: info" > /etc/salt/minion.d/log.conf
@@ -171,6 +173,7 @@ EOF_
         rm -rf /var/cache/salt/minion/doc
 		echo "$SLSes" >> $logfile
         salt-call -c /root/salt/states/test saltutil.sync_all -linfo
+        salt-call -c /root/salt/states/test state.sls salt.patch_salt -lerror
         salt-call -c /root/salt/states/test state.sls $SLSes 2>$errorfile >> $logfile
         echo "============== ERROR LOG ==============" >> $logfile
         cat $errorfile >> $logfile
@@ -208,10 +211,15 @@ mirror () {
         fn=$url
     fi
 
-    echo -n 'server: '; read server
-    echo -n 'dir: '; read destdir
+    if [ -z $ARCHIVE_SERVER ]; then
+        echo -n 'server: '; read server
+        echo -n 'dir: '; read destdir
+    else
+        arrIN=(${ARCHIVE_SERVER//:/ })
+        server=${arrIN[0]}
+        destdir=${arrIN[1]}
+    fi
     scp -v -P22022 $fn salt_archive@${server}:incoming/${destdir}/$expected_fn
-    rm -i $fn
 }
 
 saltrender () {
