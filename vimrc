@@ -63,6 +63,7 @@ autocmd FileType go nmap <leader>c <Plug>(go-coverage)
 autocmd FileType go nmap <Leader>dv <Plug>(go-def-vertical)
 autocmd FileType go nmap <Leader>gd <Plug>(go-doc)
 autocmd FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
+autocmd FileType go nmap <Leader>m Gipackage main<CR><CR>import (<CR>"log"<CR>)<CR>func main() {<CR>}<ESC>O
 
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
