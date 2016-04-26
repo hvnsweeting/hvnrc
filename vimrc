@@ -29,14 +29,22 @@ set showmatch
 " Vim pathogen
 execute pathogen#infect()
 
+" open a NERDTree automatically when vim starts up if no files were specified
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+let g:NERDTreeChDirMode=2
+
+" close vim if the only window left open is a NERDTree
+" TODO, not work autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
 " Binding
 nmap j gj
 nmap k gk
 
-nmap <Leader>E :NERDTreeToggle<CR>
 nmap <Leader>p :set paste!<CR>i
 nmap <Leader>s :source $MYVIMRC<CR>
 nmap <Leader>v :e $MYVIMRC<CR>
+nmap <C-T> :NERDTreeToggle<CR>
 nmap <C-N> :next<CR>
 nmap <C-B> :prev<CR>
 
@@ -106,7 +114,7 @@ function! HasFlake()
 endfunction
 
 set laststatus=2
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L%{GitBranch()}\ FLAKE:%{HasFlake()}
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L%{GitBranch()}\ FLAKE:%{HasFlake()} " %{fugitive#statusline()}
 if !exists("*Flake8()") && executable('flake8')
   autocmd BufWritePost *.py call Flake8()
 endif
