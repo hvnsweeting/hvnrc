@@ -71,6 +71,7 @@ alias gco='git checkout'
 alias gdi='git diff'
 alias gdev='git checkout develop && git merge origin/develop'
 alias gfap='git fetch --all -p --tags'
+alias gta='HERE=`pwd`; for d in */; do cd $d; echo $d; git checkout master; git pull; cd $HERE; done;'
 alias gpo='git push origin $(git symbolic-ref --short HEAD)'
 alias gdep='git fetch --all; git checkout testing && git reset --hard origin/testing && git merge origin/develop && git push origin testing'
 # git latest branches
@@ -249,3 +250,4 @@ startday() {
 }
 
 alias dockersalt='docker run -v ~/Github/bfs/common/:/root/salt/states -v ~/Github/bfs/pillars/:/root/salt/pillar -it hvn:salt  tmux'
+alias vimgo="vim --cmd 'cd $GOPATH/src'"
