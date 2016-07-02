@@ -71,6 +71,7 @@ alias gcm='git commit -m '
 alias gcam='git commit -am '
 alias gco='git checkout'
 alias gdi='git diff'
+alias gfu='git commit --amend --no-edit' # fixup
 alias gdev='git checkout develop && git merge origin/develop'
 alias gfap='git fetch --all -p --tags'
 alias gta='HERE=`pwd`; for d in */; do cd $d; echo $d; git checkout master; git pull; cd $HERE; done;'
