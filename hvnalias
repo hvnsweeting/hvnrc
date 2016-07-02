@@ -38,15 +38,15 @@ SCROOT="~/salt/common"
 # cds
 alias cdd="cd ~/Dropbox"
 alias cdp="cd ~/python2"
-alias cdg="cd ~/Github"
 alias cdcm="cd $SCROOT"
-alias cdrc='cd ~/Github/me/hvnrc'
-alias cdf='cd ~/Github/FOSS'
-alias cdfs='cd ~/Github/FOSS/salt'
+alias cdrc='cd ~/me/hvnrc'
+alias cdf='cd ~/FOSS'
+alias cdg="cd ~/FOSS"
+alias cdfs='cd ~/FOSS/salt'
 
 # golang workspace
 export PATH=/usr/local/go/bin/:$PATH
-export GOPATH=~/Github/gomeo:~/Github/gomeo/godeps
+export GOPATH=~/FOSS/gomeo:~/FOSS/gomeo/godeps
 if [ ! -d "$GOPATH/src" ]; then
   mkdir -p "$GOPATH/src" "$GOPATH/pkg" "$GOPATH/bin"
 fi
@@ -57,7 +57,7 @@ export PATH=$PATH:~/bin
 alias cck='ping -c2 -W1 203.162.71.66 || ping -c1 -W1 8.8.8.8 || ping -c1 -W1 208.67.222.222 || echo "NO CONNECTION"'
 
 # PyTimesheet
-alias pts='/Users/hvn/Github/pytimesheet/storage.py'
+alias pts='/Users/hvn/FOSS/pytimesheet/storage.py'
 
 # ssh
 alias sshr='ssh-keygen -R'
@@ -84,7 +84,7 @@ alias glast='git diff-tree --name-only -r --no-commit-id HEAD'
 gfa () {
     current=`pwd`
     if [ -z $1 ]; then
-        dest=/home/hvn/Github/bfs/*/
+        dest=/home/hvn/FOSS/bfs/*/
     else
         dest=$1
     fi
@@ -111,8 +111,6 @@ function pyvars () {
 if [ -f ~/.ugly_aliases ]; then
     . ~/.ugly_aliases
 fi
-
-alias nrpe='~/Github/tinyscripts/salt/nrpe2mon.py'
 
 # Auto deploy salt for test
 deps () {
@@ -225,29 +223,10 @@ mirror () {
 
 saltrender () {
     py2
-    salt-call --local -c /Users/hvn/Github/FOSS/salt/conf/local  cp.get_template salt://$1 /tmp/salt_render && less /tmp/salt_render
+    salt-call --local -c /Users/hvn/FOSS/salt/conf/local  cp.get_template salt://$1 /tmp/salt_render && less /tmp/salt_render
     rm -f /tmp/salt_render
 }
 
-startday() {
-    echo "Adding ssh key"
-    pwd=$(pwd)
-    if (! ssh-add -l); then
-        ssh-add
-    fi
-
-    echo "creating SSH tunnel if needed"
-    ~/hbin/sshtunnel.sh
-    ps auxww | grep 'ssh.*[D] 123'
-
-    for repo in common pillars; do
-        echo "fetching important repo ${repo}"
-        cd ~/Github/bfs/${repo}
-        git fetch --all --prune
-    done
-    cd $pwd
-    echo "Good day, me!"
-}
-
-alias vimgo="vim --cmd 'cd $GOPATH/src'"
+# GOWS set to where my Golang code locate
+alias vimgo='vim --cmd "cd $GOWS"'
 alias vimsalt="vim --cmd 'cd ~/salt'"
