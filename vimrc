@@ -25,6 +25,8 @@ colorscheme peachpuff
 set hlsearch
 set incsearch
 set showmatch
+set ignorecase
+set smartcase
 
 " Vim pathogen
 execute pathogen#infect()
@@ -38,15 +40,42 @@ let g:NERDTreeChDirMode=2
 " TODO, not work autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
 
 " Binding
-nmap j gj
-nmap k gk
+nnoremap j gj
+nnoremap k gk
+" move to curdir
+nmap gc :cd %:h<CR>
 
-nmap <Leader>p :set paste!<CR>i
-nmap <Leader>s :source $MYVIMRC<CR>
-nmap <Leader>v :e $MYVIMRC<CR>
-nmap <C-T> :NERDTreeToggle<CR>
+
+nmap <Leader>ag :grep
+nmap <Leader>p :se paste!<CR>i
+nmap <Leader>src :source $MYVIMRC<CR>
+nmap <Leader>erc :e $MYVIMRC<CR>
+nmap <C-K> :q<CR>
+nmap <C-X> :e#<CR>
+nmap <C-T> :tabe<CR>
+nmap <C-E> :NERDTreeToggle<CR>
+nmap <tab> :tabnext<CR>
+nmap <S-tab> :tabprevious<CR>
 nmap <C-N> :next<CR>
 nmap <C-B> :prev<CR>
+
+nmap <Leader>b :CtrlPBuffer<CR>
+nmap <Leader>tig :cd %:h<CR>:! tig<CR>
+
+" fugitive
+nmap <Leader>gs :Gstatus<CR>
+nmap <Leader>gd :Git diff<CR>
+nmap <Leader>ga :Git add %<CR>
+nmap <Leader>gc :Gcommit<CR>
+nmap <Leader>gp :Git push origin HEAD<CR>
+nmap <Leader>gn :Git checkout -b
+nmap <Leader>gb :Git checkout
+nmap <Leader>gf :Git fetch --all --prune -v<CR>
+nmap <Leader>gr :Git rebase -i origin/
+
+
+" TODO Toggle
+nmap <C-H> :vs ~/.vimnotebook.md<CR>
 
 filetype plugin indent on
 autocmd FileType text setlocal textwidth=78
@@ -73,27 +102,21 @@ autocmd FileType go nmap <Leader>gd <Plug>(go-doc)
 autocmd FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
 autocmd FileType go nmap <Leader>m Gipackage main<CR><CR>import (<CR>"log"<CR>)<CR>func main() {<CR>}<ESC>O
 
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_structs = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_build_constraints = 1
-let g:go_auto_type_info = 1
+" Haskell
+autocmd FileType haskell nmap <Leader>r :!runhaskell %<CR>
+
+"let g:go_highlight_functions = 1
+"let g:go_highlight_methods = 1
+"let g:go_highlight_structs = 1
+"let g:go_highlight_operators = 1
+"let g:go_highlight_build_constraints = 1
+"let g:go_auto_type_info = 1
 
 " Ctags
 let Tlist_WinWidth = 55
 map T :TaskList<CR>
 " D stands for def
 map D :TlistToggle<CR>
-
-" For simple status bar
-function! GitBranch()
-    let branch = system("git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* //'")
-    if branch != ''
-        return '   Git Branch: ' . substitute(branch, '\n', '', 'g')
-    en
-    return ''
-endfunction
 
 function! CurDir()
     return substitute(getcwd(), expand("$HOME"), "~", "g")
@@ -114,7 +137,7 @@ function! HasFlake()
 endfunction
 
 set laststatus=2
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L%{GitBranch()}\ FLAKE:%{HasFlake()} " %{fugitive#statusline()}
+set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L\ %{fugitive#statusline()}\ FLAKE:%{HasFlake()}
 if !exists("*Flake8()") && executable('flake8')
   autocmd BufWritePost *.py call Flake8()
 endif
