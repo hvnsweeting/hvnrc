@@ -108,23 +108,4 @@ fi
 
 export EDITOR=vi
 
-if ( ! which shuf ); then
-    function rand_cmd () {
-        python -c "import random, sys; print(random.choice(sys.stdin.readlines()))"
-    }
-else
-    function rand_cmd () {
-        shuf | head -n1
-    }
-fi
-command_today=$(find /bin /sbin 2> /dev/null | rand_cmd)
-whatis $(basename $command_today) | head -n10
-echo Command for today: $command_today
-if `which dpkg`; then
-    pkgname=$(dpkg -S $command_today | cut -f1 -d:)
-    echo "in package $pkgname"
-    dpkg -L $pkgname | grep /bin
-fi
-export GO15VENDOREXPERIMENT=1
-
 source ~/.profile
