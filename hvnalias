@@ -9,8 +9,11 @@ alias troi='while read i; do echo $i; sleep 0.5; done <'
 alias psg='ps aux | grep '
 alias irc='irssi -c irc.freenode.net'
 alias lstd='cat ~/.TODO.rst'
+alias dols='doctl compute droplet list'
 alias vitd='vim ~/.TODO.rst'
 alias myip='dig +short myip.opendns.com @208.67.222.222'
+alias myisp='curl ipinfo.io'
+alias pn='ping -t3 -c2 8.8.8.8 || ping -t3 -c2 203.162.71.66 || echo "NO CONNECTION "'
 
 function tgrep () {
   GREP=$1
@@ -50,11 +53,8 @@ export GOPATH=~/FOSS/gomeo:~/FOSS/gomeo/godeps
 if [ ! -d "$GOPATH/src" ]; then
   mkdir -p "$GOPATH/src" "$GOPATH/pkg" "$GOPATH/bin"
 fi
-export PATH=$PATH:$GOPATH/bin
+export PATH=$PATH:$GOPATH/bin:/Users/hvn/FOSS/gomeo/bin
 export PATH=$PATH:~/bin
-
-# connection checking
-alias cck='ping -c2 -W1 203.162.71.66 || ping -c1 -W1 8.8.8.8 || ping -c1 -W1 208.67.222.222 || echo "NO CONNECTION"'
 
 # PyTimesheet
 alias pts='/Users/hvn/FOSS/pytimesheet/storage.py'
@@ -133,7 +133,7 @@ deps () {
     cd $saltcommon/..
     parent=`pwd`
 
-    cd $parent/pillars
+    cd $parent/pillar/dev
     if [ "$(git rev-parse --abbrev-ref HEAD)" == "develop" ]; then
         echo -n "Pillar is in branch develop, continue? [y/n]:"
         read _answ
@@ -149,7 +149,7 @@ deps () {
     logfile=/var/log/salt/`date +%Y%m%d_%H%M%S_$SLSes.log`
     errorfile=$logfile$$
     set -x
-    $saltcommon/bootstrap_archive.py $parent/pillars $non_common > $tarball
+    $saltcommon/bootstrap_archive.py $parent/pillar/dev $non_common > $tarball
     set +x
     tar tzf $tarball 2>&1 > /dev/null || { echo "bad tarball" && return ; }
 
@@ -167,10 +167,9 @@ EOF_
         # run the salt-call
         ssh -T -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF
         cd /; rm -rf /root/salt; tar xzf $tarball;
-        pgrep salt-minion || /root/salt/states/salt/minion/bootstrap.sh "salt-hvn-dev"
+        dpkg -l 'salt-minion' || /root/salt/states/salt/minion/bootstrap.sh "salt-hvn-dev"
         echo "log_level: info" > /etc/salt/minion.d/log.conf
         echo "file_log_level: debug" >> /etc/salt/minion.d/log.conf
-        service salt-minion restart
         cd /root/salt;
         rm -rf /var/cache/salt/minion/doc
 		echo "$SLSes" >> $logfile
