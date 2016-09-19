@@ -64,11 +64,14 @@ nmap <Leader>tig :cd %:h<CR>:! tig<CR>
 
 " fugitive
 nmap <Leader>gs :Gstatus<CR>
+" j = down in vim
+nmap <Leader>gj :Git pull<CR>
 nmap <Leader>gd :Git diff<CR>
 nmap <Leader>ga :Git add %<CR>
 nmap <Leader>gc :Gcommit<CR>
 nmap <Leader>gp :Git push origin HEAD<CR>
 nmap <Leader>gn :Git checkout -b
+nmap <Leader>gm :Git checkout master<CR>
 nmap <Leader>gb :Git checkout
 nmap <Leader>gf :Git fetch --all --prune -v<CR>
 nmap <Leader>gr :Git rebase -i origin/
@@ -84,7 +87,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 
 " Python
 autocmd FileType python nmap <Leader>r :!python %<CR>
-autocmd FileType python nmap <Leader># ggO#!/usr/bin/env python2<CR># -*- coding: utf-8 -*-<Esc>o
+autocmd FileType python nmap <Leader># ggO#!/usr/bin/env python<CR># -*- coding: utf-8 -*-<Esc>o
 autocmd FileType python nmap <Leader>m Giif __name__ == "__main__":<CR>
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
