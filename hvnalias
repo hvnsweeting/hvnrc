@@ -11,9 +11,12 @@ alias irc='irssi -c irc.freenode.net'
 alias lstd='cat ~/.TODO.rst'
 alias dols='doctl compute droplet list'
 alias vitd='vim ~/.TODO.rst'
+
+# network
 alias myip='dig +short myip.opendns.com @208.67.222.222'
 alias myisp='curl ipinfo.io'
 alias pn='ping -t3 -c2 8.8.8.8 || ping -t3 -c2 203.162.71.66 || echo "NO CONNECTION "'
+alias expose='lsof -i -s TCP:LISTEN -nP | egrep -v "127.0.0.1|::1"'
 
 function tgrep () {
   GREP=$1
@@ -29,6 +32,9 @@ function tgrepl () {
 
 function grepsalt() {
     grep -v -E ' Missing key|salt.loader \(loader\.gen_functions|OrderedDict|Executing state|salt\.loaded\.int\.render\.yaml|Completed state' "$1" | less -N
+}
+function saltabsent() {
+    find $1 -name 'absent.sls' -type f | sed -e 's://::g' -e 's:/:.:g' -e 's:.sls::g' | xargs printf '%s,'; echo
 }
 
 alias py2='source ~/python2/bin/activate'
@@ -48,13 +54,9 @@ alias cdg="cd ~/FOSS"
 alias cdfs='cd ~/FOSS/salt'
 
 # golang workspace
-export PATH=/usr/local/go/bin/:$PATH
-export GOPATH=~/FOSS/gomeo:~/FOSS/gomeo/godeps
-if [ ! -d "$GOPATH/src" ]; then
-  mkdir -p "$GOPATH/src" "$GOPATH/pkg" "$GOPATH/bin"
-fi
-export PATH=$PATH:$GOPATH/bin:/Users/hvn/FOSS/gomeo/bin
-export PATH=$PATH:~/bin
+export GOPATH=~/FOSS/gomeo/godeps:~/FOSS/gomeo
+export PATH=/usr/local/go/bin:$PATH:/Users/hvn/FOSS/golang/bin:/Users/hvn/FOSS/gomeo/bin
+export PATH=~/hbin/:~/bin:$PATH
 
 # PyTimesheet
 alias pts='/Users/hvn/FOSS/pytimesheet/storage.py'
@@ -100,7 +102,7 @@ gfa () {
 }
 
 # Saltstack
-alias scdoc="cd $SCROOT; py2; time ./doc/build.py"
+alias scdoc="cd $SCROOT; time ./doc/build.py"
 
 # common developer tools
 # find the most common used Python vars
@@ -166,6 +168,7 @@ EOF_
 
         # run the salt-call
         ssh -T -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF
+        export TERM=dumb
         cd /; rm -rf /root/salt; tar xzf $tarball;
         dpkg -l 'salt-minion' || /root/salt/states/salt/minion/bootstrap.sh "salt-hvn-dev"
         echo "log_level: info" > /etc/salt/minion.d/log.conf
