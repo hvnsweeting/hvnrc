@@ -18,6 +18,21 @@ alias myisp='curl ipinfo.io'
 alias pn='ping -t3 -c2 8.8.8.8 || ping -t3 -c2 203.162.71.66 || echo "NO CONNECTION "'
 alias expose='lsof -i -s TCP:LISTEN -nP | egrep -v "127.0.0.1|::1"'
 
+# get all syslog messages in a range of HH:MM -> HH:MM
+function logrange() {
+  start_hhmm=$1
+  end_hhmm=$2
+  syslogfile=$3
+  sed -n "/ $start_hhmm:/,/ $end_hhmm:/p" $syslogfile
+}
+
+# slog greps given PATTERN in SERVER syslog file
+function slog() {
+    PATTERN=$1
+    SERVER=$2
+    ssh $SERVER "grep -in '$PATTERN' /var/log/syslog"
+}
+
 function tgrep () {
   GREP=$1
   FILETYPE=$2
@@ -34,12 +49,12 @@ function grepsalt() {
     grep -v -E ' Missing key|salt.loader \(loader\.gen_functions|OrderedDict|Executing state|salt\.loaded\.int\.render\.yaml|Completed state' "$1" | less -N
 }
 function saltabsent() {
-    find $1 -name 'absent.sls' -type f | sed -e 's://::g' -e 's:/:.:g' -e 's:.sls::g' | xargs printf '%s,'; echo
+    find $1 -name 'absent.sls' -type f | sed -e 's://:/:g' -e 's:/:.:g' -e 's:.sls::g' | xargs printf '%s,'; echo
 }
 
-alias py2='source ~/python2/bin/activate'
+alias py2='source ~/dream/bin/activate'
 alias py3='source ~/python3/bin/activate'
-alias ipy='. ~/python2/bin/activate; cd ~/python2/code; ipython'
+alias ipy='. ~/dream/bin/activate; cd ~/dream/code; ipython2'
 alias ipy3='. ~/python3/bin/activate; cd ~/python3/; ipython3'
 
 SCROOT="~/salt/common"
@@ -52,11 +67,6 @@ alias cdrc='cd ~/me/hvnrc'
 alias cdf='cd ~/FOSS'
 alias cdg="cd ~/FOSS"
 alias cdfs='cd ~/FOSS/salt'
-
-# golang workspace
-export GOPATH=~/FOSS/gomeo/godeps:~/FOSS/gomeo
-export PATH=/usr/local/go/bin:$PATH:/Users/hvn/FOSS/golang/bin:/Users/hvn/FOSS/gomeo/bin
-export PATH=~/hbin/:~/bin:$PATH
 
 # PyTimesheet
 alias pts='/Users/hvn/FOSS/pytimesheet/storage.py'
@@ -119,7 +129,7 @@ fi
 deps () {
     saltcommon=$1
     address=$2
-    SLSes=$3
+    SLSes=$(echo $3 | sed 's/,$//')
     salt_common=`pwd`
     non_common=${4:-$salt_common}
 
@@ -148,7 +158,9 @@ deps () {
     cd $salt_common
     # TODO verify is a salt-common repo
     tarball=/tmp/salt_`date +%Y%m%d_%H%M%S`.tar.gz
-    logfile=/var/log/salt/`date +%Y%m%d_%H%M%S_$SLSes.log`
+    # avoid too verbose filename
+    filename=$(echo $SLSes | head -c20)
+    logfile=/var/log/salt/`date +%Y%m%d_%H%M%S_$filename.log`
     errorfile=$logfile$$
     set -x
     $saltcommon/bootstrap_archive.py $parent/pillar/dev $non_common > $tarball
@@ -176,16 +188,19 @@ EOF_
         cd /root/salt;
         rm -rf /var/cache/salt/minion/doc
 		echo "$SLSes" >> $logfile
-        salt-call -c /root/salt/states/test saltutil.sync_all -linfo
+        salt-call -c /root/salt/states/test state.sls test.setup -linfo
+        # salt-call -c /root/salt/states/test saltutil.sync_all -linfo
         salt-call -c /root/salt/states/test state.sls salt.patch_salt -lerror
-        salt-call -c /root/salt/states/test state.sls $SLSes 2>$errorfile >> $logfile
+        salt-call -c /root/salt/states/test state.sls -ldebug $SLSes 2>$errorfile >> $logfile
         echo "============== ERROR LOG ==============" >> $logfile
         cat $errorfile >> $logfile
         rm -f $errorfile
         echo "\nDONE AT `date`" >> $logfile
+        xz $logfile
 EOF
     test -e ~/salt_deploy || mkdir ~/salt_deploy
-    scp -v root@$address:$logfile ~/salt_deploy
+    scp -v root@$address:$logfile.xz ~/salt_deploy
+    unxz ~/salt_deploy/`basename $logfile`.xz
     vim +/'Result: *False' ~/salt_deploy/`basename $logfile`
     fi
     set +x
