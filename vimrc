@@ -1,6 +1,13 @@
 set nocompatible
 set encoding=utf-8
 set history=50
+"
+" For macvim
+if has("gui_running")
+  if has("gui_macvim")
+    set guifont=Go\ Mono:h14
+  endif
+endif
 
 " Indenting
 set autoindent
@@ -20,7 +27,6 @@ set ruler
 set showcmd
 set spell
 syntax on
-colorscheme peachpuff
 
 set hlsearch
 set incsearch
@@ -30,6 +36,10 @@ set smartcase
 
 " Vim pathogen
 execute pathogen#infect()
+
+" solarized was cloned to install by pathogen
+" git://github.com/altercation/vim-colors-solarized.git
+colorscheme solarized
 
 " open a NERDTree automatically when vim starts up if no files were specified
 autocmd StdinReadPre * let s:std_in=1
@@ -108,11 +118,11 @@ autocmd FileType go nmap <Leader>m Gipackage main<CR><CR>import (<CR>"log"<CR>)<
 " Haskell
 autocmd FileType haskell nmap <Leader>r :!runhaskell %<CR>
 
-"let g:go_highlight_functions = 1
-"let g:go_highlight_methods = 1
-"let g:go_highlight_structs = 1
-"let g:go_highlight_operators = 1
-"let g:go_highlight_build_constraints = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_structs = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
 "let g:go_auto_type_info = 1
 
 " Ctags
