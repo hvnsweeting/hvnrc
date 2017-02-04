@@ -132,14 +132,10 @@ deps () {
     SLSes=$(echo $3 | sed 's/,$//')
     salt_common=`pwd`
     non_common=${4:-$salt_common}
-
     if [ ! -e 'nrpe/init.sls' ]; then
         echo "$salt_common"
-        echo "It does not look like root salt-common dir. Exit? [y/n]"
-        read _cm
-        if [ ${_cm} = 'y' ]; then
-            return
-        fi
+        echo "It does not look like root salt-common dir. Exitting"
+        return
     fi
 
     cd $saltcommon/..
@@ -169,28 +165,33 @@ deps () {
 
     set -x
     if [ ! -z $address ]; then
-        if ! `scp -v $tarball root@$address:/tmp`; then
+        if ! `scp $tarball root@$address:/tmp`; then
             ssh-keygen -f ~/.ssh/known_hosts -R $address
-            scp -v -oStrictHostKeyChecking=no $tarball root@$address:/tmp
+            scp -oStrictHostKeyChecking=no $tarball root@$address:/tmp
         fi
 
-        ssh -T -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF_
-        ntpdate ntp.ubuntu.com
-EOF_
+        RHOST=$(ssh -T -oSendEnv=no -oStrictHostKeyChecking=no root@$address 'ntpdate ntp.ubuntu.com 2>&1 >/tmp/ntp_salt_bootstrap; hostname')
 
         # run the salt-call
-        ssh -T -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF
+        TERM=dumb ssh -T -oSendEnv=no -oStrictHostKeyChecking=no root@$address << EOF
         export TERM=dumb
         cd /; rm -rf /root/salt; tar xzf $tarball;
-        dpkg -l 'salt-minion' || /root/salt/states/salt/minion/bootstrap.sh "salt-hvn-dev"
+
+        dpkg -l 'salt-minion' || /root/salt/states/salt/minion/bootstrap.sh $RHOST
         echo "log_level: info" > /etc/salt/minion.d/log.conf
         echo "file_log_level: debug" >> /etc/salt/minion.d/log.conf
         cd /root/salt;
         rm -rf /var/cache/salt/minion/doc
 		echo "$SLSes" >> $logfile
-        salt-call -c /root/salt/states/test state.sls test.setup -linfo
-        # salt-call -c /root/salt/states/test saltutil.sync_all -linfo
-        salt-call -c /root/salt/states/test state.sls salt.patch_salt -lerror
+
+        if [ -z $Q ]; then # Q stands for quick
+          echo "Running sync and patch"
+          salt-call -c /root/salt/states/test state.sls test.setup -linfo
+          salt-call -c /root/salt/states/test state.sls salt.patch_salt -lerror
+        else
+          echo "In quick mode, skip running test.setup and patch_salt"
+        fi
+
         salt-call -c /root/salt/states/test state.sls -ldebug $SLSes 2>$errorfile >> $logfile
         echo "============== ERROR LOG ==============" >> $logfile
         cat $errorfile >> $logfile
@@ -198,8 +199,9 @@ EOF_
         echo "\nDONE AT `date`" >> $logfile
         xz $logfile
 EOF
-    test -e ~/salt_deploy || mkdir ~/salt_deploy
-    scp -v root@$address:$logfile.xz ~/salt_deploy
+    echo "Copying log from $address"
+    mkdir -p ~/salt_deploy
+    scp root@$address:$logfile.xz ~/salt_deploy
     unxz ~/salt_deploy/`basename $logfile`.xz
     vim +/'Result: *False' ~/salt_deploy/`basename $logfile`
     fi
