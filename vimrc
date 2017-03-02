@@ -86,6 +86,8 @@ nmap <Leader>gb :Git checkout
 nmap <Leader>gf :Git fetch --all --prune -v<CR>
 nmap <Leader>gr :Git rebase -i origin/
 
+nmap <Leader>mk :!make<CR>
+
 
 " TODO Toggle
 nmap <C-H> :vs ~/.vimnotebook.md<CR>
@@ -115,8 +117,14 @@ autocmd FileType go nmap <Leader>gd <Plug>(go-doc)
 autocmd FileType go nmap <Leader>gv <Plug>(go-doc-vertical)
 autocmd FileType go nmap <Leader>m Gipackage main<CR><CR>import (<CR>"log"<CR>)<CR>func main() {<CR>}<ESC>O
 
+" elixir
+autocmd FileType elixir nmap <Leader>r :!elixir %<CR>
 " Haskell
 autocmd FileType haskell nmap <Leader>r :!runhaskell %<CR>
+
+" Rust
+let g:rustfmt_autosave = 1
+autocmd FileType rust nmap <Leader>r :!cargo run <CR>
 
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
