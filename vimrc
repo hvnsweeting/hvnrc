@@ -35,11 +35,17 @@ set ignorecase
 set smartcase
 
 " Vim pathogen
-execute pathogen#infect()
+if !empty(glob("~/.vim/autoload/pathogen.vim"))
+  execute pathogen#infect()
+endif
 
 " solarized was cloned to install by pathogen
 " git://github.com/altercation/vim-colors-solarized.git
-colorscheme solarized
+
+colorscheme delek
+if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
+    colorscheme solarized
+endif
 
 " open a NERDTree automatically when vim starts up if no files were specified
 autocmd StdinReadPre * let s:std_in=1
