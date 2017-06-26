@@ -108,4 +108,7 @@ fi
 
 export EDITOR=vi
 
-source ~/.profile
+# Only source on OSX, on Ubuntu, profile source bashrc
+if [ $(uname) != "Linux" ]; then
+  source ~/.profile
+fi
