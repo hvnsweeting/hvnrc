@@ -42,7 +42,7 @@ endif
 " solarized was cloned to install by pathogen
 " git://github.com/altercation/vim-colors-solarized.git
 
-colorscheme delek
+colorscheme default
 if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
     colorscheme solarized
 endif
