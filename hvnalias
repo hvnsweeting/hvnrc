@@ -15,7 +15,13 @@ alias vitd='vim ~/.TODO.rst'
 # network
 alias myip='dig +short myip.opendns.com @208.67.222.222'
 alias myisp='curl ipinfo.io'
-alias pn='ping -t3 -c2 8.8.8.8 || ping -t3 -c2 203.162.71.66 || echo "NO CONNECTION "'
+
+if [ $(uname) == "Linux" ]; then
+  alias pn='ping -W3 -c2 8.8.8.8 || ping -W3 -c2 203.162.71.66 || echo "NO CONNECTION "'
+else
+  # OSX -t means timeout
+  alias pn='ping -t3 -c2 8.8.8.8 || ping -t3 -c2 203.162.71.66 || echo "NO CONNECTION "'
+fi
 alias expose='lsof -i -s TCP:LISTEN -nP | egrep -v "127.0.0.1|::1"'
 
 # get all syslog messages in a range of HH:MM -> HH:MM
