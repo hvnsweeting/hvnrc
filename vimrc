@@ -34,6 +34,9 @@ set showmatch
 set ignorecase
 set smartcase
 
+set wildmenu
+set autochdir
+
 " Vim pathogen
 if !empty(glob("~/.vim/autoload/pathogen.vim"))
   execute pathogen#infect()
@@ -43,14 +46,15 @@ endif
 " git://github.com/altercation/vim-colors-solarized.git
 
 colorscheme default
+" colorscheme badwolf
 if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
     colorscheme solarized
 endif
 
-" open a NERDTree automatically when vim starts up if no files were specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-let g:NERDTreeChDirMode=2
+"" open a NERDTree automatically when vim starts up if no files were specified
+"autocmd StdinReadPre * let s:std_in=1
+"autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+"let g:NERDTreeChDirMode=2
 
 " close vim if the only window left open is a NERDTree
 " TODO, not work autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
@@ -171,14 +175,15 @@ endif
 
 
 " The Silver Searcher
-if executable('ag')
-  " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
+if executable('rg')
+  " Use rg over grep
+  " https://github.com/BurntSushi/ripgrep
+  set grepprg=rg\ --no-heading\ --color=never
 
-  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+  " Use rg in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'rg %s -l --color=never -g ""'
 
-  " ag is fast enough that CtrlP doesn't need to cache
+  " rg is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
 endif
 
