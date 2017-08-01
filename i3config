@@ -162,9 +162,10 @@ bar {
         status_command i3status
 }
 
-exec ibus-daemon
-exec gnome-terminal &
+# exec ibus-daemon
+# exec gnome-terminal &
 assign [class="^Skype"] 3:chat
+assign [class="^Telegram"] 3:chat
+assign [class="^Chromi"] 9
 assign [class="^Firefox"] 7
-assign [class="^Pidgin"] 9
-assign [class="^Thunderbird"] 8
+assign [class="^Thunderbird"] 8:mail
