@@ -256,3 +256,8 @@ saltrender () {
 # GOWS set to where my Golang code locate
 alias vimgo='vim --cmd "cd $GOWS"'
 alias vimsalt="vim --cmd 'cd ~/salt'"
+
+# PulseAudio
+alias volj='pactl set-sink-volume 1 -10%'
+alias volk='pactl set-sink-volume 1 +10%'
+alias volm='pactl set-sink-volume 1 0%'
