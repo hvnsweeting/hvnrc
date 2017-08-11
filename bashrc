@@ -108,6 +108,9 @@ fi
 
 export EDITOR=vi
 
+# bash auto check for local email each 60s
+export MAILCHECK=60
+
 # Only source on OSX, on Ubuntu, profile source bashrc
 if [ $(uname) != "Linux" ]; then
   source ~/.profile
