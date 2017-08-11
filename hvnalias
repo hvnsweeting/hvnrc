@@ -261,3 +261,13 @@ alias vimsalt="vim --cmd 'cd ~/salt'"
 alias volj='pactl set-sink-volume 1 -10%'
 alias volk='pactl set-sink-volume 1 +10%'
 alias volm='pactl set-sink-volume 1 0%'
+
+# pomodoro
+alias lspomo='ps xau | grep pomo'
+
+# projector
+alias proj_on='xrandr --output HDMI-1 --mode 1280x1024'
+alias proj_off='xrandr --output eDP-1'
+
+# wireless
+alias fixwifi='sudo modprobe -r b43 && sudo modprobe b43'
