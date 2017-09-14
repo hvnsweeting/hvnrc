@@ -266,8 +266,26 @@ alias volm='pactl set-sink-volume 1 0%'
 alias lspomo='ps xau | grep pomo'
 
 # projector
-alias proj_on='xrandr --output HDMI-1 --mode 1280x1024'
+alias proj_on='xrandr --output HDMI-1 --mode 1024x768'
 alias proj_off='xrandr --output eDP-1'
 
 # wireless
 alias fixwifi='sudo modprobe -r b43 && sudo modprobe b43'
+
+# mail
+alias mail='mutt -f /var/mail/$USER'
+
+#
+alias netbsd='/usr/lib/virtualbox/VBoxHeadless --comment netbsd --startvm 81f6c630-3d76-4971-adb7-3d8d146cc145 --vrde config'
+
+# Ansible helper
+alias mkansible='mkdir -p roles/$(basename `pwd`)/{files/,templates/,tasks/,handlers/,vars/,defaults/,meta/}'
+
+## bright
+alias dimj='echo 100 | sudo tee /sys/class/backlight/intel_backlight/brightness'
+alias dimm='echo 200 | sudo tee /sys/class/backlight/intel_backlight/brightness'
+alias dimn='echo 300 | sudo tee /sys/class/backlight/intel_backlight/brightness'
+alias dimk='echo 385 | sudo tee /sys/class/backlight/intel_backlight/brightness'
+
+## w3m browser
+alias openhn='w3m https://news.ycombinator.com/'
