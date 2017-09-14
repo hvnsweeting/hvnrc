@@ -115,3 +115,5 @@ export MAILCHECK=60
 if [ $(uname) != "Linux" ]; then
   source ~/.profile
 fi
+
+PATH=$GOPATH/bin/:$PATH
