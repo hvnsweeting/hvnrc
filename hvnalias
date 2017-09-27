@@ -287,5 +287,8 @@ alias dimm='echo 200 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimn='echo 300 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimk='echo 385 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 
+## always know how many mem that a script uses.
+alias python='/usr/bin/time python'
+
 ## w3m browser
 alias openhn='w3m https://news.ycombinator.com/'
