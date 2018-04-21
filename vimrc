@@ -4,9 +4,7 @@ set history=50
 "
 " For macvim
 if has("gui_running")
-  if has("gui_macvim")
-    set guifont=Go\ Mono:h14
-  endif
+    set guifont=Monospace\ 15
 endif
 
 " Indenting
