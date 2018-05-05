@@ -258,8 +258,15 @@ alias vimgo='vim --cmd "cd $GOWS"'
 alias vimsalt="vim --cmd 'cd ~/salt'"
 
 # PulseAudio
-alias volj='pactl set-sink-volume 1 -10%'
-alias volk='pactl set-sink-volume 1 +10%'
+function vols () {
+    pactl list sinks  | grep 'Volume:.*front' | tail -n1 | grep -E '[0-9]+%' -o | head -n1
+}
+function volj () {
+    pactl set-sink-volume 1 -10%; vols
+}
+function volk () {
+    pactl set-sink-volume 1 +10%; vols
+}
 alias volm='pactl set-sink-volume 1 0%'
 
 # pomodoro
@@ -282,13 +289,55 @@ alias netbsd='/usr/lib/virtualbox/VBoxHeadless --comment netbsd --startvm 81f6c6
 alias mkansible='mkdir -p roles/$(basename `pwd`)/{files/,templates/,tasks/,handlers/,vars/,defaults/,meta/}'
 
 ## bright
-alias dimj='echo 100 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimm='echo 200 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimn='echo 300 | sudo tee /sys/class/backlight/intel_backlight/brightness'
-alias dimk='echo 385 | sudo tee /sys/class/backlight/intel_backlight/brightness'
+function dimj () {
+    echo $(cat /sys/class/backlight/intel_backlight/brightness) - 100 | bc | sudo tee /sys/class/backlight/intel_backlight/brightness
+}
+function dimk () {
+    echo $(cat /sys/class/backlight/intel_backlight/brightness) + 100 | bc | sudo tee /sys/class/backlight/intel_backlight/brightness
+}
 
 ## always know how many mem that a script uses.
 alias python='/usr/bin/time python'
 
 ## w3m browser
 alias openhn='w3m https://news.ycombinator.com/'
+
+## dict and dictd
+function fr() {
+  dict --database fd-fra-eng $1
+}
+function oman() {
+    # open online manpage
+    w3m "http://manpages.ubuntu.com/cgi-bin/search.py?q=$1&cx=003883529982892832976%3A5zl6o8w6f0s&cof=FORID%3A9&ie=UTF-8&siteurl=manpages.ubuntu.com/manpages/trusty/&ref=manpages.ubuntu.com/&ss=2238j2566274j3"
+}
+function ddg() {
+
+    w3m "https://duckduckgo.com/?q=$@&t=hf"
+}
+
+function godocweb() {
+# I dont use godoc CLI, so open web and read the doc
+# Use other port than default to not conflict if any other is running
+  godoc -http=:16060 &
+  if [ "$(uname --kernel-name)" == "Linux" ]; then
+      xdg-open 'http://127.0.0.1:16060' &
+  else
+      echo Non linux
+      open http://127.0.0.1:16060
+  fi
+}
+
+function pinggw() {
+    set +x
+    gateway=$(ip ro | grep default| cut -d ' ' -f3)
+    ping -c 3 $gateway
+    nmap -A -T aggressive $gateway  # T4
+    nmap -Pn $gateway
+}
+
+function loadrc() {
+    source ~/.bashrc
+
+}
