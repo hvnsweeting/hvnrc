@@ -25,6 +25,9 @@ bindsym $mod+Shift+Q kill
 
 # start dmenu (a program launcher)
 bindsym $mod+d exec dmenu_run
+# must prepare a terminal profile named nightmode
+# somehow cannot run i3-sensible --profile=nightmode
+bindsym $mod+n exec gnome-terminal --profile=nightmode
 
 # change focus
 bindsym $mod+h focus left
@@ -110,7 +113,7 @@ bindsym $mod+Shift+R restart
 # exit i3 (logs you out of your X session)
 bindsym $mod+Shift+E exit
 # lock screen
-bindsym $mod+o exec /usr/bin/i3lock
+bindsym $mod+o exec /usr/bin/i3lock -c 333333
 #printscreen
 exec --no-startup-id feh --bg-scale /home/hvn/Pictures/bg.png
 exec ~/.dropbox-dist/dropboxd &
