@@ -341,3 +341,9 @@ function loadrc() {
     source ~/.bashrc
 
 }
+
+## ansible
+alias ansiblel="ansible -i 'localhost,' localhost -c local"
+
+alias py2='source ~/env27/bin/activate'
+alias py3='source ~/env36/bin/activate'
