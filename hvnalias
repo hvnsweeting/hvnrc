@@ -85,6 +85,7 @@ function sshroot () {
 
 # GIT
 alias gtus='git status'
+alias gs='git status'
 alias gcm='git commit -m '
 alias gcam='git commit -am '
 alias gco='git checkout'
