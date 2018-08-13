@@ -343,6 +343,14 @@ function loadrc() {
 
 }
 
+# ssh hostname instead of IP
+function sshh() {
+    hostip=$(echo "$1" | grep -o '\d.*' | sed 's/-/./g')
+    echo "SSH to ${hostip} ..."
+    shift
+    ssh "$hostip" $@
+}
+
 ## ansible
 alias ansiblel="ansible -i 'localhost,' localhost -c local"
 
