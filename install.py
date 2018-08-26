@@ -6,16 +6,14 @@ Create symlink for all config file.
 import os
 import logging
 import shutil
-import sys
-
-if sys.version_info.major != 2 or sys.version_info.minor != 7:
-    sys.exit('Require python 2.7 to run')
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
-src_dst = {'vimrc': '.vimrc',
+src_dst = {
+    'vimrc': '.vimrc',
     'bashrc': '.bashrc',
+    'emacs': '.emacs',
     'hvnalias': '.hvnalias',
     'tmux.conf': '.tmux.conf',
     'inputrc': '.inputrc',
@@ -24,7 +22,7 @@ src_dst = {'vimrc': '.vimrc',
     'mutt/imaprc': '.mutt/imaprc',
     'mutt/baserc': '.mutt/baserc',
     'mutt/pgprc': '.mutt/pgprc',
-    }
+}
 
 home = os.path.expanduser('~')
 
@@ -49,10 +47,11 @@ for src in src_dst:
                 else:
                     logger.info('%s pointed to %s', dest, source)
     else:
-        logger.debug('Checking %s' , dest)
+        logger.debug('Checking %s', dest)
         try:
             os.stat(dest)
-            logger.info('%s is not a symlink, append its name with .backup', dest)
+            logger.info('%s is not a symlink, append its name with .backup',
+                        dest)
             shutil.move(dest, '.'.join((dest, 'backup')))
         except OSError:
             # should only fail if dest dir not exist due to dir path not exist
