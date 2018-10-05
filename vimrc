@@ -5,7 +5,13 @@ set history=50
 " For macvim
 if has("gui_running")
     set guifont=Monospace\ 15
+    " TODO: turn off spell when background is black
+    set spell
 endif
+
+" fzf
+"
+set runtimepath+=~/.fzf
 
 " Indenting
 set autoindent
@@ -23,7 +29,6 @@ set colorcolumn=80
 set nu
 set ruler
 set showcmd
-set spell
 syntax on
 
 set hlsearch
@@ -125,6 +130,10 @@ autocmd FileType go nmap <Leader>m Gipackage main<CR><CR>import (<CR>"log"<CR>)<
 autocmd FileType elixir nmap <Leader>r :!elixir %<CR>
 " Haskell
 autocmd FileType haskell nmap <Leader>r :!runhaskell %<CR>
+"
+" Chicken scheme
+autocmd FileType scheme nmap <Leader>b :!csc %:p<CR>
+autocmd FileType scheme nmap <Leader>r :!csc %:p && ./%:r<CR>
 
 " Rust
 let g:rustfmt_autosave = 1
