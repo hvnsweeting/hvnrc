@@ -117,3 +117,12 @@ if [ $(uname) != "Linux" ]; then
 fi
 
 PATH=$GOPATH/bin/:$PATH
+
+if [ -e ~/.motd ]; then
+  cat -ne ~/.motd
+else
+  echo "Missing ~/.motd, creating new one"
+  touch ~/.motd
+fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
