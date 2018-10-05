@@ -11,6 +11,9 @@ alias irc='irssi -c irc.freenode.net'
 alias lstd='cat ~/.TODO.rst'
 alias dols='doctl compute droplet list'
 alias vitd='vim ~/.TODO.rst'
+function addtd () {
+    echo "- $@" >> ~/.motd
+}
 
 # network
 alias myip='dig +short myip.opendns.com @208.67.222.222'
@@ -302,7 +305,9 @@ function dimk () {
 alias python='/usr/bin/time python'
 
 ## w3m browser
-alias openhn='w3m https://news.ycombinator.com/'
+alias whn='w3m https://news.ycombinator.com/'
+alias wddg='w3m https://duckduckgo.com'
+alias wdive='w3m file:///usr/share/doc/diveintopython3/html/index.html'
 
 ## dict and dictd
 function fr() {
@@ -339,5 +344,18 @@ function pinggw() {
 
 function loadrc() {
     source ~/.bashrc
+}
 
+# auto wrap chicken scheme interpreter
+function csi() {
+    if command -v rlwrap ; then
+        rlwrap csi
+    else
+        csi
+    fi
+}
+
+# auto wrap dict output to a pager
+function dict() {
+    env dict $1 | less
 }
