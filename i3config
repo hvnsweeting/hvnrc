@@ -117,6 +117,9 @@ bindsym $mod+o exec /usr/bin/i3lock -c 333333
 #printscreen
 exec --no-startup-id feh --bg-scale /home/hvn/Pictures/bg.png
 exec ~/.dropbox-dist/dropboxd &
+exec flock --exclusive --nonblock /tmp/redshift.lock redshift
+exec /usr/bin/psensor
+
 bindsym Print exec scrot -e 'mv $f ~/Pictures && gimp ~/Pictures/$f'
 
 # resize window (you can also use the mouse for that)
