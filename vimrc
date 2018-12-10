@@ -135,6 +135,8 @@ autocmd FileType go nmap <Leader>m Gipackage main<CR><CR>import (<CR>"log"<CR>)<
 
 " elixir
 autocmd FileType elixir nmap <Leader>r :!elixir %<CR>
+autocmd FileType elixir nmap <Leader>t :!mix test<CR>
+autocmd FileType elixir nmap <Leader>tt :!mix test --trace<CR>
 " Haskell
 autocmd FileType haskell nmap <Leader>r :!runhaskell %<CR>
 "
