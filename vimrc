@@ -8,6 +8,10 @@ if has("gui_running")
     " TODO: turn off spell when background is black
     set spell
 endif
+if has("gui_macvim")
+  set guifont=Go\ Mono:h14
+  set spell
+endif
 
 " fzf
 "
@@ -22,6 +26,8 @@ set smartindent
 set expandtab
 set sw=4
 set ts=4
+
+set directory=$HOME/.vim/swapfiles/
 
 set backspace=indent,eol,start
 set cursorline
@@ -45,7 +51,7 @@ endif
 " solarized was cloned to install by pathogen
 " git://github.com/altercation/vim-colors-solarized.git
 
-colorscheme default
+colorscheme koehler
 if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
     colorscheme solarized
 endif
@@ -117,6 +123,7 @@ autocmd FileType sh nmap <Leader>r :!bash %<CR>
 autocmd FileType sh nmap <Leader># ggO#!/bin/bash<Esc>o
 
 " Golang
+let g:go_version_warning = 0
 autocmd FileType go nmap <leader>r <Plug>(go-run)
 autocmd FileType go nmap <leader>b <Plug>(go-build)
 autocmd FileType go nmap <leader>t <Plug>(go-test)
