@@ -1,18 +1,8 @@
+set shell=bash\ -i
 set nocompatible
 set encoding=utf-8
 set history=50
 "
-" For macvim
-if has("gui_running")
-    set guifont=Monospace\ 15
-    " TODO: turn off spell when background is black
-    set spell
-endif
-if has("gui_macvim")
-  set guifont=Go\ Mono:h14
-  set spell
-endif
-
 " fzf
 "
 set runtimepath+=~/.fzf
@@ -26,6 +16,8 @@ set smartindent
 set expandtab
 set sw=4
 set ts=4
+
+filetype plugin indent on
 
 set directory=$HOME/.vim/swapfiles/
 
@@ -51,10 +43,21 @@ endif
 " solarized was cloned to install by pathogen
 " git://github.com/altercation/vim-colors-solarized.git
 
-colorscheme koehler
-if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
-    colorscheme solarized
+" For macvim
+if has("gui_macvim")
+  colorscheme gruvbox
+  set background=light
+  set guifont=Menlo:h14
+  set spell
+else
+  " terminal
+  if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
+      colorscheme solarized
+  else
+      colorscheme koehler
+  endif
 endif
+
 
 " open a NERDTree automatically when vim starts up if no files were specified
 autocmd StdinReadPre * let s:std_in=1
@@ -107,7 +110,6 @@ nmap <Leader>mk :!make<CR>
 " TODO Toggle
 nmap <C-H> :vs ~/.vimnotebook.md<CR>
 
-filetype plugin indent on
 autocmd FileType text setlocal textwidth=78
 autocmd BufNewFile,BufRead *.jinja,*.jinja2 set ft=sls
 autocmd BufWritePre * :%s/\s\+$//e
@@ -116,6 +118,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 autocmd FileType python nmap <Leader>r :!python %<CR>
 autocmd FileType python nmap <Leader># ggO#!/usr/bin/env python<CR># -*- coding: utf-8 -*-<Esc>o
 autocmd FileType python nmap <Leader>m Giif __name__ == "__main__":<CR>
+autocmd FileType python nmap <Leader>fmt :!~/env36/bin/black %<CR>
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 " Shell
@@ -135,8 +138,8 @@ autocmd FileType go nmap <Leader>m Gipackage main<CR><CR>import (<CR>"log"<CR>)<
 
 " elixir
 autocmd FileType elixir nmap <Leader>r :!elixir %<CR>
-autocmd FileType elixir nmap <Leader>t :!mix test<CR>
-autocmd FileType elixir nmap <Leader>tt :!mix test --trace<CR>
+autocmd FileType elixir nmap <Leader>t :!mix test --no-color<CR>
+autocmd FileType elixir nmap <Leader>tt :!mix test --trace --no-color<CR>
 " Haskell
 autocmd FileType haskell nmap <Leader>r :!runhaskell %<CR>
 "
@@ -172,18 +175,18 @@ function! HasPaste()
     return ''
 endfunction
 
+let g:flake8_cmd=glob("~/env36/bin/flake8")
 function! HasFlake()
-  if !exists("*Flake8()") && executable('flake8')
-      return ''
+  if exists("*Flake8") && executable(g:flake8_cmd)
+      return 'Yes'
   endif
   return 'NO'
 endfunction
 
+autocmd BufWritePost *.py call Flake8()
+
 set laststatus=2
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L\ %{fugitive#statusline()}\ FLAKE:%{HasFlake()}
-if !exists("*Flake8()") && executable('flake8')
-  autocmd BufWritePost *.py call Flake8()
-endif
 
 
 " The Silver Searcher
@@ -199,3 +202,15 @@ if executable('ag')
 endif
 
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+
+nnoremap <C-L> :call <SID>ToggleQuickFix()<cr>
+function! s:ToggleQuickFix()
+  for buffer in tabpagebuflist()
+    if bufname(buffer) == ''
+      " then it should be the quickfix window
+      cclose
+      return
+    endif
+  endfor
+  copen
+endfunction
