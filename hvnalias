@@ -380,3 +380,5 @@ alias py3='source ~/env36/bin/activate'
 
 alias uman='docker run -it hvnsweeting/uman man'
 alias umanit='docker run -it hvnsweeting/uman'  # uman interactive
+
+alias iml='rlwrap ocaml'
