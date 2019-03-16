@@ -2,6 +2,7 @@ set shell=bash\ -i
 set nocompatible
 set encoding=utf-8
 set history=50
+let $PATH=$PATH.':/usr/local/bin/:'
 "
 " fzf
 "
@@ -118,7 +119,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 autocmd FileType python nmap <Leader>r :!python %<CR>
 autocmd FileType python nmap <Leader># ggO#!/usr/bin/env python<CR># -*- coding: utf-8 -*-<Esc>o
 autocmd FileType python nmap <Leader>m Giif __name__ == "__main__":<CR>
-autocmd FileType python nmap <Leader>fmt :!~/env36/bin/black %<CR>
+autocmd FileType python nmap <Leader>fmt :!~/env36/bin/black -l79 %<CR>
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 " Shell
@@ -127,6 +128,7 @@ autocmd FileType sh nmap <Leader># ggO#!/bin/bash<Esc>o
 
 " Golang
 let g:go_version_warning = 0
+let g:go_auto_type_info = 1
 autocmd FileType go nmap <leader>r <Plug>(go-run)
 autocmd FileType go nmap <leader>b <Plug>(go-build)
 autocmd FileType go nmap <leader>t <Plug>(go-test)
@@ -142,7 +144,10 @@ autocmd FileType elixir nmap <Leader>t :!mix test --no-color<CR>
 autocmd FileType elixir nmap <Leader>tt :!mix test --trace --no-color<CR>
 " Haskell
 autocmd FileType haskell nmap <Leader>r :!runhaskell %<CR>
-"
+
+" Ocaml
+autocmd FileType ocaml nmap <Leader>r :!ocaml %<CR>
+
 " Chicken scheme
 autocmd FileType scheme nmap <Leader>b :!csc %:p<CR>
 autocmd FileType scheme nmap <Leader>r :!csc %:p && ./%:r<CR>
@@ -214,3 +219,7 @@ function! s:ToggleQuickFix()
   endfor
   copen
 endfunction
+
+
+setlocal rtp+=~/.opam/default/share/merlin/vim
+setlocal rtp^="~/.opam/default/share/ocp-indent/vim"
