@@ -1,4 +1,3 @@
-set shell=bash\ -i
 set nocompatible
 set encoding=utf-8
 set history=50

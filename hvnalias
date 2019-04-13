@@ -298,6 +298,7 @@ alias mkansible='mkdir -p roles/$(basename `pwd`)/{files/,templates/,tasks/,hand
 ## bright
 alias dimm='echo 200 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimn='echo 300 | sudo tee /sys/class/backlight/intel_backlight/brightness'
+alias dimin='echo 10 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 function dimj () {
     echo $(cat /sys/class/backlight/intel_backlight/brightness) - 100 | bc | sudo tee /sys/class/backlight/intel_backlight/brightness
 }
