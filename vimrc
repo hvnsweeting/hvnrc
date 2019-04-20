@@ -57,14 +57,13 @@ Plug 'fatih/vim-go', { 'tag': '*' }
 " Initialize plugin system
 "
 "
-"Plug 'git@github.com:slashmili/alchemist.vim.git'
 Plug 'https://github.com/ctrlpvim/ctrlp.vim.git'
 Plug 'https://github.com/ElmCast/elm-vim.git'
 Plug 'https://github.com/junegunn/fzf.vim.git'
 Plug 'https://github.com/morhetz/gruvbox.git'
 "Plug 'https://github.com/udalov/kotlin-vim'
 "Plug 'https://github.com/scrooloose/nerdtree.git'
-"Plug 'https://github.com/elixir-lang/vim-elixir.git'
+Plug 'https://github.com/elixir-lang/vim-elixir.git'
 Plug 'https://github.com/nvie/vim-flake8.git'
 Plug 'git://github.com/tpope/vim-fugitive.git'
 call plug#end()
@@ -173,6 +172,7 @@ autocmd FileType haskell nmap <Leader>r :!runhaskell %<CR>
 
 " Ocaml
 autocmd FileType ocaml nmap <Leader>r :!ocaml %<CR>
+autocmd FileType ocaml nmap <Leader>rr :!ocaml %
 
 " Chicken scheme
 autocmd FileType scheme nmap <Leader>b :!csc %:p<CR>
