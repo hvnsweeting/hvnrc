@@ -35,33 +35,60 @@ set showmatch
 set ignorecase
 set smartcase
 
-" Vim pathogen
-if !empty(glob("~/.vim/autoload/pathogen.vim"))
-  execute pathogen#infect()
-endif
+call plug#begin('~/.vim/plugged')
+" Make sure you use single quotes
+" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
+" Plug 'junegunn/vim-easy-align'
+" Any valid git URL is allowed
+" Plug 'https://github.com/junegunn/vim-github-dashboard.git'
+" Multiple Plug commands can be written in a single line using | separators
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
+" On-demand loading
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+" Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
+" Using a non-master branch
+" Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
+Plug 'fatih/vim-go', { 'tag': '*' }
+" Plugin outside ~/.vim/plugged with post-update hook
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Unmanaged plugin (manually installed and updated)
+" Plug '~/my-prototype-plugin'
+" Initialize plugin system
+"
+"
+"Plug 'git@github.com:slashmili/alchemist.vim.git'
+Plug 'https://github.com/ctrlpvim/ctrlp.vim.git'
+Plug 'https://github.com/ElmCast/elm-vim.git'
+Plug 'https://github.com/junegunn/fzf.vim.git'
+Plug 'https://github.com/morhetz/gruvbox.git'
+"Plug 'https://github.com/udalov/kotlin-vim'
+"Plug 'https://github.com/scrooloose/nerdtree.git'
+"Plug 'https://github.com/elixir-lang/vim-elixir.git'
+Plug 'https://github.com/nvie/vim-flake8.git'
+Plug 'git://github.com/tpope/vim-fugitive.git'
+call plug#end()
 
-" solarized was cloned to install by pathogen
-" git://github.com/altercation/vim-colors-solarized.git
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
 
 " For macvim
 if has("gui_macvim")
   colorscheme gruvbox
-  set background=light
   set guifont=Menlo:h14
   set spell
 else
   " terminal
-  if filereadable(expand("~/.vim/bundle/vim-colors-solarized/colors/solarized.vim"))
-      colorscheme solarized
-  else
-      colorscheme koehler
-  endif
+  colorscheme gruvbox
+  set background=light
 endif
-
 
 " open a NERDTree automatically when vim starts up if no files were specified
 autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree |   wincmd l | endif
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree |   wincmd l | endif
 let g:NERDTreeChDirMode=2
 
 " close vim if the only window left open is a NERDTree
@@ -187,7 +214,7 @@ function! HasFlake()
   return 'NO'
 endfunction
 
-autocmd BufWritePost *.py call Flake8()
+autocmd BufWritePost *.py call flake8#Flake8()
 
 set laststatus=2
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L\ %{fugitive#statusline()}\ FLAKE:%{HasFlake()}
