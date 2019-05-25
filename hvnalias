@@ -373,6 +373,8 @@ function sshh() {
     ssh "$hostip" $@
 }
 
+# vim dark
+alias vimd="vim -c 'set bg=dark'"
 ## ansible
 alias ansiblel="ansible -i 'localhost,' localhost -c local"
 
