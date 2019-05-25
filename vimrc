@@ -66,11 +66,23 @@ Plug 'https://github.com/morhetz/gruvbox.git'
 Plug 'https://github.com/elixir-lang/vim-elixir.git'
 Plug 'https://github.com/nvie/vim-flake8.git'
 Plug 'git://github.com/tpope/vim-fugitive.git'
+
+" nice to have
+"Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
+
 call plug#end()
 
+" ReasonML
+"let g:LanguageClient_serverCommands = {
+"    \ 'reason': ['/absolute/path/to/reason-language-server.exe'],
+"    \ }
+"" enable autocomplete
+"let g:deoplete#enable_at_startup = 1
+autocmd FileType reason nmap <Leader>r :!yarn build && node src/Demo.bs.js<CR>
+
 let g:UltiSnipsExpandTrigger="<tab>"
-let g:UltiSnipsJumpForwardTrigger="<c-b>"
-let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsJumpForwardTrigger="<c-f>"
+let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 " If you want :UltiSnipsEdit to split your window.
 let g:UltiSnipsEditSplit="vertical"
 
@@ -81,8 +93,8 @@ if has("gui_macvim")
   set spell
 else
   " terminal
+  set background=dark
   colorscheme gruvbox
-  set background=light
 endif
 
 " open a NERDTree automatically when vim starts up if no files were specified
@@ -139,6 +151,8 @@ nmap <C-H> :vs ~/.vimnotebook.md<CR>
 autocmd FileType text setlocal textwidth=78
 autocmd BufNewFile,BufRead *.jinja,*.jinja2 set ft=sls
 autocmd BufWritePre * :%s/\s\+$//e
+
+autocmd BufNewFile,BufRead *.hy set ft=clojure
 
 " Python
 autocmd FileType python nmap <Leader>r :!python %<CR>
@@ -206,7 +220,7 @@ function! HasPaste()
     return ''
 endfunction
 
-let g:flake8_cmd=glob("~/env36/bin/flake8")
+let g:flake8_cmd=glob("~/py36/bin/flake8")
 function! HasFlake()
   if exists("*Flake8") && executable(g:flake8_cmd)
       return 'Yes'
