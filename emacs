@@ -50,6 +50,15 @@
 (pyvenv-activate "~/py36")
 (require 'evil)
 (evil-mode 1)
+
+(projectile-mode +1)
+(define-key projectile-mode-map (kbd "s-,") 'projectile-command-map)
+(define-key projectile-mode-map [?\s-d] 'projectile-find-dir)
+(define-key projectile-mode-map [?\s-p] 'projectile-switch-project)
+(define-key projectile-mode-map [?\s-f] 'projectile-find-file)
+(define-key projectile-mode-map [?\s-g] 'projectile-grep)
+
+
 ;; init.el ends here
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
