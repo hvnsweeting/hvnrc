@@ -57,6 +57,8 @@ Plug 'fatih/vim-go', { 'tag': '*' }
 " Initialize plugin system
 "
 "
+Plug 'Valloric/YouCompleteMe'
+
 Plug 'https://github.com/ctrlpvim/ctrlp.vim.git'
 Plug 'https://github.com/ElmCast/elm-vim.git'
 Plug 'https://github.com/junegunn/fzf.vim.git'
@@ -67,10 +69,15 @@ Plug 'https://github.com/elixir-lang/vim-elixir.git'
 Plug 'https://github.com/nvie/vim-flake8.git'
 Plug 'git://github.com/tpope/vim-fugitive.git'
 
+Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
+
 " nice to have
 "Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 
 call plug#end()
+
+let g:ycm_autoclose_preview_window_after_completion=1
+map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 
 " ReasonML
 "let g:LanguageClient_serverCommands = {
