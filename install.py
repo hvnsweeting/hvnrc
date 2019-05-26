@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 src_dst = {
     "vimrc": ".vimrc",
     "bashrc": ".bashrc",
-    "emacs": ".emacs",
+    "emacs": ".emacs.d/init.el",
     "hvnalias": ".hvnalias",
     "tmux.conf": ".tmux.conf",
     "inputrc": ".inputrc",
