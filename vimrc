@@ -121,6 +121,7 @@ nmap gc :cd %:h<CR>
 
 
 nmap <Leader>ag :grep
+nmap <Leader>rg :vimgrep! // %
 nmap <Leader>p :se paste!<CR>i
 nmap <Leader>src :source $MYVIMRC<CR>
 nmap <Leader>erc :e $MYVIMRC<CR>
