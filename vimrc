@@ -122,6 +122,8 @@ nmap gc :cd %:h<CR>
 
 nmap <Leader>ag :grep
 nmap <Leader>rg :vimgrep! // %
+" Pattern /^\./ to search all CSS class in current CSS file
+" Pattern /^def / to search all function def in Python file
 nmap <Leader>p :se paste!<CR>i
 nmap <Leader>src :source $MYVIMRC<CR>
 nmap <Leader>erc :e $MYVIMRC<CR>
