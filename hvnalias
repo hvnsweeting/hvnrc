@@ -296,6 +296,17 @@ alias netbsd='/usr/lib/virtualbox/VBoxHeadless --comment netbsd --startvm 81f6c6
 alias mkansible='mkdir -p roles/$(basename `pwd`)/{files/,templates/,tasks/,handlers/,vars/,defaults/,meta/}'
 
 ## bright
+function getdim() {
+    cat /sys/class/backlight/intel_backlight/brightness
+}
+function setdim() {
+    getdim
+    echo "Enter dim value:"
+    read value
+    echo $value | sudo tee /sys/class/backlight/intel_backlight/brightness
+}
+
+alias dimm='echo 200 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimm='echo 200 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimn='echo 300 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimin='echo 10 | sudo tee /sys/class/backlight/intel_backlight/brightness'
