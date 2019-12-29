@@ -41,7 +41,9 @@ for src in src_dst:
                 os.stat(dest)
             except OSError:
                 # dest is a symlink and it is broken
-                logger.info("Removing broken symlink and create new one %s", dest)
+                logger.info(
+                    "Removing broken symlink and create new one %s", dest
+                )
                 os.remove(dest)
                 os.symlink(source, os.path.join(home, dest))
             else:
@@ -55,7 +57,9 @@ for src in src_dst:
         logger.debug("Checking %s", dest)
         try:
             os.stat(dest)
-            logger.info("%s is not a symlink, append its name with .backup", dest)
+            logger.info(
+                "%s is not a symlink, append its name with .backup", dest
+            )
             shutil.move(dest, ".".join((dest, "backup")))
         except OSError:
             # should only fail if dest dir not exist due to dir path not exist
