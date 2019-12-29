@@ -191,6 +191,8 @@ autocmd FileType go nmap <Leader>m Gipackage main<CR><CR>import (<CR>"log"<CR>)<
 " elixir
 autocmd FileType elixir nmap <Leader>r :!elixir %<CR>
 autocmd FileType elixir nmap <Leader>t :!mix test --no-color<CR>
+" autocmd FileType elixir nmap <Leader>tu :!mix test --trace --no-color %:TODO add line number under cursor here<CR>
+autocmd FileType elixir nmap <Leader>tc :!mix test --trace --no-color %<CR>
 autocmd FileType elixir nmap <Leader>tt :!mix test --trace --no-color<CR>
 " Haskell
 autocmd FileType haskell nmap <Leader>r :!runhaskell %<CR>
@@ -231,7 +233,7 @@ function! HasPaste()
     return ''
 endfunction
 
-let g:flake8_cmd=glob("~/py36/bin/flake8")
+let g:flake8_cmd=glob("~/py3/bin/flake8")
 function! HasFlake()
   if exists("*Flake8") && executable(g:flake8_cmd)
       return 'Yes'
