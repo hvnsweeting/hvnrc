@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 
 src_dst = {
     "vimrc": ".vimrc",
+    "UltiSnips_all.snippets": ".vim/UltiSnips/all.snippets",
     "bashrc": ".bashrc",
     "emacs": ".emacs.d/init.el",
     "hvnalias": ".hvnalias",
@@ -25,6 +26,11 @@ src_dst = {
 }
 
 home = os.path.expanduser("~")
+
+try:
+    os.makedirs(os.path.join(home, ".vim/Ultisnips"))
+except OSError:
+    pass
 
 for src in src_dst:
     source = os.path.abspath(src)

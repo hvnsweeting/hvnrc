@@ -1,0 +1,21 @@
+snippet aoc
+  use ExUnit.Case
+
+  def solve1(program) do
+  program
+  |> String.trim
+  end
+  @tag wip: true
+  test "solve1" do
+    {:ok, input} = File.read("test/input2019_${1}.txt")
+    assert solve1(input) == nil
+    #assert Aoc2019Day.solve1(input) == nil
+  end
+endsnippet
+
+snippet a
+<a href="$1"${2: class="${3:link}"}>
+    $0
+</a>
+endsnippet
+
