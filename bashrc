@@ -59,11 +59,11 @@ function git_branch(){
 }
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\ \$(git_branch) $ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]$(date +"%D %H:%M")\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\ \$(git_branch) $ '
     #PS1='\[\e[0;32m\]\u\[\e[m\] \[\e[1;34m\]\w\[\e[m\] \[\e[1;32m\]\$\[\e[m\] \[\e[1;37m\]'']]]]]]]'
 else
     #PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-    PS1='\[\e[0;33m\]\u\[\e[m\]@\[\e[0;36m\]\h\[\e[m\]: \[\e[1;35m\]\w\[\e[m\] ($(git_branch)) \[\e[1;32m\]\$\[\e[m\] '
+    PS1='$(date +"%D %H:%M")\[\e[0;33m\]\u\[\e[m\]@\[\e[0;36m\]\h\[\e[m\]: \[\e[1;35m\]\w\[\e[m\] ($(git_branch)) \[\e[1;32m\]\$\[\e[m\] '
 fi
 unset color_prompt force_color_prompt
 
@@ -126,15 +126,3 @@ else
 fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-
-PATH="/home/hvn/perl5/bin${PATH:+:${PATH}}"; export PATH;
-PERL5LIB="/home/hvn/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"; export PERL5LIB;
-PERL_LOCAL_LIB_ROOT="/home/hvn/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"; export PERL_LOCAL_LIB_ROOT;
-PERL_MB_OPT="--install_base \"/home/hvn/perl5\""; export PERL_MB_OPT;
-PERL_MM_OPT="INSTALL_BASE=/home/hvn/perl5"; export PERL_MM_OPT;
-
-CAML_LD_LIBRARY_PATH="/home/hvn/.opam/system/lib/stublibs:/usr/lib/ocaml/stublibs"; export CAML_LD_LIBRARY_PATH;
-MANPATH="/home/hvn/.opam/system/man:"; export MANPATH;
-PERL5LIB="/home/hvn/.opam/system/lib/perl5:/home/hvn/perl5/lib/perl5"; export PERL5LIB;
-OCAML_TOPLEVEL_PATH="/home/hvn/.opam/system/lib/toplevel"; export OCAML_TOPLEVEL_PATH;
-PATH="/home/hvn/.opam/system/bin:/home/hvn/perl5/bin:/media/media/go/bin/:/home/hvn/.sdkman/candidates/kotlin/current/bin:/home/hvn/.cargo/bin:/home/hvn/bin:/home/hvn/me/tinyscripts:/home/hvn/py36/bin:/home/hvn/.cargo/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/usr/local/go/bin:/usr/local/node-v6.11.2-linux-x64/bin/:/home/hvn/.fzf/bin"; export PATH;

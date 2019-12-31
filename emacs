@@ -1,8 +1,10 @@
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (require 'package)
 
-(add-to-list 'package-archives
-       '("melpa" . "http://melpa.org/packages/") t)
-
+;; (add-to-list 'package-archives
+;;       '("melpa" . "http://melpa.org/packages/") t)
+(setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
+                         ("melpa" . "https://melpa.org/packages/")))
 (package-initialize)
 (when (not package-archive-contents)
   (package-refresh-contents))
@@ -11,8 +13,8 @@
   '(better-defaults
     ein
     elpy
-    flycheck
     evil
+    flycheck
     material-theme
     py-autopep8))
 
@@ -67,7 +69,7 @@
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
    (quote
-    ("a24c5b3c12d147da6cef80938dca1223b7c7f70f2f382b26308eba014dc4833a" default)))
+    ("732b807b0543855541743429c9979ebfb363e27ec91e82f463c91e68c772f6e3" "a24c5b3c12d147da6cef80938dca1223b7c7f70f2f382b26308eba014dc4833a" default)))
  '(package-selected-packages
    (quote
     (alchemist rope-read-mode geiser ## evil py-autopep8 material-theme flycheck elpy ein better-defaults))))

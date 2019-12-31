@@ -7,7 +7,7 @@ alias troi='while read i; do echo $i; sleep 0.5; done <'
 
 # frequent
 alias psg='ps aux | grep '
-alias irc='irssi -c irc.freenode.net'
+alias irc='irssi --connect irc.freenode.net --nick hvn'
 alias lstd='cat ~/.TODO.rst'
 alias dols='doctl compute droplet list'
 alias vitd='vim ~/.TODO.rst'
@@ -389,8 +389,7 @@ alias vimd="vim -c 'set bg=dark'"
 ## ansible
 alias ansiblel="ansible -i 'localhost,' localhost -c local"
 
-alias py2='source ~/env27/bin/activate'
-alias py3='source ~/env36/bin/activate'
+alias py3='workon py3'
 
 alias uman='docker run -it hvnsweeting/uman man'
 alias umanit='docker run -it hvnsweeting/uman'  # uman interactive

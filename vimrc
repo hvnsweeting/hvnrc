@@ -72,6 +72,9 @@ Plug 'git://github.com/tpope/vim-fugitive.git'
 Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Plug 'reasonml-editor/vim-reason-plus'
 
+" Broken Plug 'MarcWeber/vim-addon-nix'
+Plug 'LnL7/vim-nix'
+
 " nice to have
 "Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 
@@ -169,7 +172,7 @@ autocmd BufNewFile,BufRead *.hy set ft=clojure
 autocmd FileType python nmap <Leader>r :!python %<CR>
 autocmd FileType python nmap <Leader># ggO#!/usr/bin/env python<CR># -*- coding: utf-8 -*-<Esc>o
 autocmd FileType python nmap <Leader>m Giif __name__ == "__main__":<CR>
-autocmd FileType python nmap <Leader>fmt :!~/py36/bin/black -l79 %<CR>
+autocmd FileType python nmap <Leader>fmt :!~/py3/bin/black -l79 %<CR>
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 " Shell
