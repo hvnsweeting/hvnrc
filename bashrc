@@ -106,7 +106,7 @@ if ( which brew 2>&1 >/dev/null); then
     fi
 fi
 
-export EDITOR=vi
+export EDITOR='nano'  # this mostly for edit git commit, open a full vim would be slow
 
 # bash auto check for local email each 60s
 export MAILCHECK=60
@@ -117,6 +117,7 @@ if [ $(uname) != "Linux" ]; then
 fi
 
 PATH=$GOPATH/bin/:$PATH
+PATH="$HOME/.cargo/bin:$PATH"
 
 if [ -e ~/.motd ]; then
   cat -ne ~/.motd
