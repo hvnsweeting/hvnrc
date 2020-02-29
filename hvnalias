@@ -399,3 +399,9 @@ alias iml='rlwrap ocaml'
 function cl() {
     echo $@ | xclip -sel c
 }
+
+function exc() { # HELP: show Elixir code of given func
+# because split string to array in bash is crazy https://stackoverflow.com/a/45201229/807703
+# usage: exc Enum.reduce
+    python3 -c """import sys, os; print(os.system('grep -n -A10 \'^  def {1}\' ~/me/elixir/lib/elixir/lib/{0}.ex'.format(*sys.argv[1].lower().split('.'))))""" $@
+}
