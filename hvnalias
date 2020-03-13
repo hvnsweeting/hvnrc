@@ -405,3 +405,17 @@ function exc() { # HELP: show Elixir code of given func
 # usage: exc Enum.reduce
     python3 -c """import sys, os; print(os.system('grep -n -A10 \'^  def {1}\' ~/me/elixir/lib/elixir/lib/{0}.ex'.format(*sys.argv[1].lower().split('.'))))""" $@
 }
+
+function workon() { #HELP switch Python virtualenv:\nworkon [env]
+    if [ $# -eq 0 ]; then
+        for path in ~/.virtualenvs/*/; do
+            echo $(basename $path)
+        done
+    else
+        source ~/.virtualenvs/$1/bin/activate
+    fi
+}
+
+function hhelp() {
+    sed -n "s/^.*#HELP\\s//p;" ~/.hvnalias | sed "s/\\\n/\n\t/g;s/$/\n/"
+}
