@@ -22,10 +22,10 @@ alias myip='dig +short myip.opendns.com @208.67.222.222'
 alias myisp='curl ipinfo.io'
 
 if [ $(uname) == "Linux" ]; then
-  alias pn='ping -W3 -c2 8.8.8.8 || ping -W3 -c2 203.162.71.66 || echo "NO CONNECTION "'
+  alias pn='ping -W3 -c1 tuoitre.vn || ping -W3 -c2 8.8.8.8 || echo "NO CONNECTION "'
 else
   # OSX -t means timeout
-  alias pn='ping -t3 -c2 8.8.8.8 || ping -t3 -c2 203.162.71.66 || echo "NO CONNECTION "'
+  alias pn='ping -t3 -c2 tuoitre.vn || ping -t3 -c2 8.8.8.8 || echo "NO CONNECTION "'
 fi
 alias expose='lsof -i -s TCP:LISTEN -nP | egrep -v "127.0.0.1|::1"'
 
@@ -419,3 +419,5 @@ function workon() { #HELP switch Python virtualenv:\nworkon [env]
 function hhelp() {
     sed -n "s/^.*#HELP\\s//p;" ~/.hvnalias | sed "s/\\\n/\n\t/g;s/$/\n/"
 }
+
+alias exi='cd ~/me/explay; iex -S mix'
