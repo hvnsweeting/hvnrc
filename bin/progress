@@ -34,13 +34,8 @@ while True:
         real_path = os.path.realpath(os.path.join(proc, f))
         if os.path.isfile(real_path):
             stat = os.stat(real_path)
-            size = (
-                "{} MB".format(stat.st_size // ONE_MB_IN_BYTES)
-                if stat.st_size >= ONE_MB_IN_BYTES
-                else "{} KB".format(stat.st_size // 1024)
-            )
             ctime = time.strftime("%H:%M:%S", time.gmtime(stat.st_ctime))
-            print("{:>10} {:>10} {}".format(size, ctime, real_path))
+            print("{:>10,} {:>10} {}".format(stat.st_size, ctime, real_path))
 
     time.sleep(sleep)
     print()
