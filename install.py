@@ -73,3 +73,7 @@ for src in src_dst:
                 logger.debug("%s dir exists", contain_dir)
         logger.info("Creating symlink %s ------> %s", dest, source)
         os.symlink(source, os.path.join(home, dest))
+
+with open(os.path.expanduser("~/.ugly_aliases"), "a") as f:
+    here=os.path.dirname(os.path.abspath(__file__))
+    f.write("export PATH={}/bin:$PATH".format(here))

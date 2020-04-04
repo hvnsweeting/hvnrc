@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""
+Watch changes of regular files opened by given PID[s]
+
+Often used to watch file download progress.
+
+Usage:
+
+$ python progress.py 975
+   1767 MB   06:27:58 /home/hvn/Videos/foo/1910_11_2.MOV
+     48 KB   05:54:06 /home/hvn/Videos/foo/wget-log
+
+   1769 MB   06:28:00 /home/hvn/Videos/foo/1910_11_2.MOV
+     48 KB   05:54:06 /home/hvn/Videos/foo/wget-log
+
+Work on Linux with /proc only.
+"""
+
+import os
+import sys
+import time
+
+pid = sys.argv[1]
+sleep = float(sys.argv[2]) if len(sys.argv) > 2 else 2.0
+
+
+ONE_MB_IN_BYTES = 1024 * 1024
+
+proc = os.path.join("/proc", pid, "fd")
+while True:
+    for f in os.listdir(proc):
+        real_path = os.path.realpath(os.path.join(proc, f))
+        if os.path.isfile(real_path):
+            stat = os.stat(real_path)
+            size = (
+                "{} MB".format(stat.st_size // ONE_MB_IN_BYTES)
+                if stat.st_size >= ONE_MB_IN_BYTES
+                else "{} KB".format(stat.st_size // 1024)
+            )
+            ctime = time.strftime("%H:%M:%S", time.gmtime(stat.st_ctime))
+            print("{:>10} {:>10} {}".format(size, ctime, real_path))
+
+    time.sleep(sleep)
+    print()
