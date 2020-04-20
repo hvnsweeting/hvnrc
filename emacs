@@ -1,6 +1,7 @@
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (require 'package)
 
+(load-theme 'tango-dark t)
 ;; (add-to-list 'package-archives
 ;;       '("melpa" . "http://melpa.org/packages/") t)
 (setq package-archives '(("gnu" . "https://elpa.gnu.org/packages/")
@@ -28,7 +29,6 @@
 
 (setq inhibit-startup-message t) ;; hide the startup message
 ;; (load-theme 'material t) ;; load material theme
-(load-theme 'material t)
 (global-linum-mode t) ;; enable line numbers globally
 
 ;; PYTHON CONFIGURATION
