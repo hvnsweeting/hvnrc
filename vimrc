@@ -157,6 +157,7 @@ nmap <Leader>gf :Git fetch --all --prune -v<CR>
 nmap <Leader>gr :Git rebase -i origin/
 
 nmap <Leader>mk :!make<CR>
+nmap <Leader>mkt :!make test<CR>
 
 
 " TODO Toggle
@@ -194,7 +195,7 @@ autocmd FileType go nmap <Leader>m Gipackage main<CR><CR>import (<CR>"log"<CR>)<
 " elixir
 autocmd FileType elixir nmap <Leader>r :!elixir %<CR>
 autocmd FileType elixir nmap <Leader>t :!mix test --no-color<CR>
-" autocmd FileType elixir nmap <Leader>tu :!mix test --trace --no-color %:TODO add line number under cursor here<CR>
+autocmd FileType elixir nmap <Leader>tl :execute '!mix test --trace --no-color ' . expand('%:p') . ':' . line('.')<CR>
 autocmd FileType elixir nmap <Leader>tc :!mix test --trace --no-color %<CR>
 autocmd FileType elixir nmap <Leader>tt :!mix test --trace --no-color<CR>
 " Haskell
@@ -246,7 +247,6 @@ endfunction
 
 autocmd BufWritePost *.py call flake8#Flake8()
 
-set laststatus=2
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ CWD:\ %r%{CurDir()}%h\ \ \ Line:\ %l/%L\ %{fugitive#statusline()}\ FLAKE:%{HasFlake()}
 
 
