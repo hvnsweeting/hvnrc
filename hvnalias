@@ -421,3 +421,39 @@ function hhelp() {
 }
 
 alias exi='cd ~/me/explay; iex -S mix'
+
+function t3m_create_session() {
+    tmux new-session -d -s w3m w3m https://duckduckgo.com/lite/
+}
+
+### SImple implement of t3m: tmux + w3m
+function t3mt() {
+    name=$(echo "$1" | python3 -c '
+import urllib.parse as up;
+import sys;
+site = sys.stdin.read().strip()
+if not site.startswith("http"):
+    site = "http://{}".format(site)
+print(up.urlparse(site).netloc)'
+    )
+    tmux neww -k -t w3m -n "$name" w3m "$1"
+    echo "Opened  $name in session w3m"
+}
+
+function t3m() {
+  if [ -z "$1" ] ; then
+    t3m_create_session || tmux attach -t w3m
+    tmux bind -n M-0 select-window -t 0
+    tmux bind -n M-1 select-window -t 1
+    tmux bind -n M-2 select-window -t 2
+    tmux bind -n M-3 select-window -t 3
+    tmux bind -n M-4 select-window -t 4
+    tmux bind -n M-5 select-window -t 5
+    tmux bind -n M-6 select-window -t 6
+    tmux bind -n M-7 select-window -t 7
+    tmux bind -n M-8 select-window -t 8
+    tmux bind -n M-9 select-window -t 9
+  else
+    t3mt "$1"
+  fi
+}
