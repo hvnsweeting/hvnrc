@@ -75,6 +75,8 @@ Plug 'reasonml-editor/vim-reason-plus'
 " Broken Plug 'MarcWeber/vim-addon-nix'
 Plug 'LnL7/vim-nix'
 
+Plug 'https://github.com/zah/nim.vim'
+
 " nice to have
 "Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
 
@@ -123,6 +125,7 @@ nnoremap k gk
 nmap gc :cd %:h<CR>
 
 
+nmap <Leader>l :set background=light<CR>
 nmap <Leader>ag :grep
 nmap <Leader>rg :vimgrep! // %
 " Pattern /^\./ to search all CSS class in current CSS file
@@ -208,6 +211,12 @@ autocmd FileType ocaml nmap <Leader>rr :!ocaml %
 " Chicken scheme
 autocmd FileType scheme nmap <Leader>b :!csc %:p<CR>
 autocmd FileType scheme nmap <Leader>r :!csc %:p && ./%:r<CR>
+
+" Nim
+autocmd FileType nim nmap <Leader>r :!nim c -r %:p<CR>
+autocmd FileType nim nmap <Leader>rs :!nim c -d:ssl -r %:p<CR>
+autocmd FileType nim nmap <Leader>rp :!nim c -d:ssl --threads:on -r %:p<CR>
+autocmd FileType nim nmap <Leader>rr :!nim c -d:ssl -r %:p
 
 " Rust
 let g:rustfmt_autosave = 1
