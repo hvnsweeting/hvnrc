@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+code="
+(import yaml sys)
+(import [pprint [pprint]])
+(setv *input* (yaml.safe_load sys.stdin))
+$1
+"
+
+echo "Code"
+echo "$code"
+echo ==========
+
+# --spy only work in REPL mode, thus write out the code above for debugging
+hy -c "$code"
