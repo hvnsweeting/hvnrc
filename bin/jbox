@@ -5,6 +5,7 @@
 # even a browser then play with data in JS console
 # usage: curl -qL https://api.github.com/repos/awesome-jobs/vietnam/issues | jbox
 
+import argparse
 import json
 import tempfile
 import sys
@@ -38,39 +39,92 @@ def is_json(text):
         return False
 
 
-_, fn = tempfile.mkstemp()
-json_path = fn + ".json"
-with open(fn, "wt") as f, open(json_path, "wt") as jsonf:
-    data = sys.stdin.read()
-    if is_json(data):
-        jsonf.write(data)
-        f.write(
-            HTML.replace("JSONPATH", json_path).replace("__JSONDATA__", data)
-        )
+def process():
+    _, fn = tempfile.mkstemp()
+    json_path = fn + ".json"
+    with open(fn, "wt") as f, open(json_path, "wt") as jsonf:
+        data = sys.stdin.read()
+        if is_json(data):
+            jsonf.write(data)
+            f.write(
+                HTML.replace("JSONPATH", json_path).replace(
+                    "__JSONDATA__", data
+                )
+            )
+        else:
+            # try yaml
+            import yaml
+
+            try:
+                data = json.dumps(yaml.safe_load(data))
+            except Exception as e:
+                print("Not a JSON/YAML file, got error", e)
+                print("See content at ", json_path)
+                jsonf.write(data)
+                exit(1)
+
+            jsonf.write(data)
+            f.write(
+                HTML.replace("JSONPATH", json_path).replace(
+                    "__JSONDATA__", data
+                )
+            )
+    print("Wrote", fn)
+    return fn
+
+
+PYTHON_PRELOAD = """
+from pprint import pprint
+from itertools import *
+from functools import *
+from operator import *
+
+import json
+data = json.load(open("JSONPATH"))
+print("=" * 40, "WELCOME TO JBOX")
+print("Access the data via name data")
+if isinstance(data, list):
+    if not data:
+        print("Empty list")
     else:
-        # try yaml
-        import yaml
+        print("data is a list, with length {}, first elem of type {}".format(len(data), type(data[0])))
+elif isinstance(data, dict):
+    print("data is a dict, with keys: {}".format(list(data.keys())))
+"""
+
+
+def main():
+    argp = argparse.ArgumentParser()
+    argp.add_argument(
+        "-w",
+        "--webbrowser",
+        action="store_true",
+        help="View data using browser feature, access via JS console",
+    )
+    args = argp.parse_args()
+    if args.webbrowser:
+        fn = process()
 
         try:
-            data = json.dumps(yaml.safe_load(data))
-        except Exception as e:
-            print("Not a JSON/YAML file, got error", e)
-            print("See content at ", json_path)
-            jsonf.write(data)
-            exit(1)
+            # try with option to open dev console
+            subprocess.run(["firefox", "--devtools", fn])
+        except Exception:
+            import webbrowser
 
-        jsonf.write(data)
-        f.write(
-            HTML.replace("JSONPATH", json_path).replace("__JSONDATA__", data)
+            webbrowser.open_new_tab(fn)
+
+    else:
+        fn = process()
+
+        with open("/tmp/jbox.py", "wt") as f:
+            f.write(PYTHON_PRELOAD.replace("JSONPATH", fn + ".json"))
+
+        # TODO detect terminal in use
+        # TODO run as shell exec instead of subprocess
+        subprocess.run(
+            ["gnome-terminal", "--", "ipython", "-i", "/tmp/jbox.py"]
         )
 
 
-print("Wrote", fn)
-
-try:
-    # try with option to open dev console
-    subprocess.run(["firefox", "--devtools", fn])
-except Exception:
-    import webbrowser
-
-    webbrowser.open_new_tab(fn)
+if __name__ == "__main__":
+    main()
