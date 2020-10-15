@@ -10,6 +10,7 @@ import json
 import tempfile
 import sys
 import subprocess
+import webbrowser
 
 HTML = """
 <html lang="en">
@@ -93,6 +94,14 @@ elif isinstance(data, dict):
 """
 
 
+def open_in_webbrowser(fn):
+    try:
+        # try with option to open dev console
+        subprocess.run(["firefox", "--devtools", fn])
+    except Exception:
+        webbrowser.open_new_tab(fn)
+
+
 def main():
     argp = argparse.ArgumentParser()
     argp.add_argument(
@@ -104,14 +113,7 @@ def main():
     args = argp.parse_args()
     if args.webbrowser:
         fn = process()
-
-        try:
-            # try with option to open dev console
-            subprocess.run(["firefox", "--devtools", fn])
-        except Exception:
-            import webbrowser
-
-            webbrowser.open_new_tab(fn)
+        open_in_webbrowser(fn)
 
     else:
         fn = process()
@@ -121,9 +123,13 @@ def main():
 
         # TODO detect terminal in use
         # TODO run as shell exec instead of subprocess
-        subprocess.run(
-            ["gnome-terminal", "--", "ipython", "-i", "/tmp/jbox.py"]
-        )
+        cmd = ["xgnome-terminal", "--", "ipython", "-i", "/tmp/jbox.py"]
+        try:
+            subprocess.run(cmd)
+        except Exception as e:
+            print("Cannot open terminal: {}, Error: {}".format(cmd, e))
+            print("fall-back to webbrowser.")
+            open_in_webbrowser(fn)
 
 
 if __name__ == "__main__":
