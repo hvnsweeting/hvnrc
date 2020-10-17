@@ -3,6 +3,7 @@
 # a tool that take input json/yaml and open an interactive REPL tool for user to explore
 # User can choose what tool they want
 # even a browser then play with data in JS console
+# TODO: allow use other langs REPL: elixir/erl/bb/clj/node
 # usage: curl -qL https://api.github.com/repos/awesome-jobs/vietnam/issues | jbox
 
 import argparse
@@ -18,14 +19,14 @@ HTML = """
     <meta charset="utf-8">
   </head>
   <body style="background: gray; color: white">
-    <h1>Redirecting to JSON file in 3 seconds...</h1>
+    <h1><a href="file://JSONPATH">View file</a></h1>
     <h1>Open web console and access `data` to continue</h1>
     <div id="app"></div>
     <script>
     var app = document.getElementById("app");
     var data = __JSONDATA__;
-    //app.innerHTML = JSON.stringify(data);
-    window.setTimeout(function(){ window.location = "file://JSONPATH"; },3000)
+    app.innerHTML = JSON.stringify(data);
+    // window.setTimeout(function(){ window.location = "file://JSONPATH"; },3000)
     </script>
   </body>
 </html>
@@ -82,7 +83,7 @@ from operator import *
 
 import json
 data = json.load(open("JSONPATH"))
-print("=" * 40, "WELCOME TO JBOX")
+print("{0} {1} {0}".format("=" * 10, "WELCOME TO JEX"))
 print("Access the data via name data")
 if isinstance(data, list):
     if not data:
@@ -94,10 +95,24 @@ elif isinstance(data, dict):
 """
 
 
+HYLANG_PRELOAD = """
+(import json)
+(setv data (json.load (open "JSONPATH")))
+(print (.format "{0} {1} {0}" (* "=" 10) "WELCOME TO JEX"))
+(print "Access the data via name data")
+
+(if (isinstance data list)
+  (do
+  (if-not data
+    (print "Empty list")
+    (print (.format "data is a list, with length {}, first elem of type {}" (len data) (type (first data)))))))
+"""
+
+
 def open_in_webbrowser(fn):
     try:
         # try with option to open dev console
-        subprocess.run(["firefox", "--devtools", fn])
+        subprocess.run(["firefox", "--devtools", "file://" + fn])
     except Exception:
         webbrowser.open_new_tab(fn)
 
@@ -110,6 +125,11 @@ def main():
         action="store_true",
         help="View data using browser feature, access via JS console",
     )
+    argp.add_argument(
+        "--repl",
+        help="TODO, would need preconvert data to each lang",
+        choices=["hy"],
+    )
     args = argp.parse_args()
     if args.webbrowser:
         fn = process()
@@ -118,14 +138,25 @@ def main():
     else:
         fn = process()
 
-        with open("/tmp/jbox.py", "wt") as f:
-            f.write(PYTHON_PRELOAD.replace("JSONPATH", fn + ".json"))
+        if args.repl == "hy":
+            with open("/tmp/jbox.hy", "wt") as f:
+                f.write(HYLANG_PRELOAD.replace("JSONPATH", fn + ".json"))
+            cmd = ["gnome-terminal", "--", "hy", "-i", "/tmp/jbox.hy"]
+        else:
+            with open("/tmp/jbox.py", "wt") as f:
+                f.write(PYTHON_PRELOAD.replace("JSONPATH", fn + ".json"))
+            cmd = [
+                "gnome-terminal",
+                "--",
+                sys.executable,
+                "-i",
+                "/tmp/jbox.py",
+            ]
 
         # TODO detect terminal in use
         # TODO run as shell exec instead of subprocess
-        cmd = ["xgnome-terminal", "--", "ipython", "-i", "/tmp/jbox.py"]
         try:
-            subprocess.run(cmd)
+            subprocess.call(cmd)
         except Exception as e:
             print("Cannot open terminal: {}, Error: {}".format(cmd, e))
             print("fall-back to webbrowser.")
