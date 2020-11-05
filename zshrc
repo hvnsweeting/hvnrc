@@ -35,10 +35,14 @@ zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 
+function git_branch(){
+    # it will complain if cwd not a git repo, 2> it
+    echo $(git symbolic-ref --short --quiet HEAD 2>/dev/null | cut -d"/" -f 3-)
+}
 #color
 autoload -U colors && colors
 PROMPT="%{$fg[red]%}%n%{$reset_color%}@%{$fg[blue]%}%m:%{$fg[yellow]%}%d%{$reset_color%}%#"
-RPROMPT="[%{$fg[yellow]%}%?%{$reset_color%}]" 
+RPROMPT="[%{$fg[yellow]%}%?%{$reset_color%}]"
 
 # some more ls aliases
 alias ll='ls -alF'
@@ -57,54 +61,30 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 if [ -f ~/.bash_aliases ]; then
 	. ~/.bash_aliases
 fi
+if [ -f ~/.hvnalias ]; then
+    . ~/.hvnalias
+fi
 
-export JAVA_HOME=/home/famihug/Apps/jdk1.6.0_21/
-export PATH=$PATH:/home/famihug/Apps/jdk1.6.0_21/bin:~/Apps/android-sdk-linux/platform-tools:/home/famihug/Apps/apache-maven-3.0.3/bin:
-# Below command use when use junit
-#export CLASSPATH=$CLASSPATH:/media/Dale/Dropbox/DIC/javahvn/:~/Apps/mysql-connector-java-3.0.17-ga/mysql-connector-java-3.0.17-ga-bin.jar:
-# export CLASSPATH=~/Apps/junit4.8.1/junit-4.8.1.jar:~/Apps/junit4.8.1/:~/Dropbox/DIC/javahvn/:
+export EDITOR='vi -u NONE'  # this mostly for edit git commit, open a full vim would be slow
 
-alias cdd='cd /media/Dale/Dropbox/'
-alias padoff='sudo modprobe -r psmouse'
-alias padon='sudo modprobe psmouse'
-alias cb='~/bin/bat.sh'
-alias repo='cd /media/Dale/Repository/; ls'
-alias startlampp='sudo service mysql stop && sudo /opt/lampp/lampp start'
-alias stoplampp='sudo /opt/lampp/lampp stop'
-alias cdp='cd /opt/lampp/htdocs/'
-alias tat='sudo shutdown -h now'
-alias ff4='~/Apps/firefox/firefox &'
-alias junit='java org.junit.runner.JUnitCore'
-alias new='find ~/Dropbox/ -mtime -2'
-alias new2='find /media/Dale/SavedHTML/ -name *.htm* -mtime -2'
-alias lx='lynx /media/Dale/SavedHTML/'
-alias jlab='cd /media/Dale/Dropbox/DIC/javahvn/'
-alias ecl='~/Apps/eclipse/eclipse'
-alias ws1='~/bin/ws1.sh'
-alias ws='sudo service network-manager start; sudo modprobe psmouse' alias cm='tail /var/mail/famihug'
-alias cdg='cd ~/Github/FAMILUG; ls'
-alias clc='clear'
-alias cdD='cd /media/Dale; ls'
-alias zf='/opt/lampp/htdocs/zf/zf1.11.11/bin/zf.sh'
-alias argouml='java -jar ~/Apps/argouml-0.34/argouml.jar &'
-alias jedit='~/Apps/jEdit/jedit.jar &'
-alias grepc='grep --color=always'
-alias clj='java -cp ~/Apps/clojure-1.4.0/clojure-1.4.0.jar clojure.main'
-alias sublime='/home/famihug/Apps/SublimeText2/sublime_text'
-alias msql='sudo /opt/lampp/bin/mysql'
-alias adbes='adb -s emulator-5554 shell'
-alias adbue='adb -s emulator-5554 uninstall'
-alias cdu="cd .."
-alias startavd='Apps/android-sdk-linux/tools/emulator -avd Test2'
-alias kqxs='python ~/bin/leecher.py && cat ~/bin/kq.txt'
-alias cdw="cd ~/workspace/"
+# bash auto check for local email each 60s
+export MAILCHECK=60
 
-#var
-apsx="com.aps."
-head ~/.remember
+# Only source on OSX, on Ubuntu, profile source bashrc
+if [ $(uname) != "Linux" ]; then
+  source ~/.profile
+fi
 
-#Todo.txt
-PATH=$PATH:~/Apps/todo.txt_cli-2.9/
-export TODOTXT_DEFAULT_ACTION=ls
-alias t='todo.sh -d ~/Apps/todo.txt_cli-2/todo.cfg'
-alias py='python2.7'
+PATH=$GOPATH/bin/:$PATH
+PATH="$HOME/.cargo/bin:$PATH"
+
+if [ -e ~/.motd ]; then
+  cat -ne ~/.motd
+else
+  echo "Missing ~/.motd, creating new one"
+  touch ~/.motd
+fi
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
+. /home/hvn/.opam/opam-init/init.sh > /dev/null 2> /dev/null || true
