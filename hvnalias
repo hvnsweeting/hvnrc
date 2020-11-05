@@ -21,7 +21,7 @@ alias black='black -l79'
 alias myip='dig +short myip.opendns.com @208.67.222.222'
 alias myisp='curl ipinfo.io'
 
-if [ $(uname) == "Linux" ]; then
+if [ $(uname) = "Linux" ]; then
   alias pn='ping -W3 -c1 tuoitre.vn || ping -W3 -c2 8.8.8.8 || echo "NO CONNECTION "'
 else
   # OSX -t means timeout
@@ -427,21 +427,8 @@ function t3m_create_session() {
 }
 
 ### SImple implement of t3m: tmux + w3m
-function t3mt() {
-    name=$(echo "$1" | python3 -c '
-import urllib.parse as up;
-import sys;
-site = sys.stdin.read().strip()
-if not site.startswith("http"):
-    site = "http://{}".format(site)
-print(up.urlparse(site).netloc)'
-    )
-    tmux neww -k -t w3m -n "$name" w3m "$1"
-    echo "Opened  $name in session w3m"
-}
-
 function t3m() {
-  if [ -z "$1" ] ; then
+  if [ -z $1 ] ; then
     t3m_create_session || tmux attach -t w3m
     tmux bind -n M-0 select-window -t 0
     tmux bind -n M-1 select-window -t 1
@@ -453,7 +440,28 @@ function t3m() {
     tmux bind -n M-7 select-window -t 7
     tmux bind -n M-8 select-window -t 8
     tmux bind -n M-9 select-window -t 9
-  else
-    t3mt "$1"
   fi
 }
+
+function t3mt() {
+    # TODO set name to site name
+    # TODO get number of current window and add to next
+    set -x
+    name=$(echo $1 | python3 -c 'import urllib.parse as up; import sys; print(up.urlparse(sys.stdin.read().strip()).netloc)')
+    set +x
+    tmux neww -k -t w3m -n $name w3m $1
+    echo "Opened  $name in session w3m"
+}
+
+nimdoc() {
+  if [ -z $2 ]; then
+    grep -Ri --include '*.nim' --exclude-dir 'tests/' "$1" /usr/local/nim-1.2.0/
+  else
+    grep -Ri --include "$2.nim" --exclude-dir 'tests/' "$1" /usr/local/nim-1.2.0/
+  fi
+#rg --glob '*.nim' -i newasynchttp /usr/local/nim-1.2.0/
+
+}
+
+alias sp='systemctl suspend'
+alias hn='/home/hvn/py3/bin/python /home/hvn/me/pyfml/exercises/ex9/hnsotw.py'
