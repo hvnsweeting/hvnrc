@@ -1,7 +1,6 @@
-# Set up the prompt
-
 #autoload -Uz promptinit
 #promptinit
+#prompt redhat
 
 setopt histignorealldups sharehistory
 
@@ -17,11 +16,12 @@ HISTFILE=~/.zsh_history
 autoload -Uz compinit
 compinit
 
+export CLICOLOR=YES
 zstyle ':completion:*' auto-description 'specify: %d'
 zstyle ':completion:*' completer _expand _complete _correct _approximate
 zstyle ':completion:*' format 'Completing %d'
 zstyle ':completion:*' group-name ''
-zstyle ':completion:*' menu select=2 eval "$(dircolors -b)"
+#zstyle ':completion:*' menu select=2 eval "$(dircolors -b)"
 zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-prompt %SAt %p: Hit TAB for more, or the character to insert%s
@@ -41,7 +41,9 @@ function git_branch(){
 }
 #color
 autoload -U colors && colors
-PROMPT="%{$fg[red]%}%n%{$reset_color%}@%{$fg[blue]%}%m:%{$fg[yellow]%}%d%{$reset_color%}%#"
+
+# prompt -s redhat ->>>  [%n@%m %1~]%(#.#.$)
+PROMPT="%{$fg[red]%}%n%{$reset_color%}@%{$fg[blue]%}%m:%{$fg[yellow]%}%1~%{$reset_color%}%(#.#.$) "
 RPROMPT="[%{$fg[yellow]%}%?%{$reset_color%}]"
 
 # some more ls aliases
