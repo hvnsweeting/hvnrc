@@ -35,7 +35,7 @@ autoload -U colors && colors
 
 function git_branch(){
     # it will complain if cwd not a git repo, 2> it
-    ref=$(git symbolic-ref --short --quiet HEAD 2>/dev/null | tr -d " ")
+    ref=$(git symbolic-ref --short --quiet HEAD 2>/dev/null)
     if [ -n "${ref}" ]; then
         echo "(""$ref"")"
     fi
