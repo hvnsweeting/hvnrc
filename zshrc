@@ -1,7 +1,3 @@
-#autoload -Uz promptinit
-#promptinit
-#prompt redhat
-
 setopt histignorealldups sharehistory
 
 # Use emacs keybindings even if our EDITOR is set to vi
@@ -34,17 +30,21 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
-
-function git_branch(){
-    # it will complain if cwd not a git repo, 2> it
-    echo $(git symbolic-ref --short --quiet HEAD 2>/dev/null | cut -d"/" -f 3-)
-}
 #color
 autoload -U colors && colors
 
-# prompt -s redhat ->>>  [%n@%m %1~]%(#.#.$)
-PROMPT="%{$fg[red]%}%n%{$reset_color%}@%{$fg[blue]%}%m:%{$fg[yellow]%}%1~%{$reset_color%}%(#.#.$) "
-RPROMPT="[%{$fg[yellow]%}%?%{$reset_color%}]"
+function git_branch(){
+    # it will complain if cwd not a git repo, 2> it
+    ref=$(git symbolic-ref --short --quiet HEAD 2>/dev/null | tr -d " ")
+    if [ -n "${ref}" ]; then
+        echo "(""$ref"")"
+    fi
+}
+
+setopt PROMPT_SUBST
+## prompt -s redhat ->>>  [%n@%m %1~]%(#.#.$)
+PROMPT='%{$fg[red]%}%n%{$reset_color%}@%{$fg[blue]%}%m:%{$fg[yellow]%}%1~%{$reset_color%} %{%F{green}%}$(git_branch)%{%F{none}%}$ '
+RPROMPT='[%{$fg[yellow]%}%?%{$reset_color%}]'
 
 # some more ls aliases
 alias ll='ls -alF'
