@@ -49,7 +49,7 @@ Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 " Using a non-master branch
 " Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
 " Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
-Plug 'fatih/vim-go', { 'tag': '*' }
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 " Plugin outside ~/.vim/plugged with post-update hook
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Unmanaged plugin (manually installed and updated)
@@ -58,6 +58,8 @@ Plug 'fatih/vim-go', { 'tag': '*' }
 "
 "
 "Plug 'Valloric/YouCompleteMe'
+
+Plug 'https://github.com/davidhalter/jedi-vim.git'
 
 Plug 'https://github.com/ctrlpvim/ctrlp.vim.git'
 Plug 'https://github.com/ElmCast/elm-vim.git'
@@ -177,7 +179,7 @@ autocmd FileType python nmap <Leader>r :!python %<CR>
 autocmd FileType python nmap <Leader># ggO#!/usr/bin/env python<CR># -*- coding: utf-8 -*-<Esc>o
 autocmd FileType python nmap <Leader>m Giif __name__ == "__main__":<CR>
 autocmd FileType python nmap <Leader>fmt :!~/py3/bin/black -l79 %<CR>
-autocmd FileType python set omnifunc=pythoncomplete#Complete
+"autocmd FileType python set omnifunc=pythoncomplete#Complete
 
 " Shell
 autocmd FileType sh nmap <Leader>r :!bash %<CR>
