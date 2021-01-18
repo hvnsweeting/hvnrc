@@ -285,9 +285,6 @@ dimk () {
     echo $(cat /sys/class/backlight/intel_backlight/brightness) + 100 | bc | sudo tee /sys/class/backlight/intel_backlight/brightness
 }
 
-## always know how many mem that a script uses.
-alias python='/usr/bin/time python'
-
 ## w3m browser
 alias whn='w3m https://news.ycombinator.com/'
 alias wddg='w3m https://duckduckgo.com'
