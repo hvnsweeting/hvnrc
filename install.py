@@ -19,7 +19,7 @@ src_dst = {
     "tmux.conf": ".tmux.conf",
     "inputrc": ".inputrc",
     "py2req.txt": ".py2req.txt",
-    "i3config": ".i3/config",
+    "i3config": ".config/i3/config",
     "mutt/imaprc": ".mutt/imaprc",
     "mutt/baserc": ".mutt/baserc",
     "mutt/pgprc": ".mutt/pgprc",
