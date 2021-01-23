@@ -11,7 +11,7 @@ alias irc='irssi --connect irc.freenode.net --nick hvn'
 alias lstd='cat ~/.TODO.rst'
 alias dols='doctl compute droplet list'
 alias vitd='vim ~/.TODO.rst'
-function addtd () {
+addtd () {
     echo "- $@" >> ~/.motd
 }
 # python tool
@@ -30,7 +30,7 @@ fi
 alias expose='lsof -i -s TCP:LISTEN -nP | egrep -v "127.0.0.1|::1"'
 
 # get all syslog messages in a range of HH:MM -> HH:MM
-function logrange() {
+logrange() {
   start_hhmm=$1
   end_hhmm=$2
   syslogfile=$3
@@ -38,28 +38,28 @@ function logrange() {
 }
 
 # slog greps given PATTERN in SERVER syslog file
-function slog() {
+slog() {
     PATTERN=$1
     SERVER=$2
     ssh $SERVER "grep -in '$PATTERN' /var/log/syslog"
 }
 
-function tgrep () {
+tgrep () {
   GREP=$1
   FILETYPE=$2
   find . -name "*.$FILETYPE" | xargs grep -Rn "${GREP}"
 }
 
-function tgrepl () {
+tgrepl () {
   GREP=$1
   FILETYPE=$2
   find . -name "*.$FILETYPE" | xargs grep -l "${GREP}"
 }
 
-function grepsalt() {
+grepsalt() {
     grep -v -E ' Missing key|salt.loader \(loader\.gen_functions|OrderedDict|Executing state|salt\.loaded\.int\.render\.yaml|Completed state' "$1" | less -N
 }
-function saltabsent() {
+saltabsent() {
     find $1 -name 'absent.sls' -type f | sed -e 's://:/:g' -e 's:/:.:g' -e 's:.sls::g' | xargs printf '%s,'; echo
 }
 
@@ -84,7 +84,7 @@ alias pts='/Users/hvn/FOSS/pytimesheet/storage.py'
 
 # ssh
 alias sshr='ssh-keygen -R'
-function sshroot () {
+sshroot () {
     ssh -v root@$1
 }
 
@@ -129,7 +129,7 @@ alias scdoc="cd $SCROOT; time ./doc/build.py"
 
 # common developer tools
 # find the most common used Python vars
-function pyvars () {
+pyvars () {
     find $1 -name '*.py' | xargs grep ' = ' | cut -f1 -d'=' | tr -d ' ' | cut -f2 -d':' | sort -nr | uniq -c| sort -nr| head -n30
 }
 
@@ -226,52 +226,19 @@ ldir () {
     git diff $1 --stat | grep -v insertions | cut -d'/' -f1 | uniq | xargs
 }
 
-mirror () {
-    url=$1
-    if [ -z $2 ]; then
-        expected_fn=$(basename $1)
-    else
-        expected_fn=$2
-    fi
-    if [ ! -e $url ]; then
-        # it's a url
-        fn=$expected_fn
-        set -x
-        python2 -c "import urllib; print urllib.urlretrieve('"$url"', '"$fn"')"
-        set +x
-    else
-        fn=$url
-    fi
-
-    if [ -z $ARCHIVE_SERVER ]; then
-        echo -n 'server: '; read server
-        echo -n 'dir: '; read destdir
-    else
-        arrIN=(${ARCHIVE_SERVER//:/ })
-        server=${arrIN[0]}
-        destdir=${arrIN[1]}
-    fi
-    scp -v -P22022 $fn salt_archive@${server}:incoming/${destdir}/$expected_fn
-}
-
-saltrender () {
-    py2
-    salt-call --local -c /Users/hvn/FOSS/salt/conf/local  cp.get_template salt://$1 /tmp/salt_render && less /tmp/salt_render
-    rm -f /tmp/salt_render
-}
 
 # GOWS set to where my Golang code locate
 alias vimgo='vim --cmd "cd $GOWS"'
 alias vimsalt="vim --cmd 'cd ~/salt'"
 
 # PulseAudio
-function vols () {
+vols () {
     pactl list sinks  | grep 'Volume:.*front' | tail -n1 | grep -E '[0-9]+%' -o | head -n1
 }
-function volj () {
+volj () {
     pactl set-sink-volume 1 -10%; vols
 }
-function volk () {
+volk () {
     pactl set-sink-volume 1 +10%; vols
 }
 alias volm='pactl set-sink-volume 1 0%'
@@ -296,10 +263,10 @@ alias netbsd='/usr/lib/virtualbox/VBoxHeadless --comment netbsd --startvm 81f6c6
 alias mkansible='mkdir -p roles/$(basename `pwd`)/{files/,templates/,tasks/,handlers/,vars/,defaults/,meta/}'
 
 ## bright
-function getdim() {
+getdim() {
     cat /sys/class/backlight/intel_backlight/brightness
 }
-function setdim() {
+setdim() {
     getdim
     echo "Enter dim value:"
     read value
@@ -310,10 +277,10 @@ alias dimm='echo 200 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimm='echo 200 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimn='echo 300 | sudo tee /sys/class/backlight/intel_backlight/brightness'
 alias dimin='echo 10 | sudo tee /sys/class/backlight/intel_backlight/brightness'
-function dimj () {
+dimj () {
     echo $(cat /sys/class/backlight/intel_backlight/brightness) - 100 | bc | sudo tee /sys/class/backlight/intel_backlight/brightness
 }
-function dimk () {
+dimk () {
     echo $(cat /sys/class/backlight/intel_backlight/brightness) + 100 | bc | sudo tee /sys/class/backlight/intel_backlight/brightness
 }
 
@@ -326,19 +293,19 @@ alias wddg='w3m https://duckduckgo.com'
 alias wdive='w3m file:///usr/share/doc/diveintopython3/html/index.html'
 
 ## dict and dictd
-function fr() {
+fr() {
   dict --database fd-fra-eng $1
 }
-function oman() {
+oman() {
     # open online manpage
     w3m "http://manpages.ubuntu.com/cgi-bin/search.py?q=$1&cx=003883529982892832976%3A5zl6o8w6f0s&cof=FORID%3A9&ie=UTF-8&siteurl=manpages.ubuntu.com/manpages/trusty/&ref=manpages.ubuntu.com/&ss=2238j2566274j3"
 }
-function ddg() {
+ddg() {
 
     w3m "https://duckduckgo.com/?q=$@&t=hf"
 }
 
-function godocweb() {
+godocweb() {
 # I dont use godoc CLI, so open web and read the doc
 # Use other port than default to not conflict if any other is running
   godoc -http=:16060 &
@@ -350,7 +317,7 @@ function godocweb() {
   fi
 }
 
-function pinggw() {
+pinggw() {
     set +x
     gateway=$(ip ro | grep default| cut -d ' ' -f3)
     ping -c 3 $gateway
@@ -358,12 +325,12 @@ function pinggw() {
     nmap -Pn $gateway
 }
 
-function loadrc() {
+loadrc() {
     source ~/.bashrc
 }
 
 # auto wrap chicken scheme interpreter
-function csi() {
+csi() {
     if command -v rlwrap ; then
         rlwrap csi
     else
@@ -372,12 +339,12 @@ function csi() {
 }
 
 # auto wrap dict output to a pager
-function dict() {
+dict() {
     env dict $1 | less
 }
 
 # ssh hostname instead of IP
-function sshh() {
+sshh() {
     hostip=$(echo "$1" | grep -o '\d.*' | sed 's/-/./g')
     echo "SSH to ${hostip} ..."
     shift
@@ -396,17 +363,17 @@ alias umanit='docker run -it hvnsweeting/uman'  # uman interactive
 
 alias iml='rlwrap ocaml'
 
-function cl() {
+cl() {
     echo $@ | xclip -sel c
 }
 
-function exc() { # HELP: show Elixir code of given func
+exc() { # HELP: show Elixir code of given func
 # because split string to array in bash is crazy https://stackoverflow.com/a/45201229/807703
 # usage: exc Enum.reduce
     python3 -c """import sys, os; print(os.system('grep -n -A10 \'^  def {1}\' ~/me/elixir/lib/elixir/lib/{0}.ex'.format(*sys.argv[1].lower().split('.'))))""" $@
 }
 
-function workon() { #HELP switch Python virtualenv:\nworkon [env]
+workon() { #HELP switch Python virtualenv:\nworkon [env]
     if [ $# -eq 0 ]; then
         for path in ~/.virtualenvs/*/; do
             echo $(basename $path)
@@ -416,18 +383,18 @@ function workon() { #HELP switch Python virtualenv:\nworkon [env]
     fi
 }
 
-function hhelp() {
+hhelp() {
     sed -n "s/^.*#HELP\\s//p;" ~/.hvnalias | sed "s/\\\n/\n\t/g;s/$/\n/"
 }
 
 alias exi='cd ~/me/explay; iex -S mix'
 
-function t3m_create_session() {
+t3m_create_session() {
     tmux new-session -d -s w3m w3m https://duckduckgo.com/lite/
 }
 
 ### SImple implement of t3m: tmux + w3m
-function t3m() {
+t3m() {
   if [ -z $1 ] ; then
     t3m_create_session || tmux attach -t w3m
     tmux bind -n M-0 select-window -t 0
@@ -443,7 +410,7 @@ function t3m() {
   fi
 }
 
-function t3mt() {
+t3mt() {
     # TODO set name to site name
     # TODO get number of current window and add to next
     set -x
