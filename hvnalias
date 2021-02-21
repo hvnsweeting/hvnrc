@@ -431,3 +431,10 @@ nimdoc() {
 
 alias sp='systemctl suspend'
 alias hn='/home/hvn/py3/bin/python /home/hvn/me/pyfml/exercises/ex9/hnsotw.py'
+
+vmmssh () {
+  vmname=$1
+  (vmctl status $vmname 2>&1 | grep -q running) || doas vmctl start $vmname
+  ip=$(vmctl status $vmname | grep $vmname | column -t | cut -d ' ' -f1)
+  ssh -v root@"100.64.${ip}.3"
+}
