@@ -21,12 +21,15 @@ alias black='black -l79'
 alias myip='dig +short myip.opendns.com @208.67.222.222'
 alias myisp='curl ipinfo.io'
 
-if [ $(uname) = "Linux" ]; then
-  alias pn='ping -W3 -c1 tuoitre.vn || ping -W3 -c2 8.8.8.8 || echo "NO CONNECTION "'
-else
-  # OSX -t means timeout
-  alias pn='ping -t3 -c2 tuoitre.vn || ping -t3 -c2 8.8.8.8 || echo "NO CONNECTION "'
-fi
+alias pn='nc -zvw2 tuoitre.vn 80 || nc -zvw2 8.8.8.8 53 || echo "NO CONNECTION"'
+
+#if [ $(uname) = "Linux" ]; then
+#  alias pn='ping -W3 -c1 tuoitre.vn || ping -W3 -c2 8.8.8.8 || echo "NO CONNECTION "'
+#else
+#  # OSX -t means timeout
+#  alias pn='ping -t3 -c2 tuoitre.vn || ping -t3 -c2 8.8.8.8 || echo "NO CONNECTION "'
+#
+#fi
 alias expose='lsof -i -s TCP:LISTEN -nP | egrep -v "127.0.0.1|::1"'
 
 # get all syslog messages in a range of HH:MM -> HH:MM
@@ -63,10 +66,8 @@ saltabsent() {
     find $1 -name 'absent.sls' -type f | sed -e 's://:/:g' -e 's:/:.:g' -e 's:.sls::g' | xargs printf '%s,'; echo
 }
 
-alias py2='source ~/dream/bin/activate'
-alias py3='source ~/python3/bin/activate'
-alias ipy='. ~/dream/bin/activate; cd ~/dream/code; ipython2'
-alias ipy3='. ~/python3/bin/activate; cd ~/python3/; ipython3'
+alias py3='. ~/py3/bin/activate'
+alias ipy3='. ~/py3/bin/activate; ipython3'
 
 SCROOT="~/salt/common"
 
@@ -326,7 +327,7 @@ pinggw() {
 }
 
 loadrc() {
-    source ~/.bashrc
+    . ~/.bashrc
 }
 
 # auto wrap chicken scheme interpreter
@@ -356,8 +357,6 @@ alias vimd="vim -c 'set bg=dark'"
 ## ansible
 alias ansiblel="ansible -i 'localhost,' localhost -c local"
 
-alias py3='. ~/py3/bin/activate'
-
 alias uman='docker run -it hvnsweeting/uman man'
 alias umanit='docker run -it hvnsweeting/uman'  # uman interactive
 
@@ -379,7 +378,7 @@ workon() { #HELP switch Python virtualenv:\nworkon [env]
             echo $(basename $path)
         done
     else
-        source ~/.virtualenvs/$1/bin/activate
+        . ~/.virtualenvs/$1/bin/activate
     fi
 }
 
