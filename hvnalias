@@ -21,7 +21,7 @@ alias black='black -l79'
 alias myip='dig +short myip.opendns.com @208.67.222.222'
 alias myisp='curl ipinfo.io'
 
-alias pn='nc -zvw2 tuoitre.vn 80 || nc -zvw2 8.8.8.8 53 || echo "NO CONNECTION"'
+alias pn='(nc -zw2 tuoitre.vn 80 || nc -zw2 8.8.8.8 53) && echo "Connected" || echo "NO CONNECTION"'
 
 #if [ $(uname) = "Linux" ]; then
 #  alias pn='ping -W3 -c1 tuoitre.vn || ping -W3 -c2 8.8.8.8 || echo "NO CONNECTION "'
