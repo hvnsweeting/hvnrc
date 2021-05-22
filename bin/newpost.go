@@ -1,3 +1,4 @@
+//usr/bin/env go run $0 $@ ; exit $?
 package main
 
 // Scripte generates new blog post with a random Unsplash image

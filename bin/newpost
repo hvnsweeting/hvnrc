@@ -1,6 +1,0 @@
-#!//usr/bin/env python3
-import os
-
-code = os.path.join(os.path.dirname(os.path.abspath(__file__)), "newpost.go")
-
-os.system("go run {}".format(code))
