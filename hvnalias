@@ -426,7 +426,7 @@ nimdoc() {
 
 }
 
-alias sp='systemctl suspend -i && i3lock'
+alias sp='systemctl suspend -i && i3lock -c E95420'
 alias logout='dm-tool switch-to-greeter'
 alias hn='/home/hvn/py3/bin/python /home/hvn/me/pyfml/exercises/ex9/hnsotw.py'
 
