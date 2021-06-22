@@ -116,6 +116,7 @@ if [ $(uname) != "Linux" ]; then
   source ~/.profile
 fi
 
+export GOPATH=$(go env GOPATH)
 PATH=$GOPATH/bin/:$PATH
 PATH="$HOME/.cargo/bin:$PATH"
 
