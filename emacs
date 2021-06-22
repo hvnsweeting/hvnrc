@@ -17,6 +17,9 @@
     evil
     flycheck
     material-theme
+    elixir-mode
+    alchemist
+    neotree
     py-autopep8))
 
 (mapc #'(lambda (package)
@@ -31,12 +34,19 @@
 ;; (load-theme 'material t) ;; load material theme
 (global-linum-mode t) ;; enable line numbers globally
 
+(require 'neotree)
+(global-set-key [f8] 'neotree-toggle)
+
+(require 'elixir-mode)
+(require 'alchemist)
+(neotree-toggle)
+
 ;; PYTHON CONFIGURATION
 ;; --------------------------------------
 
 (elpy-enable)
 ;; (elpy-use-ipython)
-(setq python-shell-interpreter "/home/hvn/py36/bin/ipython"
+(setq python-shell-interpreter "/home/hvn/py3/bin/ipython"
       python-shell-interpreter-args "-i --simple-prompt")
 
 ;; use flycheck not flymake with elpy
@@ -44,21 +54,20 @@
   (setq elpy-modules (delq 'elpy-module-flymake elpy-modules))
   (add-hook 'elpy-mode-hook 'flycheck-mode))
 
-(require 'alchemist)
 (add-hook 'after-init-hook 'global-company-mode)
 ;; enable autopep8 formatting on save
 (require 'py-autopep8)
 (add-hook 'elpy-mode-hook 'py-autopep8-enable-on-save)
-(pyvenv-activate "~/py36")
+(pyvenv-activate "~/py3")
 (require 'evil)
 (evil-mode 1)
 
-(projectile-mode +1)
-(define-key projectile-mode-map (kbd "s-,") 'projectile-command-map)
-(define-key projectile-mode-map [?\s-d] 'projectile-find-dir)
-(define-key projectile-mode-map [?\s-p] 'projectile-switch-project)
-(define-key projectile-mode-map [?\s-f] 'projectile-find-file)
-(define-key projectile-mode-map [?\s-g] 'projectile-grep)
+;;(projectile-mode +1)
+;;(define-key projectile-mode-map (kbd "s-,") 'projectile-command-map)
+;;(define-key projectile-mode-map [?\s-d] 'projectile-find-dir)
+;;(define-key projectile-mode-map [?\s-p] 'projectile-switch-project)
+;;(define-key projectile-mode-map [?\s-f] 'projectile-find-file)
+;;(define-key projectile-mode-map [?\s-g] 'projectile-grep)
 
 
 ;; init.el ends here
@@ -72,7 +81,7 @@
     ("732b807b0543855541743429c9979ebfb363e27ec91e82f463c91e68c772f6e3" "a24c5b3c12d147da6cef80938dca1223b7c7f70f2f382b26308eba014dc4833a" default)))
  '(package-selected-packages
    (quote
-    (alchemist rope-read-mode geiser ## evil py-autopep8 material-theme flycheck elpy ein better-defaults))))
+    (nim-mode neotree alchemist rope-read-mode geiser ## evil py-autopep8 material-theme flycheck elpy ein better-defaults))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
