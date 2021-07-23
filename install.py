@@ -14,6 +14,7 @@ src_dst = {
     "vimrc": ".vimrc",
     "UltiSnips_all.snippets": ".vim/UltiSnips/all.snippets",
     "bashrc": ".bashrc",
+    "zshrc": ".zshrc",
     "emacs": ".emacs.d/init.el",
     "hvnalias": ".hvnalias",
     "tmux.conf": ".tmux.conf",
@@ -75,5 +76,5 @@ for src in src_dst:
         os.symlink(source, os.path.join(home, dest))
 
 with open(os.path.expanduser("~/.ugly_aliases"), "a") as f:
-    here=os.path.dirname(os.path.abspath(__file__))
+    here = os.path.dirname(os.path.abspath(__file__))
     f.write("export PATH={}/bin:$PATH".format(here))
