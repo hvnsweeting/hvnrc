@@ -1,49 +1,110 @@
-! urxvt
-URxvt*geometry:                53x20
-urxvt*font:             xft:Bitstream Vera Sans Mono:pixelsize=13
-URxvt*depth:                32
-URxvt*background:            [85]#000000
-URxvt*foreground:            [100]#ffffff
-URxvt*borderless: 1
-URxvt*scrollBar:            false
-URxvt*saveLines:  5000
-URxvt*termName:    rxvt-unicode
-URxvt.perl-ext-common: default,matcher
-URxvt.urlLauncher: firefox
-URxvt.matcher.button: 1
+utohint  : 0
+Xft.lcdfilter : lcddefault
+Xft.hintstyle : hintslight
+Xft.hinting   : 1
+Xft.antialias : 1
+Xft.rgba      : rgb
+! fixed is the one true font - use iso10646 for unicode characters
+#*font         : -misc-fixed-medium-r-semicondensed-*-22-*-*-*-*-*-iso10646-1
+#xterm*font:     *-fixed-*-*-*-18-*
+#xterm*font: -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso10646-1
+xterm*faceName: Monospace
+xterm*faceSize: 16
 
-!Pnevma1
-*color0: #2F2E2D
-*color8: #4A4845
-*color1: #A36666
-*color9: #D78787
-*color2: #8FA57E
-*color10: #A9BA9C
-*color3: #D7AF87
-*color11: #E4C9AF
-*color4: #7FA5BD
-*color12: #A1BDCE
-*color5: #C79EC4
-*color13: #D7BEDA
-*color6: #8ADBB4
-*color14: #B1E7DD
-*color7: #D0D0D0
-*color15: #EFEFEF
+xterm*VT100.Translations: #override \
+                 Ctrl Shift <Key>V:    insert-selection(SELECT) \n\
+                                  Ctrl Shift <Key>C:    copy-selection(SELECT)
 
-!Pnevma2 - A heavy mod of the original.
-!*color0: #2F2E2D
-!*color8: #4A4845
-!*color1: #C37561
-!*color9: #D19485
-!*color2: #A0A57E
-!*color10: #B6B99D
-!*color3: #D1A375
-!*color11: #DEBC9C
-!*color4: #7985A3
-!*color12: #98A1B9
-!*color5: #AB716D
-!*color13: #BE918E
-!*color6: #98B9B1
-!*color14: #CBE6CB
-!*color7: #D0D0D0
-!*color15: #EFEFEF
+
+! ===== xidle
+! drag pointer to lower left corner to lock screen
+XIdle*position : sw
+! and leave it there for one second.
+XIdle*delay    : 1
+! also lock screen after 5 minutes idle
+XIdle*timeout  : 300
+
+! ===== xlock
+! actually turn the backlight off
+XLock.dpmsoff     : 1
+! plain white-on-black lock screen
+XLock.description : off
+XLock.echokeys    : off
+XLock.info        :
+XLock.background  : black
+XLock.foreground  : white
+XLock.mode        : blank
+XLock.username    : username: 
+XLock.password    : password: 
+XLock.font        : -misc-fixed-medium-r-normal-*-15-*-*-*-*-*-iso10646-1
+XLock.planfont    : -misc-fixed-medium-r-normal-*-13-*-*-*-*-*-iso10646-1
+
+! ===== xclock
+! digital clock in lower right-hand corner
+XClock*analog      : false
+XClock*twentyfour  : true
+XClock*padding     : 0
+XClock*geometry    : -2-2
+XClock*render      : false
+XClock*font        : -misc-fixed-bold-r-normal-*-13-*-*-*-*-*-iso10646-1
+XClock*height      : 12
+XClock*background  : dimgray
+XClock*foreground  : white
+XClock*borderWidth : 0
+
+! ===== xterm
+! zenburn theme - http://kippura.org/zenburnpage
+XTerm*background     : #3f3f3f
+XTerm*foreground     : #dcdccc
+XTerm*cursorColor    : #aaaaaa
+XTerm*colorUL        : #366060
+XTerm*underlineColor : #dfaf8f
+XTerm*color0         : #3f3f3f
+XTerm*color1         : #cc9393
+XTerm*color2         : #7f9f7f
+XTerm*color3         : #d0bf8f
+XTerm*color4         : #6ca0a3
+XTerm*color5         : #dc8cc3
+XTerm*color6         : #93e0e3
+XTerm*color7         : #dcdccc
+XTerm*color8         : #000000
+XTerm*color9         : #dca3a3
+XTerm*color10        : #bfebbf
+XTerm*color11        : #f0dfaf
+XTerm*color12        : #8cd0d3
+XTerm*color13        : #dc8cc3
+XTerm*color14        : #93e0e3
+XTerm*color15        : #ffffff
+
+! remove the additional black border
+XTerm*borderWidth            : 0
+XTerm*internalBorder         : 2
+! set TERM env variable to use 256 colors
+XTerm*termName               : xterm-256color
+! make alt key work normally
+XTerm*vt100.metaSendsEscape  : true
+! save ~10,000 lines of scrollback
+XTerm*v100.saveLines         : 10240
+! hide scrollbar
+XTerm*vt100.scrollBar        : false
+! terminal bell tells the window manager to raise urgent flag
+XTerm*vt100.bellIsUrgent     : true
+! no bold fonts - just use brighter colors
+XTerm*allowBoldFonts         : false
+! pressing a key automatically scrolls to the bottom
+XTerm*scrollKey              : true
+! don't allow terminal to go fullscreen
+XTerm*fullscreen             : never
+! clicking a line selects only from the current word forward
+XTerm*cutToBeginningOfLine   : false
+! and don't include a trailing newline in the selection!
+XTerm*cutNewline             : false
+! some black magic to change what characters XTerm considers "word delimiters"
+XTerm*charClass              : 33:48,36-47:48,58-59:48,61:48,63-64:48,95:48,126:48
+! select word on two clicks
+XTerm*on2Clicks              : word
+! select whole line on three clicks
+XTerm*on3Clicks              : line
+! shift + left click to open selection in web browser
+XTerm*VT100*Translations     : #override Shift : exec-formatted("chrome --enable-unveil '%t'", PRIMARY)
+XTerm*selectToClipboard: true
