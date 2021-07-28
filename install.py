@@ -15,6 +15,8 @@ src_dst = {
     "UltiSnips_all.snippets": ".vim/UltiSnips/all.snippets",
     "bashrc": ".bashrc",
     "zshrc": ".zshrc",
+    "xsession": ".xsession",
+    "Xresources": ".Xresources",
     "emacs": ".emacs.d/init.el",
     "hvnalias": ".hvnalias",
     "tmux.conf": ".tmux.conf",
