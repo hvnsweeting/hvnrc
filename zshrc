@@ -67,7 +67,7 @@ if [ -f ~/.hvnalias ]; then
     . ~/.hvnalias
 fi
 
-export EDITOR='vi -u NONE'  # this mostly for edit git commit, open a full vim would be slow
+export EDITOR='vi'  # this mostly for edit git commit, open a full vim would be slow
 
 # bash auto check for local email each 60s
 export MAILCHECK=60

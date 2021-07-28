@@ -106,7 +106,7 @@ if ( which brew 2>&1 >/dev/null); then
     fi
 fi
 
-export EDITOR='vi -u NONE'  # this mostly for edit git commit, open a full vim would be slow
+export EDITOR='vi'  # this mostly for edit git commit, open a full vim would be slow
 
 # bash auto check for local email each 60s
 export MAILCHECK=60
