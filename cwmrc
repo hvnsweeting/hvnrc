@@ -1,0 +1,22 @@
+color activeborder	"#333"
+color inactiveborder	"#000"
+color menubg		"#a8ff60"
+color menufg		"#000"
+
+fontname		"spleen:pixelsize=32"
+snapdist		20
+sticky			yes
+gap 10 10 10 10
+
+command qute		qutebrowser
+command ff		"firefox"
+command gimp		"gimp"
+command office		"libreoffice"
+command screenshot		"scrot"
+
+bind-key 4-j		"window-htile"
+bind-key 4-l 		"window-vtile"
+bind-key 4-Return 	terminal
+bind-key 4-h 		"window-hide"
+unbind-key M-Left  # for Firefox back button
+unbind-key C-r  # for shell
