@@ -66,25 +66,25 @@ Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 "
 "Plug 'Valloric/YouCompleteMe'
 
-Plug 'https://github.com/davidhalter/jedi-vim.git'
+"Plug 'https://github.com/davidhalter/jedi-vim.git'
 
 Plug 'https://github.com/ctrlpvim/ctrlp.vim.git'
-Plug 'https://github.com/ElmCast/elm-vim.git'
-Plug 'https://github.com/junegunn/fzf.vim.git'
+"Plug 'https://github.com/ElmCast/elm-vim.git'
+"Plug 'https://github.com/junegunn/fzf.vim.git'
 Plug 'https://github.com/morhetz/gruvbox.git'
 "Plug 'https://github.com/udalov/kotlin-vim'
 "Plug 'https://github.com/scrooloose/nerdtree.git'
-Plug 'https://github.com/elixir-lang/vim-elixir.git'
-Plug 'https://github.com/nvie/vim-flake8.git'
-Plug 'git://github.com/tpope/vim-fugitive.git'
+"Plug 'https://github.com/elixir-lang/vim-elixir.git'
+"Plug 'https://github.com/nvie/vim-flake8.git'
+"Plug 'git://github.com/tpope/vim-fugitive.git'
 
 Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-Plug 'reasonml-editor/vim-reason-plus'
+"Plug 'reasonml-editor/vim-reason-plus'
 
 " Broken Plug 'MarcWeber/vim-addon-nix'
-Plug 'LnL7/vim-nix'
+"Plug 'LnL7/vim-nix'
 
-Plug 'https://github.com/zah/nim.vim'
+"Plug 'https://github.com/zah/nim.vim'
 
 " nice to have
 "Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
