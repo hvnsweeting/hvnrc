@@ -11,21 +11,22 @@ logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 src_dst = {
-    "vimrc": ".vimrc",
-    "UltiSnips_all.snippets": ".vim/UltiSnips/all.snippets",
     "bashrc": ".bashrc",
-    "zshrc": ".zshrc",
-    "xsession": ".xsession",
-    "Xresources": ".Xresources",
+    "cwmrc": ".cwmrc",
     "emacs": ".emacs.d/init.el",
     "hvnalias": ".hvnalias",
-    "tmux.conf": ".tmux.conf",
-    "inputrc": ".inputrc",
-    "py2req.txt": ".py2req.txt",
     "i3config": ".config/i3/config",
-    "mutt/imaprc": ".mutt/imaprc",
+    "inputrc": ".inputrc",
     "mutt/baserc": ".mutt/baserc",
+    "mutt/imaprc": ".mutt/imaprc",
     "mutt/pgprc": ".mutt/pgprc",
+    "py2req.txt": ".py2req.txt",
+    "tmux.conf": ".tmux.conf",
+    "vimrc": ".vimrc",
+    "xsession": ".xsession",
+    "zshrc": ".zshrc",
+    "UltiSnips_all.snippets": ".vim/UltiSnips/all.snippets",
+    "Xresources": ".Xresources",
 }
 
 home = os.path.expanduser("~")
