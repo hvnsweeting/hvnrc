@@ -8,15 +8,12 @@ export ENV=$HOME/.kshrc
 # load Xresources file
 xrdb -merge $HOME/.Xresources
 
-xsetroot -solid grey &
-xterm -bg black -fg white +sb &
+xsetroot -solid slategrey &
+xterm &
 redshift &
-xbacklight -set 50
-#export GTK_IM_MODULE=ibus
-#export QT_IM_MODULE=ibus
-#export XMODIFIERS=@im=ibus
-#export QT4_IM_MODULE=ibus
-#export CLUTTER_IM_MODULE=ibus
-#export GLFW_IM_MODULE=ibus
-exec i3
+
+#xbacklight -set 50  # this works only on laptop
+
+#exec i3
 #exec startxfce4
+exec cwm
