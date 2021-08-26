@@ -3,11 +3,10 @@ package main
 
 // Scripte generates new blog post with a random Unsplash image
 
-import "fmt"
-
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -65,6 +64,10 @@ func main() {
 	// }
 
 	// ask stdin for questions
+	clientId := os.Getenv("UNSPLASH_APP_ACCESS_KEY")
+	if len(clientId) == 0 {
+		panic("Unsplash.com UNSPLASH_APP_ACCESS_KEY env is required. Visit https://unsplash.com/oauth/applications, choose an app and get it")
+	}
 	fmt.Printf("Title: ")
 	inputScanner := bufio.NewScanner(os.Stdin)
 	inputScanner.Scan()
@@ -83,11 +86,6 @@ func main() {
 	fmt.Printf("Description in 140 chars: ")
 	inputScanner.Scan()
 	desc := inputScanner.Text()
-
-	clientId := os.Getenv("CLIENT_ID")
-	if len(clientId) == 0 {
-		panic("Unsplash.com CLIENT_ID env is required.")
-	}
 
 	// generate new image
 	url := fmt.Sprintf("https://api.unsplash.com/photos/random?client_id=%s&content_filter=high&topics=bo8jQKTaE0Y", clientId)
