@@ -237,10 +237,10 @@ vols () {
     pactl list sinks  | grep 'Volume:.*front' | tail -n1 | grep -E '[0-9]+%' -o | head -n1
 }
 volj () {
-    pactl set-sink-volume 1 -10%; vols
+    pactl set-sink-volume  @DEFAULT_SINK@ -10%; vols
 }
 volk () {
-    pactl set-sink-volume 1 +10%; vols
+    pactl set-sink-volume  @DEFAULT_SINK@ +10%; vols
 }
 alias volm='pactl set-sink-volume 1 0%'
 
