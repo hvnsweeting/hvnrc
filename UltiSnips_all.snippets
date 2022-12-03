@@ -1,3 +1,65 @@
+snippet tovec
+let v: Vec<${2}> = ${1}.iter().${3}.collect();
+endsnippet
+
+snippet db
+println!("{:?}", ${1});
+endsnippet
+
+snippet vec
+let mut vec: Vec<_> = Vec::new();
+endsnippet
+
+snippet hset
+let mut set: HashSet<${2}> = HashSet::new();
+endsnippet
+
+snippet hmap
+let mut d: HashMap<${1},${2}> = HashMap::new();
+endsnippet
+
+snippet uc
+.unwrap().cloned();
+endsnippet
+
+snippet min
+let &min = ${1}.iter().min().unwrap();
+endsnippet
+
+snippet max
+let &max = ${1}.iter().max().unwrap();
+endsnippet
+
+snippet re
+let re = Regex::new(r"(?P<x1>\d+),(?P<y1>\d+) -> (?P<x2>\d+),(?P<y2>\d+)").unwrap();
+let rows: Vec<_> = xs
+  .iter()
+  .map(|line| {
+	  let caps = re.captures(line).unwrap();
+	  let x_y: ((u32, u32), (u32, u32)) = (
+		  (caps["x1"].parse().unwrap(), caps["y1"].parse().unwrap()),
+		  (caps["x2"].parse().unwrap(), caps["y2"].parse().unwrap()),
+	  );
+	  x_y
+  })
+  .collect();
+println!("rows[0..3]: {:?}", &rows[0..3]);
+endsnippet
+
+snippet vfilter
+let filtered: Vec<_> = ${1}
+  .iter()
+  .cloned()
+  .filter(|&line| ${2})
+  .collect();
+println!("filtered[0..3]: {:?}", &filtered[0..3]);
+endsnippet
+
+snippet vmap
+let mapped: Vec<_> = ${1}.iter().map(|&line| line_mapper(line)).collect();
+println!("mapped[0..3]: {:?}", &mapped[0..3]);
+endsnippet
+
 snippet aoc
   use ExUnit.Case
 
