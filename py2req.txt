@@ -1,6 +1,0 @@
-# List of pkgs need to install in my ~/python2 virtualenv
-flake8
-requests
-pycallgraph
-ipython
-ipdb
