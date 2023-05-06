@@ -42,55 +42,6 @@ set smartcase
 "   autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 " endif
 
-call plug#begin('~/.vim/plugged')
-" Make sure you use single quotes
-" Shorthand notation; fetches https://github.com/junegunn/vim-easy-align
-" Plug 'junegunn/vim-easy-align'
-" Any valid git URL is allowed
-" Plug 'https://github.com/junegunn/vim-github-dashboard.git'
-" Multiple Plug commands can be written in a single line using | separators
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
-" On-demand loading
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-" Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
-" Using a non-master branch
-" Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
-" Using a tagged release; wildcard allowed (requires git 1.9.2 or above)
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
-" Plugin outside ~/.vim/plugged with post-update hook
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Unmanaged plugin (manually installed and updated)
-" Plug '~/my-prototype-plugin'
-" Initialize plugin system
-"
-"
-"Plug 'Valloric/YouCompleteMe'
-
-"Plug 'https://github.com/davidhalter/jedi-vim.git'
-
-Plug 'https://github.com/ctrlpvim/ctrlp.vim.git'
-"Plug 'https://github.com/ElmCast/elm-vim.git'
-"Plug 'https://github.com/junegunn/fzf.vim.git'
-Plug 'https://github.com/morhetz/gruvbox.git'
-"Plug 'https://github.com/udalov/kotlin-vim'
-"Plug 'https://github.com/scrooloose/nerdtree.git'
-"Plug 'https://github.com/elixir-lang/vim-elixir.git'
-"Plug 'https://github.com/nvie/vim-flake8.git'
-"Plug 'git://github.com/tpope/vim-fugitive.git'
-
-Plug 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
-"Plug 'reasonml-editor/vim-reason-plus'
-
-" Broken Plug 'MarcWeber/vim-addon-nix'
-"Plug 'LnL7/vim-nix'
-
-"Plug 'https://github.com/zah/nim.vim'
-
-" nice to have
-"Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
-
-call plug#end()
-
 let g:ycm_autoclose_preview_window_after_completion=1
 map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 

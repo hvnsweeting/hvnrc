@@ -4,6 +4,7 @@
 Create symlink for all config file.
 """
 import os
+import subprocess
 import logging
 import shutil
 
@@ -20,7 +21,6 @@ src_dst = {
     "mutt/baserc": ".mutt/baserc",
     "mutt/imaprc": ".mutt/imaprc",
     "mutt/pgprc": ".mutt/pgprc",
-    "py2req.txt": ".py2req.txt",
     "tmux.conf": ".tmux.conf",
     "vimrc": ".vimrc",
     "xsession": ".xsession",
@@ -31,10 +31,24 @@ src_dst = {
 
 home = os.path.expanduser("~")
 
-try:
-    os.makedirs(os.path.join(home, ".vim/Ultisnips"))
-except OSError:
-    pass
+## create for vim
+print("Setting up vim plugins")
+for d in ["~/.vim/swapfiles", "~/.vim/UltiSnips", "~/.vim/pack/me/start"]:
+    try:
+        os.makedirs(os.path.expanduser(d))
+    except OSError:
+        pass
+with open(os.path.join(os.path.dirname(__file__), "vim-plugins.txt")) as f:
+    vim_plugins = [line for line in f if not line.startswith("#")]
+
+    try:
+        cwd = os.getcwd()
+        for p in vim_plugins:
+            os.chdir(os.path.expanduser("~/.vim/pack/me/start"))
+            r = subprocess.run(["git", "clone", "--depth", "1", p.strip()])
+            print(r.stdout)
+    finally:
+        os.chdir(cwd)
 
 for src in src_dst:
     source = os.path.abspath(src)
@@ -81,3 +95,4 @@ for src in src_dst:
 with open(os.path.expanduser("~/.ugly_aliases"), "a") as f:
     here = os.path.dirname(os.path.abspath(__file__))
     f.write("export PATH={}/bin:$PATH".format(here))
+
