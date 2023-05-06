@@ -1,0 +1,6 @@
+vim
+git
+redshift
+feh
+scrot
+psensor
