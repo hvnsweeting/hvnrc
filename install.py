@@ -17,6 +17,7 @@ src_dst = {
     "emacs": ".emacs.d/init.el",
     "hvnalias": ".hvnalias",
     "i3config": ".config/i3/config",
+    "git.fish": ".config/fish/conf.d/git.fish",
     "inputrc": ".inputrc",
     "mutt/baserc": ".mutt/baserc",
     "mutt/imaprc": ".mutt/imaprc",
